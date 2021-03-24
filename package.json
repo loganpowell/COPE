@@ -1,13 +1,13 @@
 {
-    "name": "ts-starter",
+    "name": "COPE",
     "author": "Logan Powell",
     "license": "MIT",
-    "version": "0.2.67",
-    "description": "typescript configuration and starter project",
+    "version": "0.0.1",
+    "description": "Create Once Publish Everywhere",
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",
-    "repository": "https://github.com/loganpowell/ts-starter",
-    "homepage": "https://github.com/loganpowell/ts-starter",
+    "repository": "https://github.com/loganpowell/COPE",
+    "homepage": "https://github.com/loganpowell/COPE",
     "scripts": {
         "pages": "npm run types && npm run jsdoc",
         "clean": "rm -rf ./lib & rm -rf ./dist &  rm -rf .cache",
