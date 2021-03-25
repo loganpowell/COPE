@@ -10,6 +10,11 @@
       "StackName": "amplify-cope-staging-200850",
       "StackId": "arn:aws:cloudformation:us-east-1:538069693173:stack/amplify-cope-staging-200850/c020c940-8cdc-11eb-a3ab-0a90e6def441",
       "AmplifyAppId": "d3le67x1rc6aik"
+    },
+    "categories": {
+      "auth": {
+        "cope2fe25597": {}
+      }
     }
   }
 }

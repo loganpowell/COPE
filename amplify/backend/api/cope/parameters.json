@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "cope",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authcope2fe25597",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
