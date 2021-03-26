@@ -3,11 +3,11 @@
 query nodeEnums {
   __type(name: "NodeType"){
     name
-    enumValues{
+    enumValues(includeDeprecated:true){
       name
-      description       # not supported
-      isDeprecated      # not supported
-      deprecationReason # not supported
+      description      
+      isDeprecated     
+      deprecationReason
     }
   }
 }

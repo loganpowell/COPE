@@ -19,26 +19,34 @@
 
 enum NodeType {
     # Human #####################################
-    H_AUTHOR
+
+    "H_AUTHOR description here in parentheses (http://spec.graphql.org/draft/#sec-Descriptions)"
+    H_AUTHOR 
     H_EMPLOYEE
     H_HISTORICAL_FIGURE
+
     # Assets/leaves #############################
+
     A_IMAGE
     A_VIDEO
     A_AUDIO
     A_PDF
     A_HEADLINE_140
     A_TEXT_MD
+
     # Groupings/branches ########################
+
     G_PAGE # findable by router/deeplink
     G_APPLICATION
     G_COLLECTION # Unordered
     G_SERIES # Ordered/linked list
     G_LIST # Ordered/sortable
 
+    # Deprecated ################################
     # currently, deprecated enums are just stripped, invisible when introspected
     # see: https://github.com/aws-amplify/amplify-cli/pull/1612 for more
-    N_DEPRECATED @deprecated(reason: "just because") 
+
+    N_DEPRECATED @deprecated(reason: "reason is `markdown` _friendly_!") 
 }
 
 # for local secondary index (LSI/@key)
