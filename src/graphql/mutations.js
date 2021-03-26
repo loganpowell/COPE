@@ -49,45 +49,6 @@ export const deleteEdge = /* GraphQL */ `
     }
   }
 `;
-export const createNodeProps = /* GraphQL */ `
-  mutation CreateNodeProps(
-    $input: CreateNodePropsInput!
-    $condition: ModelNodePropsConditionInput
-  ) {
-    createNodeProps(input: $input, condition: $condition) {
-      id
-      content
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateNodeProps = /* GraphQL */ `
-  mutation UpdateNodeProps(
-    $input: UpdateNodePropsInput!
-    $condition: ModelNodePropsConditionInput
-  ) {
-    updateNodeProps(input: $input, condition: $condition) {
-      id
-      content
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteNodeProps = /* GraphQL */ `
-  mutation DeleteNodeProps(
-    $input: DeleteNodePropsInput!
-    $condition: ModelNodePropsConditionInput
-  ) {
-    deleteNodeProps(input: $input, condition: $condition) {
-      id
-      content
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const createNode = /* GraphQL */ `
   mutation CreateNode(
     $input: CreateNodeInput!
@@ -95,27 +56,12 @@ export const createNode = /* GraphQL */ `
   ) {
     createNode(input: $input, condition: $condition) {
       id
-      status
-      type
-      category
-      createdAt
-      updated_at
-      deleted_at
-      published {
-        id
-        content
-        createdAt
-        updatedAt
-      }
-      draft {
-        id
-        content
-        createdAt
-        updatedAt
-      }
+      name
+      content
       edges {
         nextToken
       }
+      createdAt
       updatedAt
     }
   }
@@ -127,27 +73,12 @@ export const updateNode = /* GraphQL */ `
   ) {
     updateNode(input: $input, condition: $condition) {
       id
-      status
-      type
-      category
-      createdAt
-      updated_at
-      deleted_at
-      published {
-        id
-        content
-        createdAt
-        updatedAt
-      }
-      draft {
-        id
-        content
-        createdAt
-        updatedAt
-      }
+      name
+      content
       edges {
         nextToken
       }
+      createdAt
       updatedAt
     }
   }
@@ -159,6 +90,23 @@ export const deleteNode = /* GraphQL */ `
   ) {
     deleteNode(input: $input, condition: $condition) {
       id
+      name
+      content
+      edges {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createMeta = /* GraphQL */ `
+  mutation CreateMeta(
+    $input: CreateMetaInput!
+    $condition: ModelMetaConditionInput
+  ) {
+    createMeta(input: $input, condition: $condition) {
+      id
       status
       type
       category
@@ -167,18 +115,79 @@ export const deleteNode = /* GraphQL */ `
       deleted_at
       published {
         id
+        name
         content
         createdAt
         updatedAt
       }
       draft {
         id
+        name
         content
         createdAt
         updatedAt
       }
-      edges {
-        nextToken
+      updatedAt
+    }
+  }
+`;
+export const updateMeta = /* GraphQL */ `
+  mutation UpdateMeta(
+    $input: UpdateMetaInput!
+    $condition: ModelMetaConditionInput
+  ) {
+    updateMeta(input: $input, condition: $condition) {
+      id
+      status
+      type
+      category
+      createdAt
+      updated_at
+      deleted_at
+      published {
+        id
+        name
+        content
+        createdAt
+        updatedAt
+      }
+      draft {
+        id
+        name
+        content
+        createdAt
+        updatedAt
+      }
+      updatedAt
+    }
+  }
+`;
+export const deleteMeta = /* GraphQL */ `
+  mutation DeleteMeta(
+    $input: DeleteMetaInput!
+    $condition: ModelMetaConditionInput
+  ) {
+    deleteMeta(input: $input, condition: $condition) {
+      id
+      status
+      type
+      category
+      createdAt
+      updated_at
+      deleted_at
+      published {
+        id
+        name
+        content
+        createdAt
+        updatedAt
+      }
+      draft {
+        id
+        name
+        content
+        createdAt
+        updatedAt
       }
       updatedAt
     }
@@ -201,12 +210,9 @@ export const createNodeEdge = /* GraphQL */ `
       }
       node {
         id
-        status
-        type
-        category
+        name
+        content
         createdAt
-        updated_at
-        deleted_at
         updatedAt
       }
       createdAt
@@ -231,12 +237,9 @@ export const updateNodeEdge = /* GraphQL */ `
       }
       node {
         id
-        status
-        type
-        category
+        name
+        content
         createdAt
-        updated_at
-        deleted_at
         updatedAt
       }
       createdAt
@@ -261,12 +264,9 @@ export const deleteNodeEdge = /* GraphQL */ `
       }
       node {
         id
-        status
-        type
-        category
+        name
+        content
         createdAt
-        updated_at
-        deleted_at
         updatedAt
       }
       createdAt

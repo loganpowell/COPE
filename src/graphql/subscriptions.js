@@ -40,61 +40,16 @@ export const onDeleteEdge = /* GraphQL */ `
     }
   }
 `;
-export const onCreateNodeProps = /* GraphQL */ `
-  subscription OnCreateNodeProps {
-    onCreateNodeProps {
-      id
-      content
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateNodeProps = /* GraphQL */ `
-  subscription OnUpdateNodeProps {
-    onUpdateNodeProps {
-      id
-      content
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteNodeProps = /* GraphQL */ `
-  subscription OnDeleteNodeProps {
-    onDeleteNodeProps {
-      id
-      content
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const onCreateNode = /* GraphQL */ `
   subscription OnCreateNode {
     onCreateNode {
       id
-      status
-      type
-      category
-      createdAt
-      updated_at
-      deleted_at
-      published {
-        id
-        content
-        createdAt
-        updatedAt
-      }
-      draft {
-        id
-        content
-        createdAt
-        updatedAt
-      }
+      name
+      content
       edges {
         nextToken
       }
+      createdAt
       updatedAt
     }
   }
@@ -103,27 +58,12 @@ export const onUpdateNode = /* GraphQL */ `
   subscription OnUpdateNode {
     onUpdateNode {
       id
-      status
-      type
-      category
-      createdAt
-      updated_at
-      deleted_at
-      published {
-        id
-        content
-        createdAt
-        updatedAt
-      }
-      draft {
-        id
-        content
-        createdAt
-        updatedAt
-      }
+      name
+      content
       edges {
         nextToken
       }
+      createdAt
       updatedAt
     }
   }
@@ -131,6 +71,20 @@ export const onUpdateNode = /* GraphQL */ `
 export const onDeleteNode = /* GraphQL */ `
   subscription OnDeleteNode {
     onDeleteNode {
+      id
+      name
+      content
+      edges {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateMeta = /* GraphQL */ `
+  subscription OnCreateMeta {
+    onCreateMeta {
       id
       status
       type
@@ -140,18 +94,73 @@ export const onDeleteNode = /* GraphQL */ `
       deleted_at
       published {
         id
+        name
         content
         createdAt
         updatedAt
       }
       draft {
         id
+        name
         content
         createdAt
         updatedAt
       }
-      edges {
-        nextToken
+      updatedAt
+    }
+  }
+`;
+export const onUpdateMeta = /* GraphQL */ `
+  subscription OnUpdateMeta {
+    onUpdateMeta {
+      id
+      status
+      type
+      category
+      createdAt
+      updated_at
+      deleted_at
+      published {
+        id
+        name
+        content
+        createdAt
+        updatedAt
+      }
+      draft {
+        id
+        name
+        content
+        createdAt
+        updatedAt
+      }
+      updatedAt
+    }
+  }
+`;
+export const onDeleteMeta = /* GraphQL */ `
+  subscription OnDeleteMeta {
+    onDeleteMeta {
+      id
+      status
+      type
+      category
+      createdAt
+      updated_at
+      deleted_at
+      published {
+        id
+        name
+        content
+        createdAt
+        updatedAt
+      }
+      draft {
+        id
+        name
+        content
+        createdAt
+        updatedAt
       }
       updatedAt
     }
@@ -171,12 +180,9 @@ export const onCreateNodeEdge = /* GraphQL */ `
       }
       node {
         id
-        status
-        type
-        category
+        name
+        content
         createdAt
-        updated_at
-        deleted_at
         updatedAt
       }
       createdAt
@@ -198,12 +204,9 @@ export const onUpdateNodeEdge = /* GraphQL */ `
       }
       node {
         id
-        status
-        type
-        category
+        name
+        content
         createdAt
-        updated_at
-        deleted_at
         updatedAt
       }
       createdAt
@@ -225,12 +228,9 @@ export const onDeleteNodeEdge = /* GraphQL */ `
       }
       node {
         id
-        status
-        type
-        category
+        name
+        content
         createdAt
-        updated_at
-        deleted_at
         updatedAt
       }
       createdAt

@@ -1,0 +1,13 @@
+# Example of using introspection to get enum values
+
+query nodeEnums {
+  __type(name: "NodeType"){
+    name
+    enumValues{
+      name
+      description       # not supported
+      isDeprecated      # not supported
+      deprecationReason # not supported
+    }
+  }
+}

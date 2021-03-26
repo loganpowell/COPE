@@ -35,6 +35,10 @@ enum NodeType {
     G_COLLECTION # Unordered
     G_SERIES # Ordered/linked list
     G_LIST # Ordered/sortable
+
+    # currently, deprecated enums are just stripped, invisible when introspected
+    # see: https://github.com/aws-amplify/amplify-cli/pull/1612 for more
+    N_DEPRECATED @deprecated(reason: "just because") 
 }
 
 # for local secondary index (LSI/@key)
@@ -57,13 +61,13 @@ enum EdgeType {
     CONTAINS
     # Human to Group
     MEMBER_OF
+    AUTHOR_OF
 }
 
 enum Status {
-    STUBBED
-    DRAFTED
-    REVIEWED
-    PUBLISHED
+    PROVISIONAL
+    UNDER_REVIEW
+    PUBLIC
     EDITED
 }
 
@@ -75,24 +79,20 @@ type Edge
     Nodes                   : [NodeEdge]    @connection (keyName: "nodeEdgeByEdgeIndex", fields: ["id"])
 }
 
-
-type NodeProps 
+type Node 
     @model
 {
+    id                      : ID!
+    name                    : String!
     content                 : String
+    edges                   : [NodeEdge]    @connection (keyName: "nodeEdgeByNodeIndex", fields: ["id"])
 }
 
-type Node
+type Meta
     @model
-    #@auth()
-    @key(
-        # GSI Index Name
-        name: "typeIndex"   
-        # partition key, LSI, sort key
-        fields: ["type", "status", "createdAt"]
-        # GraphQL query name
-        queryField: "nodesByType" 
-    ) 
+    #@auth  (rules: [{ allow: public, operations: [read] }])
+    @key   (name: "byStatusAndDate", fields: ["type", "status", "createdAt"], queryField: "nodesByType" ) 
+    #       name: GSI Index Name,    fields: [partition key, sort key, ... ], queryField: GraphQL query name
 {
     id                      : ID!
     status                  : Status
@@ -101,21 +101,27 @@ type Node
     createdAt               : AWSDateTime!
     updated_at              : AWSDateTime
     deleted_at              : AWSDateTime
-    published               : NodeProps
-    draft                   : NodeProps @auth (rules: [
-                                { 
-                                    allow: private, 
-                                    provider: userPools, 
-                                    operations: [create, read, update, delete] 
-                                }
-                            ])
-    edges                   : [NodeEdge]    @connection(keyName: "nodeEdgeByNodeIndex", fields: ["id"])
+    published               : Node
+    draft                   : Node
+    #draft                   : Node          @auth (rules: [
+    #                            { 
+    #                                allow: private, 
+    #                                provider: userPools, 
+    #                                operations: [create, read, update, delete] 
+    #                            }
+    #                        ])
 }
 
+#type PrivateLink
+#    @model
+#{
+
+#}
+
 type NodeEdge
-    @model(queries: null)
-    @key(name: "nodeEdgeByEdgeIndex", fields: ["edge_id", "node_id"])
-    @key(name: "nodeEdgeByNodeIndex", fields: ["node_id", "edge_id"]) 
+    @model (queries: null)
+    @key   (name: "nodeEdgeByEdgeIndex", fields: ["edge_id", "node_id"])
+    @key   (name: "nodeEdgeByNodeIndex", fields: ["node_id", "edge_id"]) 
 {
     id                      : ID!
     edge_id                 : ID!

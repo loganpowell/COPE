@@ -31,58 +31,16 @@ export const listEdges = /* GraphQL */ `
     }
   }
 `;
-export const getNodeProps = /* GraphQL */ `
-  query GetNodeProps($id: ID!) {
-    getNodeProps(id: $id) {
-      id
-      content
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listNodePropss = /* GraphQL */ `
-  query ListNodePropss(
-    $filter: ModelNodePropsFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listNodePropss(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        content
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
 export const getNode = /* GraphQL */ `
   query GetNode($id: ID!) {
     getNode(id: $id) {
       id
-      status
-      type
-      category
-      createdAt
-      updated_at
-      deleted_at
-      published {
-        id
-        content
-        createdAt
-        updatedAt
-      }
-      draft {
-        id
-        content
-        createdAt
-        updatedAt
-      }
+      name
+      content
       edges {
         nextToken
       }
+      createdAt
       updatedAt
     }
   }
@@ -94,6 +52,52 @@ export const listNodes = /* GraphQL */ `
     $nextToken: String
   ) {
     listNodes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        content
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getMeta = /* GraphQL */ `
+  query GetMeta($id: ID!) {
+    getMeta(id: $id) {
+      id
+      status
+      type
+      category
+      createdAt
+      updated_at
+      deleted_at
+      published {
+        id
+        name
+        content
+        createdAt
+        updatedAt
+      }
+      draft {
+        id
+        name
+        content
+        createdAt
+        updatedAt
+      }
+      updatedAt
+    }
+  }
+`;
+export const listMetas = /* GraphQL */ `
+  query ListMetas(
+    $filter: ModelMetaFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMetas(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         status
@@ -111,9 +115,9 @@ export const listNodes = /* GraphQL */ `
 export const nodesByType = /* GraphQL */ `
   query NodesByType(
     $type: NodeType
-    $statusCreatedAt: ModelNodeTypeIndexCompositeKeyConditionInput
+    $statusCreatedAt: ModelMetaByStatusAndDateCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
-    $filter: ModelNodeFilterInput
+    $filter: ModelMetaFilterInput
     $limit: Int
     $nextToken: String
   ) {
