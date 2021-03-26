@@ -43,9 +43,6 @@ enum NodeType {
     G_LIST # Ordered/sortable
 
     # Deprecated ################################
-    # currently, deprecated enums are just stripped, invisible when introspected
-    # see: https://github.com/aws-amplify/amplify-cli/pull/1612 for more
-
     N_DEPRECATED @deprecated(reason: "reason is `markdown` _friendly_!") 
 }
 
