@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "cope2fe25597_identitypool_2fe25597",
-    "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "cope2fe25597",
-    "userPoolName": "cope2fe25597_userpool_2fe25597",
+    "identityPoolName": "cope_id_pool",
+    "allowUnauthenticatedIdentities": true,
+    "resourceNameTruncated": "copefe15834f",
+    "userPoolName": "cope_user_pool",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "cope2f2fe25597_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "copeAufe15834f_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "2fe25597",
-    "resourceName": "cope2fe25597",
+    "sharedId": "fe15834f",
+    "resourceName": "copeAuth",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -45,12 +45,26 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
+    "useDefault": "manual",
+    "thirdPartyAuth": false,
     "usernameAttributes": [
         "email"
     ],
-    "userPoolGroupList": [],
+    "userPoolGroups": true,
+    "adminQueries": true,
+    "triggers": "{}",
+    "hostedUI": false,
+    "userPoolGroupList": [
+        "Admins",
+        "Editors",
+        "Viewers"
+    ],
+    "adminQueryGroup": "Admins",
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "permissions": [],
     "dependsOn": []
 }

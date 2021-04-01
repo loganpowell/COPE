@@ -1,0 +1,183 @@
+
+enum ResourceType {
+    # Documentation #############################
+    """
+    A [description](http://spec.graphql.org/draft/#sec-Descriptions), 
+    here in parentheses, is `markdown` friendly!
+    """
+    DEPRECATED @deprecated(reason: "reason is _also_ `markdown` friendly!") 
+
+    # Assets #############################
+    A_IMAGE
+    A_VIDEO
+    A_AUDIO
+
+    # Text
+    T_BIO
+    T_HEADLINE_140
+    T_TITLE
+    T_LEDE
+    T_SUMMARY
+    T_BODY
+
+    # Links
+    L_REFERENCE
+
+    # Files
+    F_PDF
+}
+
+enum NodeType {
+    # Person #####################################
+    H_AUTHOR_PAGE
+    H_EMPLOYEE_PAGE
+    H_HISTORICAL_FIGURE
+    
+    # Thing ######################################
+    A_LESSON
+    A_ARTICLE
+
+    # Collections/Groupings/branches ############
+    G_LANDING_PAGE # findable by router/deeplink
+    G_APPLICATION
+    G_COLLECTION # Unordered
+    G_COURSE
+    G_SERIES # Ordered/linked list
+    G_LIST # Ordered/sortable
+
+}
+
+enum EdgeType {
+    # Human to Human
+    WORKED_WITH
+    # Human to Asset
+    CREATED_BY
+    # Asset to Asset
+    COMPOSED_WITH 
+    SIBLING_OF
+    NEXT_TO # linked list
+    # Group to Group
+    COMPONENT_OF
+    # Group to Asset
+    CONTAINS
+    # Human to Group
+    MEMBER_OF
+    AUTHOR_OF
+}
+
+enum Status {
+    PROVISIONAL
+    UNDER_REVIEW
+    PUBLIC
+    EDITED
+}
+
+interface Resource {
+    id                      : ID!
+    node_id                 : ID!
+    createdAt               : AWSDateTime! 
+    type                    : ResourceType!
+    name                    : String!
+    content                 : String
+}
+
+type PublicResource implements Resource 
+    @model
+    @key (name: "Resources_by_type", fields: ["type", "createdAt"])
+    @key (name: "PublicResources_by_node", fields: ["node_id"])
+    @auth (rules: [
+        { allow: owner, operations: [ create, read, update, delete ] }
+        { allow: groups, groups: [ "Admins", "Editors" ] operations: [ create, read, update, delete ] },
+        { allow: public, provider: apiKey, operations: [ read ] },
+        { allow: groups, groups: ["Viewers"] operations: [ read ] },
+    ])
+{
+    id                      : ID!
+    node_id                 : ID!
+    createdAt               : AWSDateTime!
+    type                    : ResourceType!
+    name                    : String!
+    content                 : String
+}
+
+type DraftResource  implements Resource
+    @model (queries: null)
+    @key (name: "DraftResources_by_node", fields: ["node_id"])
+    @auth (rules: [
+        { allow: owner, operations: [ create, read, update, delete ] }
+        { allow: groups, groups: ["Admins", "Editors"], operations: [ create, read, update, delete ] },
+        { allow: groups, groups: ["Viewers"] operations: [ read ] },
+        #{ allow: owner, ownerField: "editors", operations: [ read, update, delete ] }
+    ])
+{
+    id                      : ID!
+    node_id                 : ID! 
+    createdAt               : AWSDateTime!
+    type                    : ResourceType!
+    name                    : String!
+    content                 : String
+    #editors                 : [ String ]
+}
+
+type Node
+    @model
+    @auth (rules: [
+        { allow: owner, operations: [ create, read, update, delete ] }
+        { allow: groups, groups: ["Admins", "Editors"], operations: [ read, update, delete ] },
+        { allow: groups, groups: ["Viewers"] operations: [ read ] },
+        { allow: public, operations: [ read ]}
+    ])
+    @key (
+        # name: GSI Index Name,    
+        name: "Nodes_by_type_status_createdAt", 
+        # fields: [partition key, sort key, ... ], 
+        fields: ["type", "status", "createdAt"], 
+        # queryField: GraphQL query name
+        queryField: "nodesByTypeStatusCreatedAt" 
+    )
+{
+    id                      : ID!
+    status                  : Status!
+    type                    : NodeType!
+    createdAt               : AWSDateTime!  # automatically associated
+    #owner                   : String!      # automatically associated
+    updated_at              : AWSDateTime
+    deleted_at              : AWSDateTime
+    public_resources        : [ PublicResource ]    @connection (keyName: "PublicResources_by_node", fields: ["id"])
+    # https://docs.amplify.aws/cli/graphql-transformer/auth#field-level-authorization
+    draft_resources         : [ DraftResource ]     @connection (keyName: "DraftResources_by_node", fields: ["id"])
+    edges                   : [ NodeEdge ]          @connection (keyName: "NodeEdges_by_node", fields: ["id"])
+}
+
+type Edge 
+    @model
+    @auth (rules: [
+        { allow: owner, operations: [ create, read, update, delete ] }
+        { allow: groups, groups: ["Admins", "Editors"], operations: [ read, update, delete ] },
+        { allow: groups, groups: ["Viewers"] operations: [ read ] },
+        { allow: public, operations: [ read ]}
+    ])
+{
+    id                      : ID!
+    type                    : EdgeType!
+    weight                  : Int
+    Nodes                   : [ NodeEdge ]          @connection (keyName: "NodeEdges_by_edge", fields: ["id"])
+}
+
+type NodeEdge
+    @model (queries: null)
+    @auth (rules: [
+        { allow: owner, operations: [ create, read, update, delete ] }
+        { allow: groups, groups: ["Admins", "Editors"], operations: [ read, update, delete ] },
+        { allow: groups, groups: ["Viewers"] operations: [ read ] },
+        { allow: public, operations: [ read ]}
+    ])
+    @key   (name: "NodeEdges_by_edge", fields: ["edge_id", "node_id"])
+    @key   (name: "NodeEdges_by_node", fields: ["node_id", "edge_id"]) 
+{
+    id                      : ID!
+    edge_id                 : ID!
+    node_id                 : ID!
+    edge                    : Edge!                 @connection (fields: ["edge_id"])
+    node                    : Node!                 @connection (fields: ["node_id"])
+}

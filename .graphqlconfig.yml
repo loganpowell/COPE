@@ -1,6 +1,6 @@
 projects:
-  cope:
-    schemaPath: amplify/backend/api/cope/build/schema.graphql
+  CopeAPI:
+    schemaPath: amplify/backend/api/CopeAPI/build/schema.graphql
     includes:
       - src/graphql/**/*.js
     excludes:

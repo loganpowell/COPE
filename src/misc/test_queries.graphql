@@ -1,5 +1,7 @@
 # Example of using introspection to get enum values
 
+# shift-option/alt-click on a query below to jump to it in the explorer
+# option/alt-click on a field in the explorer to select all subfields
 query nodeEnums {
   __type(name: "NodeType"){
     name
@@ -10,4 +12,72 @@ query nodeEnums {
       deprecationReason
     }
   }
+}
+
+
+mutation createNode1 {
+	createNode(input:{
+    name: "my second node",
+    content: "markdown \n goes here \n and more can go ```here```"
+  }){
+    id
+  }  
+}
+
+mutation createEdge {
+  createEdge(input:{
+    type: COMPOSED_WITH
+  }){
+		id
+	}
+}
+
+mutation createNodeEdge($nodeID2:ID!, $edgeID_1_2:ID!) {
+  createNodeEdge(input:{
+    node_id:$nodeID2,
+    edge_id:$edgeID_1_2
+  }) {
+    id
+    edge{
+      id
+      type
+    }
+    node{
+      id
+      name
+      content
+      createdAt
+    }
+  }
+}
+
+query getNodes($edgeID_1_2:ID!) {
+  getEdge(id:$edgeID_1_2){
+    id
+    type
+    Nodes {
+      nextToken
+      items{
+        id
+        # edge_id
+        node_id
+        # edge{
+        #   id
+        #   type
+        # }
+        node{
+          id
+          name
+          content
+        }
+      }
+    }
+  }
+}
+
+variables: {
+  "nodeID1":"150535e7-86a3-4578-8d70-de5c398d2ebd",
+	"nodeID2":"7a7fd533-afbb-4b30-b99b-a4be6b55847a",
+  "edgeID_1_2":"194a814b-7bdd-4ab0-9bb4-f492e6e4e2c5",
+  "nodeEdgeID1": "6c9850c8-d812-4d13-a2a0-a371ec0f23f0"
 }
