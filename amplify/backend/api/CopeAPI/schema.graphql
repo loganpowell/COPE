@@ -75,44 +75,43 @@ enum Status {
 interface Resource {
     id                      : ID!
     node_id                 : ID!
-    createdAt               : AWSDateTime! 
+    updatedAt               : AWSDateTime! 
     type                    : ResourceType!
     name                    : String!
     content                 : String
 }
 
-type PublicResource implements Resource 
+type ResourcePublic implements Resource 
     @model
-    @key (name: "Resources_by_type", fields: ["type", "createdAt"])
-    @key (name: "PublicResources_by_node", fields: ["node_id"])
     @auth (rules: [
-        { allow: owner, operations: [ create, read, update, delete ] }
-        { allow: groups, groups: [ "Admins", "Editors" ] operations: [ create, read, update, delete ] },
-        { allow: public, provider: apiKey, operations: [ read ] },
-        { allow: groups, groups: ["Viewers"] operations: [ read ] },
+        { allow: owner,  operations: [ create, read, update, delete ]                                }
+        { allow: groups, operations: [         read, update, delete ], groups: ["Admins", "Editors"] },
+        { allow: groups, operations: [         read                 ], groups: ["Viewers"]           },
+        { allow: public, operations: [         read                 ]                                }
     ])
+    @key (name: "Resources_by_type", fields: ["type", "updatedAt"])
+    @key (name: "ResourcePublics_by_node", fields: ["node_id"])
 {
     id                      : ID!
     node_id                 : ID!
-    createdAt               : AWSDateTime!
+    updatedAt               : AWSDateTime!
     type                    : ResourceType!
     name                    : String!
     content                 : String
 }
 
-type DraftResource  implements Resource
+type ResourceDraft  implements Resource
     @model (queries: null)
-    @key (name: "DraftResources_by_node", fields: ["node_id"])
     @auth (rules: [
-        { allow: owner, operations: [ create, read, update, delete ] }
-        { allow: groups, groups: ["Admins", "Editors"], operations: [ create, read, update, delete ] },
-        { allow: groups, groups: ["Viewers"] operations: [ read ] },
-        #{ allow: owner, ownerField: "editors", operations: [ read, update, delete ] }
+        { allow: owner,  operations: [ create, read, update, delete ]                                }
+        { allow: groups, operations: [         read, update, delete ], groups: ["Admins", "Editors"] },
+        #{ allow: owner,  operations: [         read, update, delete ], ownerField: "editors",         }
     ])
+    @key (name: "ResourceDrafts_by_node", fields: ["node_id"])
 {
     id                      : ID!
     node_id                 : ID! 
-    createdAt               : AWSDateTime!
+    updatedAt               : AWSDateTime!
     type                    : ResourceType!
     name                    : String!
     content                 : String
@@ -122,40 +121,40 @@ type DraftResource  implements Resource
 type Node
     @model
     @auth (rules: [
-        { allow: owner, operations: [ create, read, update, delete ] }
-        { allow: groups, groups: ["Admins", "Editors"], operations: [ read, update, delete ] },
-        { allow: groups, groups: ["Viewers"] operations: [ read ] },
-        { allow: public, operations: [ read ]}
+        { allow: owner,  operations: [ create, read, update, delete ]                                }
+        { allow: groups, operations: [         read, update, delete ], groups: ["Admins", "Editors"] },
+        { allow: groups, operations: [         read                 ], groups: ["Viewers"]           },
+        { allow: public, operations: [         read                 ]                                }
     ])
     @key (
         # name: GSI Index Name,    
-        name: "Nodes_by_type_status_createdAt", 
+        name: "Nodes_by_type_status_updatedAt", 
         # fields: [partition key, sort key, ... ], 
-        fields: ["type", "status", "createdAt"], 
+        fields: ["type", "status", "updatedAt"], 
         # queryField: GraphQL query name
-        queryField: "nodesByTypeStatusCreatedAt" 
+        queryField: "nodesByTypeStatusupdatedAt" 
     )
 {
     id                      : ID!
     status                  : Status!
     type                    : NodeType!
-    createdAt               : AWSDateTime!  # automatically associated
+    updatedAt               : AWSDateTime!  # automatically associated
     #owner                   : String!      # automatically associated
     updated_at              : AWSDateTime
     deleted_at              : AWSDateTime
-    public_resources        : [ PublicResource ]    @connection (keyName: "PublicResources_by_node", fields: ["id"])
+    resources_public        : [ ResourcePublic ]    @connection (keyName: "ResourcePublics_by_node", fields: ["id"])
     # https://docs.amplify.aws/cli/graphql-transformer/auth#field-level-authorization
-    draft_resources         : [ DraftResource ]     @connection (keyName: "DraftResources_by_node", fields: ["id"])
+    resources_draft         : [ ResourceDraft ]     @connection (keyName: "ResourceDrafts_by_node", fields: ["id"])
     edges                   : [ NodeEdge ]          @connection (keyName: "NodeEdges_by_node", fields: ["id"])
 }
 
 type Edge 
     @model
     @auth (rules: [
-        { allow: owner, operations: [ create, read, update, delete ] }
-        { allow: groups, groups: ["Admins", "Editors"], operations: [ read, update, delete ] },
-        { allow: groups, groups: ["Viewers"] operations: [ read ] },
-        { allow: public, operations: [ read ]}
+        { allow: owner,  operations: [ create, read, update, delete ]                                }
+        { allow: groups, operations: [         read, update, delete ], groups: ["Admins", "Editors"] },
+        { allow: groups, operations: [         read                 ], groups: ["Viewers"]           },
+        { allow: public, operations: [         read                 ]                                }
     ])
 {
     id                      : ID!
@@ -167,10 +166,10 @@ type Edge
 type NodeEdge
     @model (queries: null)
     @auth (rules: [
-        { allow: owner, operations: [ create, read, update, delete ] }
-        { allow: groups, groups: ["Admins", "Editors"], operations: [ read, update, delete ] },
-        { allow: groups, groups: ["Viewers"] operations: [ read ] },
-        { allow: public, operations: [ read ]}
+        { allow: owner,  operations: [ create, read, update, delete ]                                }
+        { allow: groups, operations: [         read, update, delete ], groups: ["Admins", "Editors"] },
+        { allow: groups, operations: [         read                 ], groups: ["Viewers"]           },
+        { allow: public, operations: [         read                 ]                                }
     ])
     @key   (name: "NodeEdges_by_edge", fields: ["edge_id", "node_id"])
     @key   (name: "NodeEdges_by_node", fields: ["node_id", "edge_id"]) 

@@ -1,104 +1,104 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreatePublicResource = /* GraphQL */ `
-  subscription OnCreatePublicResource($owner: String) {
-    onCreatePublicResource(owner: $owner) {
+export const onCreateResourcePublic = /* GraphQL */ `
+  subscription OnCreateResourcePublic($owner: String) {
+    onCreateResourcePublic(owner: $owner) {
       id
       node_id
-      createdAt
+      updatedAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      updatedAt
+      createdAt
       owner
     }
   }
 `;
-export const onUpdatePublicResource = /* GraphQL */ `
-  subscription OnUpdatePublicResource($owner: String) {
-    onUpdatePublicResource(owner: $owner) {
+export const onUpdateResourcePublic = /* GraphQL */ `
+  subscription OnUpdateResourcePublic($owner: String) {
+    onUpdateResourcePublic(owner: $owner) {
       id
       node_id
-      createdAt
+      updatedAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      updatedAt
+      createdAt
       owner
     }
   }
 `;
-export const onDeletePublicResource = /* GraphQL */ `
-  subscription OnDeletePublicResource($owner: String) {
-    onDeletePublicResource(owner: $owner) {
+export const onDeleteResourcePublic = /* GraphQL */ `
+  subscription OnDeleteResourcePublic($owner: String) {
+    onDeleteResourcePublic(owner: $owner) {
       id
       node_id
-      createdAt
+      updatedAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      updatedAt
+      createdAt
       owner
     }
   }
 `;
-export const onCreateDraftResource = /* GraphQL */ `
-  subscription OnCreateDraftResource($owner: String) {
-    onCreateDraftResource(owner: $owner) {
+export const onCreateResourceDraft = /* GraphQL */ `
+  subscription OnCreateResourceDraft($owner: String) {
+    onCreateResourceDraft(owner: $owner) {
       id
       node_id
-      createdAt
+      updatedAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      updatedAt
+      createdAt
       owner
     }
   }
 `;
-export const onUpdateDraftResource = /* GraphQL */ `
-  subscription OnUpdateDraftResource($owner: String) {
-    onUpdateDraftResource(owner: $owner) {
+export const onUpdateResourceDraft = /* GraphQL */ `
+  subscription OnUpdateResourceDraft($owner: String) {
+    onUpdateResourceDraft(owner: $owner) {
       id
       node_id
-      createdAt
+      updatedAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      updatedAt
+      createdAt
       owner
     }
   }
 `;
-export const onDeleteDraftResource = /* GraphQL */ `
-  subscription OnDeleteDraftResource($owner: String) {
-    onDeleteDraftResource(owner: $owner) {
+export const onDeleteResourceDraft = /* GraphQL */ `
+  subscription OnDeleteResourceDraft($owner: String) {
+    onDeleteResourceDraft(owner: $owner) {
       id
       node_id
-      createdAt
+      updatedAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      updatedAt
+      createdAt
       owner
     }
   }
@@ -109,18 +109,18 @@ export const onCreateNode = /* GraphQL */ `
       id
       status
       type
-      createdAt
+      updatedAt
       updated_at
       deleted_at
       _version
       _deleted
       _lastChangedAt
-      updatedAt
-      public_resources {
+      createdAt
+      resources_public {
         nextToken
         startedAt
       }
-      draft_resources {
+      resources_draft {
         nextToken
         startedAt
       }
@@ -138,18 +138,18 @@ export const onUpdateNode = /* GraphQL */ `
       id
       status
       type
-      createdAt
+      updatedAt
       updated_at
       deleted_at
       _version
       _deleted
       _lastChangedAt
-      updatedAt
-      public_resources {
+      createdAt
+      resources_public {
         nextToken
         startedAt
       }
-      draft_resources {
+      resources_draft {
         nextToken
         startedAt
       }
@@ -167,18 +167,18 @@ export const onDeleteNode = /* GraphQL */ `
       id
       status
       type
-      createdAt
+      updatedAt
       updated_at
       deleted_at
       _version
       _deleted
       _lastChangedAt
-      updatedAt
-      public_resources {
+      createdAt
+      resources_public {
         nextToken
         startedAt
       }
-      draft_resources {
+      resources_draft {
         nextToken
         startedAt
       }
@@ -262,13 +262,13 @@ export const onCreateNodeEdge = /* GraphQL */ `
         id
         status
         type
-        createdAt
+        updatedAt
         updated_at
         deleted_at
         _version
         _deleted
         _lastChangedAt
-        updatedAt
+        createdAt
         owner
       }
       edge {
@@ -301,13 +301,13 @@ export const onUpdateNodeEdge = /* GraphQL */ `
         id
         status
         type
-        createdAt
+        updatedAt
         updated_at
         deleted_at
         _version
         _deleted
         _lastChangedAt
-        updatedAt
+        createdAt
         owner
       }
       edge {
@@ -340,13 +340,13 @@ export const onDeleteNodeEdge = /* GraphQL */ `
         id
         status
         type
-        createdAt
+        updatedAt
         updated_at
         deleted_at
         _version
         _deleted
         _lastChangedAt
-        updatedAt
+        createdAt
         owner
       }
       edge {

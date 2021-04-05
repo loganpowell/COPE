@@ -13,71 +13,120 @@ query nodeEnums {
     }
   }
 }
-
-
-mutation createNode1 {
-	createNode(input:{
-    name: "my second node",
-    content: "markdown \n goes here \n and more can go ```here```"
-  }){
-    id
-  }  
+fragment resource on Resource {
+  id
+  type
+  node_id
+	name
+  content
 }
 
-mutation createEdge {
-  createEdge(input:{
-    type: COMPOSED_WITH
-  }){
-		id
-	}
-}
-
-mutation createNodeEdge($nodeID2:ID!, $edgeID_1_2:ID!) {
-  createNodeEdge(input:{
-    node_id:$nodeID2,
-    edge_id:$edgeID_1_2
-  }) {
-    id
-    edge{
-      id
-      type
+fragment node on Node {
+  id
+  status
+  type
+  createdAt
+  owner
+  resources_public{
+    items{
+      ...resource
     }
-    node{
+  }
+  resources_draft{
+    items {
+      ...resource
+    }
+  }
+  edges{
+    items{
       id
-      name
-      content
-      createdAt
+      edge_id
+      node_id
+      edge{
+        id
+        type
+        weight
+      }
     }
   }
 }
 
-query getNodes($edgeID_1_2:ID!) {
-  getEdge(id:$edgeID_1_2){
-    id
-    type
-    Nodes {
-      nextToken
-      items{
-        id
-        # edge_id
-        node_id
-        # edge{
-        #   id
-        #   type
-        # }
-        node{
+query listNodes {
+  listNodes {
+    items {
+      ...node
+    }
+  }
+}
+
+query listEdges {
+  listEdges {
+    items{
+      id
+      type
+      weight
+      owner
+      Nodes{
+        items{
           id
-          name
-          content
+          edge_id
+          node_id
+          node{
+            ...node
+          }
         }
       }
     }
   }
 }
 
-variables: {
-  "nodeID1":"150535e7-86a3-4578-8d70-de5c398d2ebd",
-	"nodeID2":"7a7fd533-afbb-4b30-b99b-a4be6b55847a",
-  "edgeID_1_2":"194a814b-7bdd-4ab0-9bb4-f492e6e4e2c5",
-  "nodeEdgeID1": "6c9850c8-d812-4d13-a2a0-a371ec0f23f0"
+query listResourcesPublic{
+  listResourcePublics{
+    items{
+      id
+      node_id
+      type
+      name
+    }
+  }
+}
+
+mutation createNode {
+  createNode(input:{
+    id:1,
+    type:H_AUTHOR_PAGE,
+    status:PROVISIONAL,
+  }){
+    id
+    type
+    status
+    updatedAt
+    createdAt
+  }
+}
+
+mutation createResourceDraft {
+  createResourceDraft(input:{
+    id:2
+    node_id:1
+    type:A_IMAGE
+    name:"this is a anothah boogah"
+    content:"so you're saying we can't just..."
+  }){
+    id
+    updatedAt
+  }
+}
+
+mutation createResourcePublic {
+  createResourcePublic(input:{
+    id:1
+    node_id:1
+    type:A_IMAGE
+    name:"public resource name"
+    content:"once upon a midnight, dreary"
+  }){
+    id
+    updatedAt
+  }
 }

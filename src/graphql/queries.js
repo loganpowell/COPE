@@ -1,41 +1,41 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getPublicResource = /* GraphQL */ `
-  query GetPublicResource($id: ID!) {
-    getPublicResource(id: $id) {
+export const getResourcePublic = /* GraphQL */ `
+  query GetResourcePublic($id: ID!) {
+    getResourcePublic(id: $id) {
       id
       node_id
-      createdAt
+      updatedAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      updatedAt
+      createdAt
       owner
     }
   }
 `;
-export const listPublicResources = /* GraphQL */ `
-  query ListPublicResources(
-    $filter: ModelPublicResourceFilterInput
+export const listResourcePublics = /* GraphQL */ `
+  query ListResourcePublics(
+    $filter: ModelResourcePublicFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listPublicResources(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listResourcePublics(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         node_id
-        createdAt
+        updatedAt
         type
         name
         content
         _version
         _deleted
         _lastChangedAt
-        updatedAt
+        createdAt
         owner
       }
       nextToken
@@ -43,14 +43,14 @@ export const listPublicResources = /* GraphQL */ `
     }
   }
 `;
-export const syncPublicResources = /* GraphQL */ `
-  query SyncPublicResources(
-    $filter: ModelPublicResourceFilterInput
+export const syncResourcePublics = /* GraphQL */ `
+  query SyncResourcePublics(
+    $filter: ModelResourcePublicFilterInput
     $limit: Int
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncPublicResources(
+    syncResourcePublics(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -59,14 +59,14 @@ export const syncPublicResources = /* GraphQL */ `
       items {
         id
         node_id
-        createdAt
+        updatedAt
         type
         name
         content
         _version
         _deleted
         _lastChangedAt
-        updatedAt
+        createdAt
         owner
       }
       nextToken
@@ -74,14 +74,14 @@ export const syncPublicResources = /* GraphQL */ `
     }
   }
 `;
-export const syncDraftResources = /* GraphQL */ `
-  query SyncDraftResources(
-    $filter: ModelDraftResourceFilterInput
+export const syncResourceDrafts = /* GraphQL */ `
+  query SyncResourceDrafts(
+    $filter: ModelResourceDraftFilterInput
     $limit: Int
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncDraftResources(
+    syncResourceDrafts(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -90,14 +90,14 @@ export const syncDraftResources = /* GraphQL */ `
       items {
         id
         node_id
-        createdAt
+        updatedAt
         type
         name
         content
         _version
         _deleted
         _lastChangedAt
-        updatedAt
+        createdAt
         owner
       }
       nextToken
@@ -116,13 +116,13 @@ export const listNodes = /* GraphQL */ `
         id
         status
         type
-        createdAt
+        updatedAt
         updated_at
         deleted_at
         _version
         _deleted
         _lastChangedAt
-        updatedAt
+        createdAt
         owner
       }
       nextToken
@@ -136,18 +136,18 @@ export const getNode = /* GraphQL */ `
       id
       status
       type
-      createdAt
+      updatedAt
       updated_at
       deleted_at
       _version
       _deleted
       _lastChangedAt
-      updatedAt
-      public_resources {
+      createdAt
+      resources_public {
         nextToken
         startedAt
       }
-      draft_resources {
+      resources_draft {
         nextToken
         startedAt
       }
@@ -159,18 +159,18 @@ export const getNode = /* GraphQL */ `
     }
   }
 `;
-export const nodesByTypeStatusCreatedAt = /* GraphQL */ `
-  query NodesByTypeStatusCreatedAt(
+export const nodesByTypeStatusupdatedAt = /* GraphQL */ `
+  query NodesByTypeStatusupdatedAt(
     $type: NodeType
-    $statusCreatedAt: ModelNodeNodes_by_type_status_createdAtCompositeKeyConditionInput
+    $statusUpdatedAt: ModelNodeNodes_by_type_status_updatedAtCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelNodeFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    nodesByTypeStatusCreatedAt(
+    nodesByTypeStatusupdatedAt(
       type: $type
-      statusCreatedAt: $statusCreatedAt
+      statusUpdatedAt: $statusUpdatedAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -180,13 +180,13 @@ export const nodesByTypeStatusCreatedAt = /* GraphQL */ `
         id
         status
         type
-        createdAt
+        updatedAt
         updated_at
         deleted_at
         _version
         _deleted
         _lastChangedAt
-        updatedAt
+        createdAt
         owner
       }
       nextToken
@@ -211,13 +211,13 @@ export const syncNodes = /* GraphQL */ `
         id
         status
         type
-        createdAt
+        updatedAt
         updated_at
         deleted_at
         _version
         _deleted
         _lastChangedAt
-        updatedAt
+        createdAt
         owner
       }
       nextToken
