@@ -1,104 +1,104 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateResourcePublic = /* GraphQL */ `
-  subscription OnCreateResourcePublic($owner: String) {
-    onCreateResourcePublic(owner: $owner) {
+export const onCreateAsset = /* GraphQL */ `
+  subscription OnCreateAsset($owner: String) {
+    onCreateAsset(owner: $owner) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const onUpdateResourcePublic = /* GraphQL */ `
-  subscription OnUpdateResourcePublic($owner: String) {
-    onUpdateResourcePublic(owner: $owner) {
+export const onUpdateAsset = /* GraphQL */ `
+  subscription OnUpdateAsset($owner: String) {
+    onUpdateAsset(owner: $owner) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const onDeleteResourcePublic = /* GraphQL */ `
-  subscription OnDeleteResourcePublic($owner: String) {
-    onDeleteResourcePublic(owner: $owner) {
+export const onDeleteAsset = /* GraphQL */ `
+  subscription OnDeleteAsset($owner: String) {
+    onDeleteAsset(owner: $owner) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const onCreateResourceDraft = /* GraphQL */ `
-  subscription OnCreateResourceDraft($owner: String) {
-    onCreateResourceDraft(owner: $owner) {
+export const onCreate_Asset = /* GraphQL */ `
+  subscription OnCreate_Asset($owner: String) {
+    onCreate_Asset(owner: $owner) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const onUpdateResourceDraft = /* GraphQL */ `
-  subscription OnUpdateResourceDraft($owner: String) {
-    onUpdateResourceDraft(owner: $owner) {
+export const onUpdate_Asset = /* GraphQL */ `
+  subscription OnUpdate_Asset($owner: String) {
+    onUpdate_Asset(owner: $owner) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const onDeleteResourceDraft = /* GraphQL */ `
-  subscription OnDeleteResourceDraft($owner: String) {
-    onDeleteResourceDraft(owner: $owner) {
+export const onDelete_Asset = /* GraphQL */ `
+  subscription OnDelete_Asset($owner: String) {
+    onDelete_Asset(owner: $owner) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
@@ -109,18 +109,16 @@ export const onCreateNode = /* GraphQL */ `
       id
       status
       type
+      createdAt
       updatedAt
-      updated_at
-      deleted_at
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      resources_public {
+      assets {
         nextToken
         startedAt
       }
-      resources_draft {
+      _assets {
         nextToken
         startedAt
       }
@@ -138,18 +136,16 @@ export const onUpdateNode = /* GraphQL */ `
       id
       status
       type
+      createdAt
       updatedAt
-      updated_at
-      deleted_at
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      resources_public {
+      assets {
         nextToken
         startedAt
       }
-      resources_draft {
+      _assets {
         nextToken
         startedAt
       }
@@ -167,18 +163,16 @@ export const onDeleteNode = /* GraphQL */ `
       id
       status
       type
+      createdAt
       updatedAt
-      updated_at
-      deleted_at
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      resources_public {
+      assets {
         nextToken
         startedAt
       }
-      resources_draft {
+      _assets {
         nextToken
         startedAt
       }
@@ -195,14 +189,14 @@ export const onCreateEdge = /* GraphQL */ `
     onCreateEdge(owner: $owner) {
       id
       type
+      createdAt
       weight
       _version
       _deleted
       _lastChangedAt
-      createdAt
       updatedAt
       owner
-      Nodes {
+      nodes {
         nextToken
         startedAt
       }
@@ -214,14 +208,14 @@ export const onUpdateEdge = /* GraphQL */ `
     onUpdateEdge(owner: $owner) {
       id
       type
+      createdAt
       weight
       _version
       _deleted
       _lastChangedAt
-      createdAt
       updatedAt
       owner
-      Nodes {
+      nodes {
         nextToken
         startedAt
       }
@@ -233,14 +227,14 @@ export const onDeleteEdge = /* GraphQL */ `
     onDeleteEdge(owner: $owner) {
       id
       type
+      createdAt
       weight
       _version
       _deleted
       _lastChangedAt
-      createdAt
       updatedAt
       owner
-      Nodes {
+      nodes {
         nextToken
         startedAt
       }
@@ -262,23 +256,21 @@ export const onCreateNodeEdge = /* GraphQL */ `
         id
         status
         type
+        createdAt
         updatedAt
-        updated_at
-        deleted_at
         _version
         _deleted
         _lastChangedAt
-        createdAt
         owner
       }
       edge {
         id
         type
+        createdAt
         weight
         _version
         _deleted
         _lastChangedAt
-        createdAt
         updatedAt
         owner
       }
@@ -301,23 +293,21 @@ export const onUpdateNodeEdge = /* GraphQL */ `
         id
         status
         type
+        createdAt
         updatedAt
-        updated_at
-        deleted_at
         _version
         _deleted
         _lastChangedAt
-        createdAt
         owner
       }
       edge {
         id
         type
+        createdAt
         weight
         _version
         _deleted
         _lastChangedAt
-        createdAt
         updatedAt
         owner
       }
@@ -340,23 +330,21 @@ export const onDeleteNodeEdge = /* GraphQL */ `
         id
         status
         type
+        createdAt
         updatedAt
-        updated_at
-        deleted_at
         _version
         _deleted
         _lastChangedAt
-        createdAt
         owner
       }
       edge {
         id
         type
+        createdAt
         weight
         _version
         _deleted
         _lastChangedAt
-        createdAt
         updatedAt
         owner
       }

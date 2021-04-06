@@ -1,41 +1,41 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getResourcePublic = /* GraphQL */ `
-  query GetResourcePublic($id: ID!) {
-    getResourcePublic(id: $id) {
+export const getAsset = /* GraphQL */ `
+  query GetAsset($id: ID!) {
+    getAsset(id: $id) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const listResourcePublics = /* GraphQL */ `
-  query ListResourcePublics(
-    $filter: ModelResourcePublicFilterInput
+export const listAssets = /* GraphQL */ `
+  query ListAssets(
+    $filter: ModelAssetFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listResourcePublics(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listAssets(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         node_id
-        updatedAt
+        createdAt
         type
         name
         content
         _version
         _deleted
         _lastChangedAt
-        createdAt
+        updatedAt
         owner
       }
       nextToken
@@ -43,14 +43,84 @@ export const listResourcePublics = /* GraphQL */ `
     }
   }
 `;
-export const syncResourcePublics = /* GraphQL */ `
-  query SyncResourcePublics(
-    $filter: ModelResourcePublicFilterInput
+export const assetsByNode = /* GraphQL */ `
+  query AssetsByNode(
+    $node_id: ID
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelAssetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    AssetsByNode(
+      node_id: $node_id
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        node_id
+        createdAt
+        type
+        name
+        content
+        _version
+        _deleted
+        _lastChangedAt
+        updatedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const assetsByTypeName = /* GraphQL */ `
+  query AssetsByTypeName(
+    $type: AssetType
+    $nameCreatedAt: ModelAssetAssets_by_type_nameCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelAssetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    AssetsByTypeName(
+      type: $type
+      nameCreatedAt: $nameCreatedAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        node_id
+        createdAt
+        type
+        name
+        content
+        _version
+        _deleted
+        _lastChangedAt
+        updatedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncAssets = /* GraphQL */ `
+  query SyncAssets(
+    $filter: ModelAssetFilterInput
     $limit: Int
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncResourcePublics(
+    syncAssets(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -59,14 +129,14 @@ export const syncResourcePublics = /* GraphQL */ `
       items {
         id
         node_id
-        updatedAt
+        createdAt
         type
         name
         content
         _version
         _deleted
         _lastChangedAt
-        createdAt
+        updatedAt
         owner
       }
       nextToken
@@ -74,14 +144,14 @@ export const syncResourcePublics = /* GraphQL */ `
     }
   }
 `;
-export const syncResourceDrafts = /* GraphQL */ `
-  query SyncResourceDrafts(
-    $filter: ModelResourceDraftFilterInput
+export const sync_Assets = /* GraphQL */ `
+  query Sync_Assets(
+    $filter: Model_AssetFilterInput
     $limit: Int
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncResourceDrafts(
+    sync_Assets(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -90,14 +160,14 @@ export const syncResourceDrafts = /* GraphQL */ `
       items {
         id
         node_id
-        updatedAt
+        createdAt
         type
         name
         content
         _version
         _deleted
         _lastChangedAt
-        createdAt
+        updatedAt
         owner
       }
       nextToken
@@ -116,13 +186,11 @@ export const listNodes = /* GraphQL */ `
         id
         status
         type
+        createdAt
         updatedAt
-        updated_at
-        deleted_at
         _version
         _deleted
         _lastChangedAt
-        createdAt
         owner
       }
       nextToken
@@ -136,18 +204,16 @@ export const getNode = /* GraphQL */ `
       id
       status
       type
+      createdAt
       updatedAt
-      updated_at
-      deleted_at
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      resources_public {
+      assets {
         nextToken
         startedAt
       }
-      resources_draft {
+      _assets {
         nextToken
         startedAt
       }
@@ -159,18 +225,18 @@ export const getNode = /* GraphQL */ `
     }
   }
 `;
-export const nodesByTypeStatusupdatedAt = /* GraphQL */ `
-  query NodesByTypeStatusupdatedAt(
+export const nodesByTypeStatus = /* GraphQL */ `
+  query NodesByTypeStatus(
     $type: NodeType
-    $statusUpdatedAt: ModelNodeNodes_by_type_status_updatedAtCompositeKeyConditionInput
+    $statusCreatedAt: ModelNodeNodes_by_type_status_createdAtCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelNodeFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    nodesByTypeStatusupdatedAt(
+    nodesByTypeStatus(
       type: $type
-      statusUpdatedAt: $statusUpdatedAt
+      statusCreatedAt: $statusCreatedAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -180,13 +246,11 @@ export const nodesByTypeStatusupdatedAt = /* GraphQL */ `
         id
         status
         type
+        createdAt
         updatedAt
-        updated_at
-        deleted_at
         _version
         _deleted
         _lastChangedAt
-        createdAt
         owner
       }
       nextToken
@@ -211,13 +275,11 @@ export const syncNodes = /* GraphQL */ `
         id
         status
         type
+        createdAt
         updatedAt
-        updated_at
-        deleted_at
         _version
         _deleted
         _lastChangedAt
-        createdAt
         owner
       }
       nextToken
@@ -235,11 +297,11 @@ export const listEdges = /* GraphQL */ `
       items {
         id
         type
+        createdAt
         weight
         _version
         _deleted
         _lastChangedAt
-        createdAt
         updatedAt
         owner
       }
@@ -253,17 +315,50 @@ export const getEdge = /* GraphQL */ `
     getEdge(id: $id) {
       id
       type
+      createdAt
       weight
       _version
       _deleted
       _lastChangedAt
-      createdAt
       updatedAt
       owner
-      Nodes {
+      nodes {
         nextToken
         startedAt
       }
+    }
+  }
+`;
+export const edgesByTypeWeight = /* GraphQL */ `
+  query EdgesByTypeWeight(
+    $type: EdgeType
+    $weightCreatedAt: ModelEdgeEdges_by_type_weightCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelEdgeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    edgesByTypeWeight(
+      type: $type
+      weightCreatedAt: $weightCreatedAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        type
+        createdAt
+        weight
+        _version
+        _deleted
+        _lastChangedAt
+        updatedAt
+        owner
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -283,11 +378,11 @@ export const syncEdges = /* GraphQL */ `
       items {
         id
         type
+        createdAt
         weight
         _version
         _deleted
         _lastChangedAt
-        createdAt
         updatedAt
         owner
       }

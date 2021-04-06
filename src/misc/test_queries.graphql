@@ -13,7 +13,10 @@ query nodeEnums {
     }
   }
 }
-fragment resource on Resource {
+
+# shift-option/alt-click on a query below to jump to it in the explorer
+# option/alt-click on a field in the explorer to select all subfields
+fragment asset on Resource {
   id
   type
   node_id
@@ -27,35 +30,58 @@ fragment node on Node {
   type
   createdAt
   owner
-  resources_public{
+  assets{
     items{
-      ...resource
+      ...asset
     }
   }
-  resources_draft{
+  _assets{
     items {
-      ...resource
+      ...asset
     }
   }
-  edges{
-    items{
-      id
-      edge_id
-      node_id
+  edges(sortDirection:DESC){
+    items{ #nodeEdges
+      # id
+      # edge_id
+      # node_id
+      # createdAt
+      # owner
       edge{
         id
         type
         weight
+        createdAt
+        owner
+        nodes(filter:{
+          id:{
+            ne: $nodeEdge
+          }
+        }){
+          items{
+            id
+            node{
+              id
+              type
+            }
+          }
+        }
       }
     }
   }
 }
 
-query listNodes {
+query listNodes($nodeEdge: ID) {
   listNodes {
     items {
       ...node
     }
+  }
+}
+
+query getNode ($nodeEdge: ID){
+  getNode(id:1){
+    ...node
   }
 }
 
@@ -66,13 +92,14 @@ query listEdges {
       type
       weight
       owner
-      Nodes{
+      nodes{
         items{
+          createdAt
           id
           edge_id
           node_id
           node{
-            ...node
+            type
           }
         }
       }
@@ -80,8 +107,10 @@ query listEdges {
   }
 }
 
-query listResourcesPublic{
-  listResourcePublics{
+
+
+query listAssets{
+  listAssets{
     items{
       id
       node_id
@@ -91,11 +120,56 @@ query listResourcesPublic{
   }
 }
 
+query nodesByTypeStatus($nodeEdge: ID) {
+  nodesByTypeStatus(
+    type:H_AUTHOR_PAGE
+    sortDirection:DESC
+    statusCreatedAt:{
+			beginsWith:{
+				status:STUBBED
+				# createdAt:"2021-04-05T21"
+			}
+			# ge:{
+			# status:PROVISIONAL
+			# createdAt:"2021-04-05T20"
+			# }
+    }
+  ){
+    items{
+      ...node
+    }
+  }
+}
+
+query edgesByTypeWeight{
+  edgesByTypeWeight(
+    type:WORKED_WITH
+    weightCreatedAt:{
+      lt:{
+        weight:2,
+        # createdAt:"2022"
+      }
+    }
+    sortDirection:DESC
+  ){
+    items{
+      id
+      type
+      weight
+      createdAt
+    }
+  }
+}
+
+############################
+######## MUTATIONS #########
+############################
+
 mutation createNode {
   createNode(input:{
     id:1,
     type:H_AUTHOR_PAGE,
-    status:PROVISIONAL,
+    status:STUBBED,
   }){
     id
     type
@@ -105,11 +179,11 @@ mutation createNode {
   }
 }
 
-mutation createResourceDraft {
-  createResourceDraft(input:{
-    id:2
+mutation create_Resource {
+  create_Asset(input:{
+    id:1
     node_id:1
-    type:A_IMAGE
+    type:V_IMAGE
     name:"this is a anothah boogah"
     content:"so you're saying we can't just..."
   }){
@@ -118,15 +192,43 @@ mutation createResourceDraft {
   }
 }
 
-mutation createResourcePublic {
-  createResourcePublic(input:{
+mutation createResource {
+  createAsset(input:{
     id:1
     node_id:1
-    type:A_IMAGE
+    type:V_IMAGE
     name:"public resource name"
     content:"once upon a midnight, dreary"
   }){
     id
     updatedAt
+  }
+}
+
+
+mutation createEdge {
+  createEdge(input:{
+    id:1
+    type:CREATED_BY
+    weight:0
+  }){
+    id
+  }
+}
+
+# each Edge should have two Nodes: [from, to]
+# create NodeEdge after creating both Nodes
+# link each Node in order [from, to]
+mutation createNodeEdge {
+  createNodeEdge(input:{
+    id: "1:1"
+    node_id:1,
+    edge_id:1,
+  }){
+    edge{
+      id
+      type
+      weight
+    }
   }
 }

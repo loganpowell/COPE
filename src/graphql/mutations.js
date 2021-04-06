@@ -1,122 +1,122 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createResourcePublic = /* GraphQL */ `
-  mutation CreateResourcePublic(
-    $input: CreateResourcePublicInput!
-    $condition: ModelResourcePublicConditionInput
+export const createAsset = /* GraphQL */ `
+  mutation CreateAsset(
+    $input: CreateAssetInput!
+    $condition: ModelAssetConditionInput
   ) {
-    createResourcePublic(input: $input, condition: $condition) {
+    createAsset(input: $input, condition: $condition) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const updateResourcePublic = /* GraphQL */ `
-  mutation UpdateResourcePublic(
-    $input: UpdateResourcePublicInput!
-    $condition: ModelResourcePublicConditionInput
+export const updateAsset = /* GraphQL */ `
+  mutation UpdateAsset(
+    $input: UpdateAssetInput!
+    $condition: ModelAssetConditionInput
   ) {
-    updateResourcePublic(input: $input, condition: $condition) {
+    updateAsset(input: $input, condition: $condition) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const deleteResourcePublic = /* GraphQL */ `
-  mutation DeleteResourcePublic(
-    $input: DeleteResourcePublicInput!
-    $condition: ModelResourcePublicConditionInput
+export const deleteAsset = /* GraphQL */ `
+  mutation DeleteAsset(
+    $input: DeleteAssetInput!
+    $condition: ModelAssetConditionInput
   ) {
-    deleteResourcePublic(input: $input, condition: $condition) {
+    deleteAsset(input: $input, condition: $condition) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const createResourceDraft = /* GraphQL */ `
-  mutation CreateResourceDraft(
-    $input: CreateResourceDraftInput!
-    $condition: ModelResourceDraftConditionInput
+export const create_Asset = /* GraphQL */ `
+  mutation Create_Asset(
+    $input: Create_AssetInput!
+    $condition: Model_AssetConditionInput
   ) {
-    createResourceDraft(input: $input, condition: $condition) {
+    create_Asset(input: $input, condition: $condition) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const updateResourceDraft = /* GraphQL */ `
-  mutation UpdateResourceDraft(
-    $input: UpdateResourceDraftInput!
-    $condition: ModelResourceDraftConditionInput
+export const update_Asset = /* GraphQL */ `
+  mutation Update_Asset(
+    $input: Update_AssetInput!
+    $condition: Model_AssetConditionInput
   ) {
-    updateResourceDraft(input: $input, condition: $condition) {
+    update_Asset(input: $input, condition: $condition) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
 `;
-export const deleteResourceDraft = /* GraphQL */ `
-  mutation DeleteResourceDraft(
-    $input: DeleteResourceDraftInput!
-    $condition: ModelResourceDraftConditionInput
+export const delete_Asset = /* GraphQL */ `
+  mutation Delete_Asset(
+    $input: Delete_AssetInput!
+    $condition: Model_AssetConditionInput
   ) {
-    deleteResourceDraft(input: $input, condition: $condition) {
+    delete_Asset(input: $input, condition: $condition) {
       id
       node_id
-      updatedAt
+      createdAt
       type
       name
       content
       _version
       _deleted
       _lastChangedAt
-      createdAt
+      updatedAt
       owner
     }
   }
@@ -130,18 +130,16 @@ export const createNode = /* GraphQL */ `
       id
       status
       type
+      createdAt
       updatedAt
-      updated_at
-      deleted_at
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      resources_public {
+      assets {
         nextToken
         startedAt
       }
-      resources_draft {
+      _assets {
         nextToken
         startedAt
       }
@@ -162,18 +160,16 @@ export const updateNode = /* GraphQL */ `
       id
       status
       type
+      createdAt
       updatedAt
-      updated_at
-      deleted_at
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      resources_public {
+      assets {
         nextToken
         startedAt
       }
-      resources_draft {
+      _assets {
         nextToken
         startedAt
       }
@@ -194,18 +190,16 @@ export const deleteNode = /* GraphQL */ `
       id
       status
       type
+      createdAt
       updatedAt
-      updated_at
-      deleted_at
       _version
       _deleted
       _lastChangedAt
-      createdAt
-      resources_public {
+      assets {
         nextToken
         startedAt
       }
-      resources_draft {
+      _assets {
         nextToken
         startedAt
       }
@@ -225,14 +219,14 @@ export const createEdge = /* GraphQL */ `
     createEdge(input: $input, condition: $condition) {
       id
       type
+      createdAt
       weight
       _version
       _deleted
       _lastChangedAt
-      createdAt
       updatedAt
       owner
-      Nodes {
+      nodes {
         nextToken
         startedAt
       }
@@ -247,14 +241,14 @@ export const updateEdge = /* GraphQL */ `
     updateEdge(input: $input, condition: $condition) {
       id
       type
+      createdAt
       weight
       _version
       _deleted
       _lastChangedAt
-      createdAt
       updatedAt
       owner
-      Nodes {
+      nodes {
         nextToken
         startedAt
       }
@@ -269,14 +263,14 @@ export const deleteEdge = /* GraphQL */ `
     deleteEdge(input: $input, condition: $condition) {
       id
       type
+      createdAt
       weight
       _version
       _deleted
       _lastChangedAt
-      createdAt
       updatedAt
       owner
-      Nodes {
+      nodes {
         nextToken
         startedAt
       }
@@ -301,23 +295,21 @@ export const createNodeEdge = /* GraphQL */ `
         id
         status
         type
+        createdAt
         updatedAt
-        updated_at
-        deleted_at
         _version
         _deleted
         _lastChangedAt
-        createdAt
         owner
       }
       edge {
         id
         type
+        createdAt
         weight
         _version
         _deleted
         _lastChangedAt
-        createdAt
         updatedAt
         owner
       }
@@ -343,23 +335,21 @@ export const updateNodeEdge = /* GraphQL */ `
         id
         status
         type
+        createdAt
         updatedAt
-        updated_at
-        deleted_at
         _version
         _deleted
         _lastChangedAt
-        createdAt
         owner
       }
       edge {
         id
         type
+        createdAt
         weight
         _version
         _deleted
         _lastChangedAt
-        createdAt
         updatedAt
         owner
       }
@@ -385,23 +375,21 @@ export const deleteNodeEdge = /* GraphQL */ `
         id
         status
         type
+        createdAt
         updatedAt
-        updated_at
-        deleted_at
         _version
         _deleted
         _lastChangedAt
-        createdAt
         owner
       }
       edge {
         id
         type
+        createdAt
         weight
         _version
         _deleted
         _lastChangedAt
-        createdAt
         updatedAt
         owner
       }
