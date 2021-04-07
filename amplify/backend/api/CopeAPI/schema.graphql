@@ -101,12 +101,12 @@ type Asset implements Resource
     #    queryField: "AssetsByType"
     #)
     @key (
-        name: "Assets_by_node",
+        name: "Assets_by_node"
         fields: ["node_id", "createdAt"]
         queryField: "AssetsByNode"
     )
     @key (
-        name: "Assets_by_type_name",
+        name: "Assets_by_type_name"
         fields: ["type", "name", "createdAt"]
         queryField: "AssetsByTypeName"
     )
@@ -134,14 +134,13 @@ type _Asset implements Resource
     type            : AssetType!
     name            : String!
     content         : String
-    #editors                 : [ String ]
+    #editors         : [ String ]
 }
 
 # NOTES:
 # https://docs.amplify.aws/cli/graphql-transformer/key#designing-data-models-using-key
 # https://www.alexdebrie.com/posts/dynamodb-one-to-many/#composite-primary-key--the-query-api-action
 # https://docs.amplify.aws/cli/graphql-transformer/auth#field-level-authorization
-
 type Node
     @model
     @auth (rules: [
@@ -151,17 +150,17 @@ type Node
         { allow: public, operations: [ read                 ]                                }
     ])
     @key (
-        name: "Nodes_by_type_status_createdAt",  # name: GSI Index Name 
-        fields: ["type", "status", "createdAt"], # type = partition key | status#createdAt = composite sort key
-        queryField: "nodesByTypeStatus" # GraphQL query name
+        name: "Nodes_by_type_status_createdAt",     # name: GSI Index Name 
+        fields: ["type", "status", "createdAt"],    # type = partition key | status#createdAt = composite sort key
+        queryField: "nodesByTypeStatus"             # GraphQL query name
     )
 {
     id              : ID!
     status          : Status!
     type            : NodeType!
     createdAt       : AWSDateTime!
-    updatedAt       : AWSDateTime!  # automatically associated
-    #owner          : String!       # automatically associated
+    updatedAt       : AWSDateTime!                  # automatically associated
+    #owner          : String!                       # automatically associated
     assets          : [ Asset ]         @connection (keyName: "Assets_by_node", fields: ["id"])
     _assets         : [ _Asset ]        @connection (keyName: "_Assets_by_node", fields: ["id"])
     edges           : [ NodeEdge ]      @connection (keyName: "NodeEdges_by_node", fields: ["id"])

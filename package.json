@@ -9,17 +9,14 @@
     "repository": "https://github.com/loganpowell/COPE",
     "homepage": "https://github.com/loganpowell/COPE",
     "scripts": {
-        "pages": "npm run types && npm run jsdoc",
         "clean": "rm -rf ./lib & rm -rf ./dist &  rm -rf .cache",
         "madge": "madge --circular lib/",
         "typewatch": "tsc --project tsconfig.json",
         "types": "tsc --project tsconfig.build.json",
-        "jsdoc": "jsdoc -c jsdoc/jsdoc.json --verbose --debug",
-        "docs": "npm run types && npm run jsdoc",
-        "patch": "npm version patch && npm run docs && npm run pages && npm publish",
-        "test": "npm run madge && concurrently \"npm run typewatch\" \"jest --watchAll\"",
-        "postgit": "git push origin master && npm run patch",
-        "ncu": "ncu -u && npm i && npm audit fix",
+        "mock": "amplify mock",
+        "jest": "jest --watchAll",
+        "delay": "node ./node_modules/npm-delay 60000",
+        "test": "npm run madge && concurrently \"amplify mock\" \"npm run delay && npm run typewatch\" \"npm run delay && npm run jest\"",
         "git": "npm run ncu && git add . && git commit -m",
         "build": "npm run clean && cross-env NODE_ENV=production parcel build client/index.html -d dist --no-source-maps --no-cache --public-url ./",
         "dev": "concurrently \"npm run typewatch\" \"parcel client/index.html --global md -p 8080 --open -d dist watch\""
@@ -28,28 +25,36 @@
     "publishConfig": {
         "access": "public"
     },
-    "dependencies": {},
+    "dependencies": {
+        "nanographql": "^2.0.0",
+        "node-fetch": "^2.6.1"
+    },
     "peerDependencies": {},
     "devDependencies": {
         "@babel/plugin-transform-modules-commonjs": "^7.13.8",
-        "@types/jest": "^26.0.21",
-        "@types/node": "^14.14.35",
-        "@typescript-eslint/eslint-plugin": "^4.19.0",
-        "@typescript-eslint/parser": "^4.19.0",
+        "@types/jest": "^26.0.22",
+        "@types/node": "^14.14.37",
+        "@typescript-eslint/eslint-plugin": "^4.21.0",
+        "@typescript-eslint/parser": "^4.21.0",
         "babel-jest": "^26.6.3",
-        "better-docs": "^2.3.2",
         "cross-env": "^7.0.3",
-        "eslint": "^7.22.0",
+        "dotenv": "^8.2.0",
+        "dummy-text-generator": "^1.0.3",
+        "eslint": "^7.23.0",
         "eslint-plugin-prettier": "^3.3.1",
-        "gh-pages": "^3.1.0",
         "jest": "^26.6.3",
-        "prettier": "^2.2.1",
         "jest-environment-jsdom": "^26.6.2",
-        "jsdom": "^16.5.1",
+        "jsdom": "^16.5.2",
+        "npm-delay": "^1.0.4",
+        "prettier": "^2.2.1",
         "ts-jest": "^26.5.4",
-        "ts-node": "^9.1.1"
+        "ts-node": "^9.1.1",
+        "typescript": "^4.2.3",
+        "uuid": "^8.3.2"
     },
-    "browserslist": [ "last 3 Chrome versions" ],
+    "browserslist": [
+        "last 3 Chrome versions"
+    ],
     "prettier": {
         "singleQuote": false,
         "printWidth": 120,
