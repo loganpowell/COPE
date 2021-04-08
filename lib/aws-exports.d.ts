@@ -11,9 +11,4 @@ declare namespace awsmobile {
         endpoint: string;
         region: string;
     }[];
-    const aws_appsync_graphqlEndpoint: string;
-    const aws_appsync_region: string;
-    const aws_appsync_authenticationType: string;
-    const aws_appsync_apiKey: string;
-    const aws_appsync_dangerously_connect_to_http_endpoint_for_testing: boolean;
 }

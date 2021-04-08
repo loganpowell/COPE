@@ -1,3 +1,6 @@
+################################################################################
+################################ ASSETS ########################################
+################################################################################
 
 enum AssetType {
     # Documentation #############################
@@ -27,56 +30,7 @@ enum AssetType {
     F_PDF
 }
 
-enum NodeType {
-    # Person #####################################
-    H_AUTHOR
-    H_EMPLOYEE
-    H_HISTORICAL
 
-    # Geographic Hierarchy #######################
-    # summary level = 040 (State)
-    G_STATE_01 
-    G_STATE_02
-    # ...
-
-    
-    # Thing ######################################
-    A_LESSON
-    A_ARTICLE
-
-    # Collections/Groupings/branches #############
-    C_PAGE # findable by router/deeplink
-    C_APPLICATION
-    C_COURSE
-    C_SERIES # Ordered/linked list
-    C_LIST # Ordered/sortable
-
-}
-
-enum EdgeType {
-    # Human to Human
-    WORKED_WITH
-    # Human to Asset
-    CREATED_BY
-    # Asset to Asset
-    COMPOSED_WITH 
-    CHILD_OF
-    PARENT_OF
-    SIBLING_OF
-    IS_BEFORE # linked list
-    COMPONENT_OF
-    CONTAINS
-    MEMBER_OF
-    AUTHOR_OF
-}
-
-enum Status {
-    STUBBED
-    REVIEWED
-    PUBLISHED
-    DELETED
-    EDITED
-}
 
 interface Resource {
     id              : ID!
@@ -137,6 +91,44 @@ type _Asset implements Resource
     #editors         : [ String ]
 }
 
+################################################################################
+################################# NODES ########################################
+################################################################################
+
+enum NodeType {
+    # Person #####################################
+    PER_PERSON
+    PER_AUTHOR
+    PER_EMPLOYEE
+    PER_HISTORICAL
+
+    # Geographic Hierarchy #######################
+    # summary level = 040 (State)
+    GEO_STATE_01 
+    GEO_STATE_02
+    # ...
+
+    # Thing ######################################
+    A_LESSON
+    A_ARTICLE
+    A_PAGE # findable by router/deeplink
+    A_APPLICATION
+
+    # Collections/Groupings/branches #############
+    GR_COURSE
+    GR_SERIES # Ordered/linked list
+    GR_LIST # Ordered/sortable
+
+}
+
+enum Status {
+    DRAFT
+    REVIEWED
+    PUBLISHED
+    EDITED
+    DELETED
+}
+
 # NOTES:
 # https://docs.amplify.aws/cli/graphql-transformer/key#designing-data-models-using-key
 # https://www.alexdebrie.com/posts/dynamodb-one-to-many/#composite-primary-key--the-query-api-action
@@ -163,8 +155,27 @@ type Node
     #owner          : String!                       # automatically associated
     assets          : [ Asset ]         @connection (keyName: "Assets_by_node", fields: ["id"])
     _assets         : [ _Asset ]        @connection (keyName: "_Assets_by_node", fields: ["id"])
-    edges           : [ NodeEdge ]      @connection (keyName: "NodeEdges_by_node", fields: ["id"])
+    edges           : [ EdgeNode ]      @connection (keyName: "EdgeNodes_by_node", fields: ["id"])
 }
+
+################################################################################
+################################# EDGES ########################################
+################################################################################
+
+enum EdgeType {
+    # Human to Human
+    WORKED_WITH
+    # Human to Group
+    HAS_MEMBER
+    # Human to Asset
+    AUTHORED
+    # Asset to Asset
+    HAS_CHILD
+    IS_BEFORE # linked list
+    # Asset to Group
+    HAS_PART
+}
+
 
 type Edge 
     @model
@@ -184,12 +195,12 @@ type Edge
     type            : EdgeType!
     createdAt       : AWSDateTime!
     weight          : Int
-    nodes           : [ NodeEdge ]      @connection (keyName: "NodeEdges_by_edge", fields: ["id"])
+    nodes           : [ EdgeNode ]      @connection (keyName: "EdgeNodes_by_edge", fields: ["id"])
 }
 
-# NodeEdges insertion order is important [ from, to ] = direction of relationship/type
+# EdgeNodes insertion order is important [ from, to ] = direction of relationship/type
 # creation of these needs to be done deliberately in order (use spool)
-type NodeEdge
+type EdgeNode
     @auth (rules: [
         { allow: owner                                                                       },
         { allow: groups, operations: [ read, update, delete ], groups: ["Admins", "Editors"] },
@@ -197,8 +208,8 @@ type NodeEdge
         { allow: public, operations: [ read                 ]                                }
     ])
     @model (queries: null)
-    @key ( name: "NodeEdges_by_edge", fields: ["edge_id", "node_id"] )
-    @key ( name: "NodeEdges_by_node", fields: ["node_id", "edge_id"] ) 
+    @key ( name: "EdgeNodes_by_edge", fields: ["edge_id", "node_id"] )
+    @key ( name: "EdgeNodes_by_node", fields: ["node_id", "edge_id"] ) 
 {
     id              : ID!
     edge_id         : ID!

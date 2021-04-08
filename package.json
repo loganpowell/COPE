@@ -26,6 +26,8 @@
         "access": "public"
     },
     "dependencies": {
+        "@thi.ng/associative": "^5.2.2",
+        "json-to-graphql-query": "^2.0.0",
         "nanographql": "^2.0.0",
         "node-fetch": "^2.6.1"
     },

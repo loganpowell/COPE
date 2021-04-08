@@ -105,8 +105,8 @@ const result = {
     }
 }
 
-describe("something", () => {
-    test("something", () => {
+describe("graphql mutations", () => {
+    test("basic", () => {
         data.then(j => {
             expect(j).toMatchObject(result)
         })
