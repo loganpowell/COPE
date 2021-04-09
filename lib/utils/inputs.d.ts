@@ -28,5 +28,5 @@ export declare type Relation = {
     nodes: Array<Node | null>;
     edge: Edge;
     edge_nodes: Array<EdgeNode | null>;
-};
+} | Record<string, never>;
 export declare const gen_link_input: (node_matrix: Link) => Relation;

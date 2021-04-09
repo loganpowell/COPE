@@ -36,11 +36,13 @@ export interface Link {
     edge: Edge
 }
 
-export type Relation = {
-    nodes: Array<Node | null>
-    edge: Edge
-    edge_nodes: Array<EdgeNode | null>
-}
+export type Relation =
+    | {
+          nodes: Array<Node | null>
+          edge: Edge
+          edge_nodes: Array<EdgeNode | null>
+      }
+    | Record<string, never>
 
 //generateWord(1) //?
 //generateSentence(2) //?
@@ -48,6 +50,11 @@ export type Relation = {
 
 // prettier-ignore
 export const gen_link_input = ( node_matrix : Link ) : Relation => {
+    const { nodes, edge } = node_matrix
+    if (!nodes || !edge || nodes.length === 0 || Object.entries(edge).length === 0 ) {
+        console.warn("gen_link_input args do not meet requirements. Check signature")
+        return {}
+    }
     const { 
         nodes : [ 
             { id: id1, ...n1 },
@@ -55,6 +62,7 @@ export const gen_link_input = ( node_matrix : Link ) : Relation => {
         ], 
         edge : { id: id3, ...e1 }
     } = node_matrix
+
 
     const aka1 = id1.length < 5 && "id"
     const aka2 = id2.length < 5 && "id"
@@ -75,7 +83,7 @@ export const gen_link_input = ( node_matrix : Link ) : Relation => {
     const uid3 = uuid()
 
     const na1 = { id: uid1, ...n1 }
-    const na2 = { id: uid2, ...n1 }
+    const na2 = { id: uid2, ...n2 }
     const ea1 = { id: uid3, ...e1 }
 
     const result = (
@@ -89,7 +97,7 @@ export const gen_link_input = ( node_matrix : Link ) : Relation => {
                     ]
                 }
             ],
-            [ // nodes alias, edge akaerence
+            [ // nodes alias, edge reference
                 { nodes : [ n1_aka, n2_aka  ], edge : e1_ref }, 
                 { nodes : [ na1, na2        ], edge : null, 
                     edge_nodes : [
@@ -98,7 +106,7 @@ export const gen_link_input = ( node_matrix : Link ) : Relation => {
                     ]
                 }
             ],
-            [ // edge alias, nodes akaerence
+            [ // edge alias, nodes reference
                 { nodes : [ n1_ref, n2_ref  ], edge : e1_aka }, 
                 { nodes : [ null, null      ], edge : ea1, 
                     edge_nodes : [
@@ -107,7 +115,7 @@ export const gen_link_input = ( node_matrix : Link ) : Relation => {
                     ]
                 }
             ],
-            [ // edge alias, node1 akaerence, node2 alias
+            [ // edge alias, node1 reference, node2 alias
                 { nodes : [ n1_ref, n2_aka  ], edge : e1_aka }, 
                 { nodes : [ null, na2       ], edge : ea1, 
                     edge_nodes : [
@@ -116,7 +124,7 @@ export const gen_link_input = ( node_matrix : Link ) : Relation => {
                     ]
                 }
             ],
-            [ // edge alias, node1 alias, node2 akaerence
+            [ // edge alias, node1 alias, node2 reference
                 { nodes : [ n1_aka, n2_ref  ], edge : e1_aka }, 
                 { nodes : [ na1, null       ], edge : ea1, 
                     edge_nodes : [
@@ -125,7 +133,7 @@ export const gen_link_input = ( node_matrix : Link ) : Relation => {
                     ]
                 }
             ],
-            [ // edge akaerence, node1 akaerence, node2 alias
+            [ // edge reference, node1 reference, node2 alias
                 { nodes : [ n1_ref, n2_aka  ], edge : e1_ref }, 
                 { nodes : [ null, na2       ], edge : null, 
                     edge_nodes : [
@@ -134,7 +142,7 @@ export const gen_link_input = ( node_matrix : Link ) : Relation => {
                     ]
                 }
             ],
-            [ // edge akaerence, node1 alias, node2 akaerence
+            [ // edge reference, node1 alias, node2 reference
                 { nodes : [ n1_aka, n2_ref  ], edge : e1_ref }, 
                 { nodes : [ na1, null       ], edge : null, 
                     edge_nodes : [
@@ -143,7 +151,7 @@ export const gen_link_input = ( node_matrix : Link ) : Relation => {
                     ]
                 }
             ],
-            [ // full akaerencea
+            [ // full reference
                 { nodes : [ n1_ref, n2_ref ], edge : e1_ref }, 
                 { nodes : [ null, null       ], edge : null, 
                     edge_nodes : [
