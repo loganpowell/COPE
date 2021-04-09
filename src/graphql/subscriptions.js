@@ -241,9 +241,9 @@ export const onDeleteEdge = /* GraphQL */ `
     }
   }
 `;
-export const onCreateNodeEdge = /* GraphQL */ `
-  subscription OnCreateNodeEdge($owner: String) {
-    onCreateNodeEdge(owner: $owner) {
+export const onCreateEdgeNode = /* GraphQL */ `
+  subscription OnCreateEdgeNode($owner: String) {
+    onCreateEdgeNode(owner: $owner) {
       id
       edge_id
       node_id
@@ -278,9 +278,9 @@ export const onCreateNodeEdge = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateNodeEdge = /* GraphQL */ `
-  subscription OnUpdateNodeEdge($owner: String) {
-    onUpdateNodeEdge(owner: $owner) {
+export const onUpdateEdgeNode = /* GraphQL */ `
+  subscription OnUpdateEdgeNode($owner: String) {
+    onUpdateEdgeNode(owner: $owner) {
       id
       edge_id
       node_id
@@ -315,9 +315,9 @@ export const onUpdateNodeEdge = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteNodeEdge = /* GraphQL */ `
-  subscription OnDeleteNodeEdge($owner: String) {
-    onDeleteNodeEdge(owner: $owner) {
+export const onDeleteEdgeNode = /* GraphQL */ `
+  subscription OnDeleteEdgeNode($owner: String) {
+    onDeleteEdgeNode(owner: $owner) {
       id
       edge_id
       node_id

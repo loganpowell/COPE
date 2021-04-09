@@ -1,16 +1,16 @@
-import { gen_link_input } from "../../lib/utils/inputs"
+import { gen_link_input, gen_assets_for_node_input } from "../../lib/utils/inputs"
+import { generateWord, generateSentence, generateParagraph } from "dummy-text-generator"
 
-const node_aka1 = { id: "001", status: "A", type: "B" }
-const node_aka2 = { id: "002", status: "A", type: "B" }
-const edge_aka1 = { id: "1:1", type: "TO", weight: null }
+const node_alias1 = { id: "001", status: "A", type: "B" }
+const node_alias2 = { id: "002", status: "A", type: "B" }
+const edge_alias1 = { id: "1:1", type: "TO", weight: null }
 
 const test_full_alias = {
-    nodes : [ node_aka1, node_aka2 ],
-    edge  : edge_aka1
+    nodes : [ node_alias1, node_alias2 ],
+    edge  : edge_alias1
 }
 
 gen_link_input(test_full_alias)
-
 /**
 { nodes:  
    [ { id: '9c0fad35-589f-46e0-bc5d-c2b9a1347d73', 
@@ -31,7 +31,7 @@ gen_link_input(test_full_alias)
  */
 
 const test_nodes_alias_edge_reference = {
-    nodes : [ node_aka1, node_aka2 ],
+    nodes : [ node_alias1, node_alias2 ],
     edge  : { id: "faffasfdasdf" }
 }
 
@@ -55,7 +55,7 @@ gen_link_input(test_nodes_alias_edge_reference)
 
 const test_edge_alias_nodes_reference = {
     nodes : [ { id: "1231231" }, { id: "234235" } ],
-    edge  : edge_aka1
+    edge  : edge_alias1
 }
 
 gen_link_input(test_edge_alias_nodes_reference)
@@ -74,11 +74,11 @@ gen_link_input(test_edge_alias_nodes_reference)
  */
 
 const test_edge_alias_node1_reference_node2_alias = {
-    nodes : [ { id: "123131" }, node_aka2 ],
-    edge  : edge_aka1
+    nodes : [ { id: "123131" }, node_alias2 ],
+    edge  : edge_alias1
 }
 
-gen_link_input(test_edge_alias_node1_reference_node2_alias)
+gen_link_input(test_edge_alias_node1_reference_node2_alias) //?
 
 /**
 { nodes:  
@@ -98,8 +98,8 @@ gen_link_input(test_edge_alias_node1_reference_node2_alias)
  */
 
 const test_edge_alias_node1_alias_node2_reference = {
-    nodes : [ node_aka1, { id: "1231231" } ],
-    edge  : edge_aka1
+    nodes : [ node_alias1, { id: "1231231" } ],
+    edge  : edge_alias1
 }
 
 gen_link_input(test_edge_alias_node1_alias_node2_reference)
@@ -122,7 +122,7 @@ gen_link_input(test_edge_alias_node1_alias_node2_reference)
  */
 
 const test_edge_reference_node1_reference_node2_alias = {
-    nodes : [ { id: "1231231" }, node_aka2 ],
+    nodes : [ { id: "1231231" }, node_alias2 ],
     edge  : { id: "im an edgy sombitch" }
 }
 
@@ -142,7 +142,7 @@ gen_link_input(test_edge_reference_node1_reference_node2_alias)
  */
 
 const test_edge_reference_node1_alias_node2_reference = {
-    nodes : [ node_aka1, { id: "1231231" } ],
+    nodes : [ node_alias1, { id: "1231231" } ],
     edge  : { id: "im an edgy sombitch" }
 }
 
@@ -178,4 +178,22 @@ gen_link_input(test_full_reference)
 
 const test_garbage = { nodes: [], edge: {} }
 
-gen_link_input(test_garbage) //?
+gen_link_input(test_garbage)
+
+// GEN ASSETS ///////////////////////////////////////////////
+
+const assets = Array.from(Array(10), () => {
+    return { type: generateWord().toUpperCase(), name: generateWord(), content: generateSentence(6) }
+})
+
+//const test_assets_node_alias = {
+//    node   : node_alias1,
+//    assets : []
+//}
+
+//gen_assets_for_node_input({
+//    node   : {},
+//    assets : []
+//})
+
+/////////////////////////////////////////////// GEN ASSETS //

@@ -52,7 +52,7 @@ export const assetsByNode = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    AssetsByNode(
+    assetsByNode(
       node_id: $node_id
       createdAt: $createdAt
       sortDirection: $sortDirection
@@ -87,7 +87,7 @@ export const assetsByTypeName = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    AssetsByTypeName(
+    assetsByTypeName(
       type: $type
       nameCreatedAt: $nameCreatedAt
       sortDirection: $sortDirection
@@ -391,14 +391,14 @@ export const syncEdges = /* GraphQL */ `
     }
   }
 `;
-export const syncNodeEdges = /* GraphQL */ `
-  query SyncNodeEdges(
-    $filter: ModelNodeEdgeFilterInput
+export const syncEdgeNodes = /* GraphQL */ `
+  query SyncEdgeNodes(
+    $filter: ModelEdgeNodeFilterInput
     $limit: Int
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncNodeEdges(
+    syncEdgeNodes(
       filter: $filter
       limit: $limit
       nextToken: $nextToken

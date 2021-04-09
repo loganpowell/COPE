@@ -15,7 +15,7 @@ import {
     updateNodeEdge,
     update_Asset
 } from "../../src/graphql/mutations"
-import { auth } from "./utils"
+import { auth } from "../../src/utils"
 import fetch from "node-fetch"
 import dotenv from "dotenv"
 dotenv.config()
@@ -105,10 +105,10 @@ const result = {
     }
 }
 
-describe("graphql mutations", () => {
-    test("basic", () => {
-        data.then(j => {
-            expect(j).toMatchObject(result)
-        })
-    })
-})
+//describe("graphql mutations", () => {
+//    test("basic", () => {
+//        data.then(j => {
+//            expect(j).toMatchObject(result)
+//        })
+//    })
+//})

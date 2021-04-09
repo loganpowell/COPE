@@ -277,12 +277,12 @@ export const deleteEdge = /* GraphQL */ `
     }
   }
 `;
-export const createNodeEdge = /* GraphQL */ `
-  mutation CreateNodeEdge(
-    $input: CreateNodeEdgeInput!
-    $condition: ModelNodeEdgeConditionInput
+export const createEdgeNode = /* GraphQL */ `
+  mutation CreateEdgeNode(
+    $input: CreateEdgeNodeInput!
+    $condition: ModelEdgeNodeConditionInput
   ) {
-    createNodeEdge(input: $input, condition: $condition) {
+    createEdgeNode(input: $input, condition: $condition) {
       id
       edge_id
       node_id
@@ -317,12 +317,12 @@ export const createNodeEdge = /* GraphQL */ `
     }
   }
 `;
-export const updateNodeEdge = /* GraphQL */ `
-  mutation UpdateNodeEdge(
-    $input: UpdateNodeEdgeInput!
-    $condition: ModelNodeEdgeConditionInput
+export const updateEdgeNode = /* GraphQL */ `
+  mutation UpdateEdgeNode(
+    $input: UpdateEdgeNodeInput!
+    $condition: ModelEdgeNodeConditionInput
   ) {
-    updateNodeEdge(input: $input, condition: $condition) {
+    updateEdgeNode(input: $input, condition: $condition) {
       id
       edge_id
       node_id
@@ -357,12 +357,12 @@ export const updateNodeEdge = /* GraphQL */ `
     }
   }
 `;
-export const deleteNodeEdge = /* GraphQL */ `
-  mutation DeleteNodeEdge(
-    $input: DeleteNodeEdgeInput!
-    $condition: ModelNodeEdgeConditionInput
+export const deleteEdgeNode = /* GraphQL */ `
+  mutation DeleteEdgeNode(
+    $input: DeleteEdgeNodeInput!
+    $condition: ModelEdgeNodeConditionInput
   ) {
-    deleteNodeEdge(input: $input, condition: $condition) {
+    deleteEdgeNode(input: $input, condition: $condition) {
       id
       edge_id
       node_id

@@ -33,45 +33,30 @@ const cluster = {
         {
             log   : "authored",
             nodes : [ { id: 0, status: n_status.c, type: n_type.a }, { id: 1, status: n_status.a, type: n_type.b } ],
-            edge  : { id: 0, type: e_type.a, weight: null },
-            link  : [
-                { edge_id: 0, node_id: 0 }, // from
-                { edge_id: 0, node_id: 1 } // to
-            ]
+            edge  : { id: 0, type: e_type.a, weight: null }
         },
         {
             log   : "authored",
-            nodes : [
-                null, // from node preexisting
-                { id: 2, status: n_status.a, type: n_type.b }
-            ],
-            edge  : { id: 1, type: e_type.a, weight: null },
-            link  : [
-                { edge_id: 1, node_id: 0 }, // node_id preexisting
-                { edge_id: 1, node_id: 2 } // id = `${edge_id}:{node_id}
-            ]
+            nodes : [ null, { id: 2, status: n_status.a, type: n_type.b } ],
+            edge  : { id: 1, type: e_type.a, weight: null }
         },
         {
             log   : "authored",
             nodes : [ null, { id: 3, status: n_status.a, type: n_type.b } ],
-            edge  : { id: 2, type: e_type.a, weight: null },
-            link  : [ { edge_id: 2, node_id: 0 }, { edge_id: 2, node_id: 3 } ]
+            edge  : { id: 2, type: e_type.a, weight: null }
         },
         {
             log   : "authored",
             nodes : [ null, { id: 4, status: n_status.a, type: n_type.b } ],
-            edge  : { id: 3, type: e_type.a, weight: null },
-            link  : [ { edge_id: 3, node_id: 0 }, { edge_id: 3, node_id: 4 } ]
+            edge  : { id: 3, type: e_type.a, weight: null }
         },
         {
             nodes : [ null, { id: 3, status: n_status.a, type: n_type.b } ],
-            edge  : { id: 2, type: e_type.a, weight: null },
-            link  : [ { edge_id: 2, node_id: 0 }, { edge_id: 2, node_id: 3 } ]
+            edge  : { id: 2, type: e_type.a, weight: null }
         },
         {
             nodes : [ null, { id: 3, status: n_status.a, type: n_type.b } ],
-            edge  : { id: 2, type: e_type.a, weight: null },
-            link  : [ { edge_id: 2, node_id: 0 }, { edge_id: 2, node_id: 3 } ]
+            edge  : { id: 2, type: e_type.a, weight: null }
         }
     ]
 }

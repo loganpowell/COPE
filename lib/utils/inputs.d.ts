@@ -20,7 +20,7 @@ export declare type EdgeNode = {
     edge_id?: string;
     node_id?: string;
 } | null;
-export interface Link {
+export interface LinkInput {
     nodes: Array<Node | null>;
     edge: Edge;
 }
@@ -29,4 +29,42 @@ export declare type Relation = {
     edge: Edge;
     edge_nodes: Array<EdgeNode | null>;
 } | Record<string, never>;
-export declare const gen_link_input: (node_matrix: Link) => Relation;
+export declare const gen_link_input: (config: LinkInput) => Relation;
+export declare type Asset = {
+    id: string;
+    node_id: string;
+    type: string;
+    name: string;
+    content?: string;
+};
+export interface AssetInput {
+    node: Node;
+    assets: Array<Asset>;
+}
+export declare const gen_assets_for_node_input: (config: AssetInput) => {
+    node: {
+        status?: string;
+        type?: string;
+        node_id: any;
+    };
+    assets: {
+        node_id: string;
+        type: string;
+        name: string;
+        content?: string;
+        id: any;
+    }[];
+} | {
+    node: {
+        id?: string;
+        status?: string;
+        type?: string;
+    };
+    assets: {
+        node_id: string;
+        type: string;
+        name: string;
+        content?: string;
+        id: any;
+    }[];
+};

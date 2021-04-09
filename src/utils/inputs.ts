@@ -1,5 +1,3 @@
-//import { generateWord, generateSentence, generateParagraph } from "dummy-text-generator"
-import { EquivMap } from "@thi.ng/associative"
 import { v4 as uuid } from "uuid"
 
 import dotenv from "dotenv"
@@ -31,7 +29,7 @@ export type EdgeNode = {
     node_id?: string
 } | null
 
-export interface Link {
+export interface LinkInput {
     nodes: Array<Node | null>
     edge: Edge
 }
@@ -48,121 +46,79 @@ export type Relation =
 //generateSentence(2) //?
 //generateParagraph(2, 3) //?
 
-// prettier-ignore
-export const gen_link_input = ( node_matrix : Link ) : Relation => {
-    const { nodes, edge } = node_matrix
-    if (!nodes || !edge || nodes.length === 0 || Object.entries(edge).length === 0 ) {
-        console.warn("gen_link_input args do not meet requirements. Check signature")
+/**
+ * creates input arguments to create a link between two
+ * nodes in order to enable directed edges, the edge_node
+ * order must be maintained during insertion/EdgeNode
+ * creation. 
+ * I.e., EdgeNode (edge_node) insertion order = [ from, to ]
+ * 
+ */
+export const gen_link_input = (config: LinkInput): Relation => {
+    const { nodes, edge } = config
+    if (!nodes || !edge || nodes.length === 0 || Object.entries(edge).length === 0) {
+        console.warn(`
+        gen_link_input args do not meet requirements. Check signature`)
         return {}
     }
-    const { 
-        nodes : [ 
-            { id: id1, ...n1 },
-            { id: id2, ...n2 }
-        ], 
-        edge : { id: id3, ...e1 }
-    } = node_matrix
 
+    const [ { id: n_id1, ...n1 }, { id: n_id2, ...n2 } ] = nodes
+    const { id: e_id1, ...e1 } = edge
 
-    const aka1 = id1.length < 5 && "id"
-    const aka2 = id2.length < 5 && "id"
-    const aka3 = id3.length < 5 && "id"
-    const ref1 = id1.length > 4 && "id"
-    const ref2 = id2.length > 4 && "id"
-    const ref3 = id3.length > 4 && "id"
+    const UID_n1 = uuid()
+    const UID_n2 = uuid()
+    const UID_e1 = uuid()
 
-    const n1_aka = { [aka1]: id1, ...n1 }
-    const n1_ref = { [ref1]: id1, ...n1 }
-    const n2_aka = { [aka2]: id2, ...n2 }
-    const n2_ref = { [ref2]: id2, ...n2 }
-    const e1_aka = { [aka3]: id3, ...e1 }
-    const e1_ref = { [ref3]: id3, ...e1 }
+    const node_new1 = { id: UID_n1, ...n1 }
+    const node_new2 = { id: UID_n2, ...n2 }
+    const edge_new1 = { id: UID_e1, ...e1 }
 
-    const uid1 = uuid()
-    const uid2 = uuid()
-    const uid3 = uuid()
+    const n1_alias = n_id1.length < 5
+    const n2_alias = n_id2.length < 5
+    const e1_alias = e_id1.length < 5
 
-    const na1 = { id: uid1, ...n1 }
-    const na2 = { id: uid2, ...n2 }
-    const ea1 = { id: uid3, ...e1 }
+    return {
+        nodes: [ n1_alias ? node_new1 : null, n2_alias ? node_new2 : null ],
+        edge: e1_alias ? edge_new1 : null,
+        edge_nodes: [
+            {
+                edge_id: e1_alias ? UID_e1 : e_id1,
+                node_id: n1_alias ? UID_n1 : n_id1
+            },
+            {
+                edge_id: e1_alias ? UID_e1 : e_id1,
+                node_id: n2_alias ? UID_n2 : n_id2
+            }
+        ]
+    }
+}
 
-    const result = (
-        new EquivMap([
-            [ // full alias
-                { nodes : [ n1_aka, n2_aka  ], edge : e1_aka }, 
-                { nodes : [ na1, na2        ], edge : ea1, 
-                    edge_nodes : [
-                        { edge_id: uid3, node_id: uid1 }, 
-                        { edge_id: uid3, node_id: uid2 }
-                    ]
-                }
-            ],
-            [ // nodes alias, edge reference
-                { nodes : [ n1_aka, n2_aka  ], edge : e1_ref }, 
-                { nodes : [ na1, na2        ], edge : null, 
-                    edge_nodes : [
-                        { edge_id: id3, node_id: uid1 }, 
-                        { edge_id: id3, node_id: uid2 }
-                    ]
-                }
-            ],
-            [ // edge alias, nodes reference
-                { nodes : [ n1_ref, n2_ref  ], edge : e1_aka }, 
-                { nodes : [ null, null      ], edge : ea1, 
-                    edge_nodes : [
-                        { edge_id: uid3, node_id: id1 }, 
-                        { edge_id: uid3, node_id: id2 }
-                    ]
-                }
-            ],
-            [ // edge alias, node1 reference, node2 alias
-                { nodes : [ n1_ref, n2_aka  ], edge : e1_aka }, 
-                { nodes : [ null, na2       ], edge : ea1, 
-                    edge_nodes : [
-                        { edge_id: uid3, node_id: id1 }, 
-                        { edge_id: uid3, node_id: uid2 }
-                    ]
-                }
-            ],
-            [ // edge alias, node1 alias, node2 reference
-                { nodes : [ n1_aka, n2_ref  ], edge : e1_aka }, 
-                { nodes : [ na1, null       ], edge : ea1, 
-                    edge_nodes : [
-                        { edge_id: uid3, node_id: uid1 }, 
-                        { edge_id: uid3, node_id: id2 }
-                    ]
-                }
-            ],
-            [ // edge reference, node1 reference, node2 alias
-                { nodes : [ n1_ref, n2_aka  ], edge : e1_ref }, 
-                { nodes : [ null, na2       ], edge : null, 
-                    edge_nodes : [
-                        { edge_id: id3, node_id: id1 }, 
-                        { edge_id: id3, node_id: uid2 }
-                    ]
-                }
-            ],
-            [ // edge reference, node1 alias, node2 reference
-                { nodes : [ n1_aka, n2_ref  ], edge : e1_ref }, 
-                { nodes : [ na1, null       ], edge : null, 
-                    edge_nodes : [
-                        { edge_id: id3, node_id: uid1 }, 
-                        { edge_id: id3, node_id: id2 }
-                    ]
-                }
-            ],
-            [ // full reference
-                { nodes : [ n1_ref, n2_ref ], edge : e1_ref }, 
-                { nodes : [ null, null       ], edge : null, 
-                    edge_nodes : [
-                        { edge_id: id3, node_id: id1 }, 
-                        { edge_id: id3, node_id: id2 }
-                    ]
-                }
-            ],
-        ]).get(node_matrix) || { // no action
-            nodes: [null, null], edge: null, edge_nodes: [ null, null ]
-        })
-        
-        return result
+export type Asset = {
+    id: string
+    node_id: string
+    type: string
+    name: string
+    content?: string
+}
+
+export interface AssetInput {
+    node: Node
+    assets: Array<Asset>
+}
+
+export const gen_assets_for_node_input = (config: AssetInput) => {
+    const { node, assets } = config
+    const { id, ...ns } = node
+    const alias = id.length < 5
+    const node_id = alias ? uuid() : id
+
+    const results = assets.map(asset => {
+        const { id, ...as } = asset
+        const alias = id.length < 5
+        const alias_id = alias ? uuid() : id
+        return { id: alias_id, node_id, ...as }
+    })
+
+    if (alias) return { node: { node_id, ...ns }, assets: results }
+    return { node, assets: results }
 }

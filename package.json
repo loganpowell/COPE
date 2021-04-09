@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "@thi.ng/associative": "^5.2.2",
+        "@thi.ng/checks": "^2.9.6",
         "json-to-graphql-query": "^2.0.0",
         "nanographql": "^2.0.0",
         "node-fetch": "^2.6.1"

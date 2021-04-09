@@ -57,12 +57,12 @@ type Asset implements Resource
     @key (
         name: "Assets_by_node"
         fields: ["node_id", "createdAt"]
-        queryField: "AssetsByNode"
+        queryField: "assetsByNode"
     )
     @key (
         name: "Assets_by_type_name"
         fields: ["type", "name", "createdAt"]
-        queryField: "AssetsByTypeName"
+        queryField: "assetsByTypeName"
     )
 {
     id              : ID!
