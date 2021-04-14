@@ -41,6 +41,15 @@ interface Resource {
     content         : String
 }
 
+# Assets are sub-atomic, i.e., they are not - by themselves
+# - useful, but rather are combined into a Node, which is.
+#   Nodes are the atomic unit of the system. If an Asset
+#   (e.g., an image of a person) is needed for a different
+#   use case than the Node that holds it (e.g., Node:Bio =
+#   [ image, name, contact ]), then the Asset should be
+#   copied to a new Node (e.g., Node:Author = [ image, name,
+#   specialization_tags ])
+
 type Asset implements Resource 
     @model
     @auth (rules: [

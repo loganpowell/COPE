@@ -1,6 +1,6 @@
-import { gen_link_input, gen_link_cluster_input } from "../../lib/utils/inputs"
+import { gen_link_input, gen_link_cluster_input, gen_assets_for_node_input } from "../../lib/utils/inputs"
 import { abbreviateIDVals } from "../utils"
-import { dummy_links } from "./data"
+import { create_assets, dummy_links } from "./data"
 import { nod_status, nod_type, edg_type } from "../../src/api"
 
 // prettier-ignore
@@ -148,13 +148,14 @@ describe("gen_link_input", () => {
 
 describe("gen_link_cluster_input", () => {
     test("test cross-linking between same IDs in link cluster", () => {
-        const { refs, links } = gen_link_cluster_input(dummy_links)
+        const { refs } = gen_link_cluster_input(dummy_links)
         expect(Object.keys(refs).length).toEqual(5)
     })
 })
 
 describe("gen_assets_for_node_input", () => {
     test("existing node", () => {
-        //const
+        const res = gen_assets_for_node_input(create_assets)
+        expect(res).toMatchObject({})
     })
 })

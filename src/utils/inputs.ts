@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid"
-import { Node, Edge, EdgeNode, Relation, LinkInput, LinksConfig, AssetInput, Asset } from "../api"
+import { Relation, LinkInput, LinksConfig, AssetInput, Asset } from "../api"
 
 //generateWord(1) //?
 //generateSentence(2) //?
@@ -125,7 +125,41 @@ export const gen_link_input = (config: LinkInput, refs = {}): Relation => {
 
 // @ts-ignore
 /**
- * 
+ * @example
+ *  gen_link_cluster_input([
+ *     {
+ *         nodes : [ { id: "001", status: "A", type: "D" }, { id: "002", status: "H", type: "I" } ],
+ *         edge  : { id: "1:1", type: "FROM", weight: null }
+ *     },
+ *     {
+ *         nodes : [ { id: "001", status: "A", type: "D" }, node_alias2 ],
+ *         edge  : { id: "this is long enough to be unique" }
+ *     }
+ * ])
+ * //=>{ refs:  
+ * //=>   { 001: 'auto id for 001', 
+ * //=>     002: 'magic id for 002', 
+ * //=>     '1:1': 'yes, even edge ids 1:1' }, 
+ * //=>  links:  
+ * //=>   [ { nodes:  
+ * //=>        [ { id: 'auto id for 001', status: 'A', type: 'D' }, 
+ * //=>          { id: 'magic id for 002', status: 'H', type: 'I' } ], 
+ * //=>       edge:  
+ * //=>        { id: 'yes, even edge ids 1:1', type: 'FROM', weight: null }, 
+ * //=>       edge_nodes:  
+ * //=>        [ { edge_id: 'yes, even edge ids 1:1', node_id: 'auto id for 001' }, 
+ * //=>          { edge_id: 'yes, even edge ids 1:1', node_id: 'magic id for 002' } ] 
+ * //=>     }, 
+ * //=>     { nodes:  
+ * //=>        [ { id: 'auto id for 001', status: 'A', type: 'D' }, 
+ * //=>          { id: 'magic id for 002', status: 'A', type: 'B' } ], 
+ * //=>       edge: null, 
+ * //=>       edge_nodes:  
+ * //=>        [ { edge_id: 'this is long enough to be unique', 
+ * //=>            node_id: 'auto id for 001' }, 
+ * //=>          { edge_id: 'this is long enough to be unique', 
+ * //=>            node_id: 'magic id for 002' } ] } ] 
+ * //=>     } 
  */
 export const gen_link_cluster_input = (configs: Array<LinkInput>): LinksConfig => {
     return configs.reduce(
@@ -162,8 +196,21 @@ export const gen_link_cluster_input = (configs: Array<LinkInput>): LinksConfig =
     )
 }
 
+/**
+ * pseudo:
+ * - use case 1: create = Node (new) + Assets (new)
+ * - use case 2: assign = Node (old) + Assets (new)
+ * - use case 3: update = Node (old) + Assets (old)
+ */
 export const gen_assets_for_node_input = (config: AssetInput): Array<Asset> => {
     const { node, assets } = config
+    if (!node) {
+        // use case 2
+    }
+    if (!assets) {
+        // use case 2
+        // treat config assets array, not object
+    }
     const { id, ...ns } = node
     const alias = id.length < 5
     const node_id = alias ? uuid() : id
@@ -175,6 +222,14 @@ export const gen_assets_for_node_input = (config: AssetInput): Array<Asset> => {
         return { id: alias_id, node_id, ...as }
     })
 
-    if (alias) return { node: { node_id, ...ns }, assets: results }
-    return { node, assets: results }
+    if (alias)
+        return {
+            node: { node_id, ...ns },
+            assets: results
+        }
+
+    return {
+        node,
+        assets: results
+    }
 }

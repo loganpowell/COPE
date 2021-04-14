@@ -1,6 +1,6 @@
 import { gen_link_input, gen_link_cluster_input, gen_assets_for_node_input } from "../../lib/utils/inputs"
 import { generateWord, generateSentence, generateParagraph } from "dummy-text-generator"
-import { dummy_links } from "../graphql/data"
+import { dummy_links, create_assets } from "../graphql/data"
 import { abbreviateIDVals } from "../utils"
 
 const node_alias1 = { id: "001", status: "A", type: "B" }
@@ -180,7 +180,7 @@ gen_link_input(test_full_reference)
 
 const test_garbage = { nodes: [], edge: {} }
 
-gen_link_input(test_garbage)
+//gen_link_input(test_garbage)
 
 // GEN ASSETS ///////////////////////////////////////////////
 
@@ -200,6 +200,21 @@ const assets = Array.from(Array(10), () => {
 
 /////////////////////////////////////////////// GEN ASSETS //
 
-const res_cluster = gen_link_cluster_input(dummy_links)
+export const test_links = [
+    // full_alias                                      :
+    {
+        nodes : [ { id: "001", status: "A", type: "D" }, { id: "002", status: "H", type: "I" } ],
+        edge  : { id: "1:1", type: "FROM", weight: null }
+    },
+    // nodes_alias_edge_reference                       :
+    {
+        nodes : [ { id: "001", status: "A", type: "D" }, node_alias2 ],
+        edge  : { id: "this is long enough to be unique" }
+    }
+]
 
-const dummy = JSON.stringify(abbreviateIDVals(res_cluster), null, 1) //?
+const res_cluster = gen_link_cluster_input(test_links)
+
+//const dummy = JSON.stringify(abbreviateIDVals(res_cluster), null, 1) //?
+
+gen_assets_for_node_input({ node: { id: "001" }, assets: create_assets }) //?
