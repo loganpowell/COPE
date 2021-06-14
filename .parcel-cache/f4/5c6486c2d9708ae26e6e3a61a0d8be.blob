@@ -1,0 +1,33 @@
+* {
+                /* font-family: Michroma; */
+                /*Reset's every elements apperance*/
+                background: none repeat scroll 0 0 transparent;
+                border: none;
+                border-spacing: 0;
+                list-style: none outside none;
+                margin: 0;
+                padding: 0;
+                text-align: left;
+                text-decoration: none;
+                text-indent: 0;
+                /* fix z-index for FLIP els */
+                box-sizing: border-box;
+                position: relative;
+            }
+
+            /* SCROLLBAR REMOVAL */
+            html {
+                -ms-overflow-style: none;
+                /* Internet Explorer 10+ */
+                scrollbar-width: none;
+                /* Firefox */
+            }
+
+            html::-webkit-scrollbar {
+                display: none;
+                /* Safari and Chrome */
+            }
+
+            a[active] {
+                color: coral;
+            }

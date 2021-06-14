@@ -1,0 +1,24 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "sum", function () {
+  return sum;
+});
+_parcelHelpers.export(exports, "product", function () {
+  return product;
+});
+_parcelHelpers.export(exports, "bloop", function () {
+  return bloop;
+});
+_parcelHelpers.export(exports, "bleep", function () {
+  return bleep;
+});
+_parcelHelpers.export(exports, "blop", function () {
+  return blop;
+});
+const sum = (a, b) => {
+  return a + b;
+};
+const product = (a, b) => a * b;
+const bloop = "bloop";
+const bleep = "bleep";
+const blop = "blop";

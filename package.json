@@ -19,13 +19,17 @@
         "test": "npm run madge && concurrently \"amplify mock\" \"npm run delay && npm run typewatch\" \"npm run delay && npm run jest\"",
         "git": "npm run ncu && git add . && git commit -m",
         "build": "npm run clean && cross-env NODE_ENV=production parcel build client/index.html -d dist --no-source-maps --no-cache --public-url ./",
-        "dev": "concurrently \"npm run typewatch\" \"parcel client/index.html --global md -p 8080 --open -d dist watch\""
+        "dev": "npm run madge && concurrently \"amplify mock\" \"npm run delay && parcel client/index.html -p 8080 --open -d dist watch\" \"npm run delay && npm run typewatch\""
     },
     "keywords": [],
     "publishConfig": {
         "access": "public"
     },
     "dependencies": {
+        "@aws-amplify/auth": "^3.4.32",
+        "@aws-amplify/core": "^4.0.0",
+        "@aws-amplify/datastore": "^3.0.0",
+        "@aws-amplify/storage": "^3.4.2",
         "@thi.ng/associative": "^5.2.2",
         "@thi.ng/checks": "^2.9.6",
         "json-to-graphql-query": "^2.0.0",
@@ -56,9 +60,7 @@
         "typescript": "^4.2.3",
         "uuid": "^8.3.2"
     },
-    "browserslist": [
-        "last 3 Chrome versions"
-    ],
+    "browserslist": [ "last 3 Chrome versions" ],
     "prettier": {
         "singleQuote": false,
         "printWidth": 120,

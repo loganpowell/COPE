@@ -1,4 +1,5 @@
 import { isPlainObject, isArray } from "@thi.ng/checks"
+import { is_alias } from "../src/utils"
 
 /**
  * @example
@@ -42,9 +43,9 @@ export const abbreviateIDVals = (input, i = 0, edge = false) => {
         return input
     }
     if (isPlainObject(input)) {
-        if (input.id && input.id.length > 4) input.id = `id${i}`
-        if (input.edge_id && input.edge_id.length > 4) input.edge_id = `edge_id`
-        if (input.node_id && input.node_id.length > 4) input.node_id = `id${i}`
+        if (input.id && !is_alias(input.id)) input.id = `id${i}`
+        if (input.edge_id && !is_alias(input.edge_id)) input.edge_id = `edge_id`
+        if (input.node_id && !is_alias(input.node_id)) input.node_id = `id${i}`
         Object.entries(input).forEach(
             ([ k, v ], idx) => (k === "edge" ? abbreviateIDVals(v, idx, true) : abbreviateIDVals(v, idx))
         )

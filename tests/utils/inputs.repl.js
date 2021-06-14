@@ -1,6 +1,6 @@
 import { gen_link_input, gen_link_cluster_input, gen_assets_for_node_input } from "../../lib/utils/inputs"
 import { generateWord, generateSentence, generateParagraph } from "dummy-text-generator"
-import { dummy_links, create_assets } from "../graphql/data"
+import { dummy_links, create_assets_new_node } from "../graphql/data"
 import { abbreviateIDVals } from "../utils"
 
 const node_alias1 = { id: "001", status: "A", type: "B" }
@@ -217,4 +217,4 @@ const res_cluster = gen_link_cluster_input(test_links)
 
 //const dummy = JSON.stringify(abbreviateIDVals(res_cluster), null, 1) //?
 
-gen_assets_for_node_input({ node: { id: "001" }, assets: create_assets }) //?
+gen_assets_for_node_input({ node: { id: "001" }, assets: create_assets_new_node }) //?

@@ -11,6 +11,7 @@ export namespace nod_type {
     const A_PAGE: string;
     const GR_COURSE: string;
     const A_LESSON: string;
+    const A_COLLECTION: string;
 }
 export namespace edg_type {
     const AUTHORED: string;

@@ -2,23 +2,57 @@ import {
     createAsset,
     createEdge,
     createNode,
-    createNodeEdge,
+    createEdgeNode,
     create_Asset,
     deleteAsset,
     deleteEdge,
     deleteNode,
-    deleteNodeEdge,
+    deleteEdgeNode,
     delete_Asset,
     updateAsset,
     updateEdge,
     updateNode,
-    updateNodeEdge,
+    updateEdgeNode,
     update_Asset
 } from "../../src/graphql/mutations"
-import { auth } from "../../src/utils"
+import { _Asset, Asset, Edge, Node, EdgeNode } from "../../src/models"
+import Amplify from "@aws-amplify/core"
+import { DataStore } from "@aws-amplify/datastore"
+import { auth, ass_type, edg_type, nod_status, nod_type } from "../../lib/api"
+import { v4 as uuid } from "uuid"
+import config from "../../src/aws-exports"
 import fetch from "node-fetch"
+
 import dotenv from "dotenv"
+
+Amplify.configure(config)
 dotenv.config()
+
+//
+//  888~-_               d8             ,d88~~\   d8
+//  888   \    /~~~8e  _d88__   /~~~8e  8888    _d88__  e88~-_  888-~\  e88~~8e
+//  888    |       88b  888         88b `Y88b    888   d888   i 888    d888  88b
+//  888    |  e88~-888  888    e88~-888  `Y88b,  888   8888   | 888    8888__888
+//  888   /  C888  888  888   C888  888    8888  888   Y888   ' 888    Y888    ,
+//  888_-~    "88_-888  "88_/  "88_-888 \__88P'  "88_/  "88_-~  888     "88___/
+//
+//
+
+const save_Asset = async config => {
+    const { name, node_id, type, createdAt, content } = config
+    await DataStore.save(new _Asset(config)).then(r => console.log("saved _Asset:", r)).catch(console.warn)
+}
+const read_Assets = async () => {
+    const assets = await DataStore.query(_Asset).catch(console.warn)
+    console.log("Read these _assets:", JSON.stringify(assets, null, 4))
+}
+save_Asset({
+    name    : "created by DataStore",
+    node_id : "0123456789",
+    type    : ""
+}).then(
+    read_Assets() //?
+)
 
 let query = /* GraphQL */ `
     query getNode {
@@ -59,8 +93,9 @@ const data = fetch("http://localhost:20002/graphql", {
     },
     method  : "POST",
     body    : JSON.stringify({ query: query })
-}).then(r => r.json())
-//.then(j => JSON.stringify(j, null, 2)) //?
+})
+    .then(r => r.json())
+    .then(j => JSON.stringify(j, null, 2)) //?
 
 const result = {
     data : {

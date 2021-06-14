@@ -1,10 +1,13 @@
 import { v4 as uuid } from "uuid"
-import { Relation, LinkInput, LinksConfig, AssetInput, Asset } from "../api"
+import { Relation, LinkInput, LinksConfig, AssetGroupInput, Asset, AssetConfig } from "../api"
+import { nod_status, nod_type, edg_type, ass_type } from "../../src/api/consts"
+import { E2BIG } from "node:constants"
 
 //generateWord(1) //?
 //generateSentence(2) //?
 //generateParagraph(2, 3) //?
 
+export const is_alias = id => id.length < 10
 /**
  * generates unique ids and aliases from LinkInput config object
  * 
@@ -57,10 +60,7 @@ const gen_id_references = (config, refs = {}) => {
         e1_UUID,
         n1_new: { id: n1_UUID, ...n1 },
         n2_new: { id: n2_UUID, ...n2 },
-        e1_new: { id: e1_UUID, ...e1 },
-        n1_alias: n1_id.length < 10,
-        n2_alias: n2_id.length < 10,
-        e1_alias: e1_id.length < 10
+        e1_new: { id: e1_UUID, ...e1 }
     }
 }
 
@@ -102,22 +102,19 @@ export const gen_link_input = (config: LinkInput, refs = {}): Relation => {
         n1_new, 
         n2_new, 
         e1_new, 
-        n1_alias, 
-        n2_alias, 
-        e1_alias 
     } = ids
 
     return {
-        nodes: [ n1_alias ? n1_new : null, n2_alias ? n2_new : null ],
-        edge: e1_alias ? e1_new : null,
+        nodes: [ is_alias(n1_id) ? n1_new : null, is_alias(n2_id) ? n2_new : null ],
+        edge: is_alias(e1_id) ? e1_new : null,
         edge_nodes: [
             {
-                edge_id: e1_alias ? e1_UUID : e1_id,
-                node_id: n1_alias ? n1_UUID : n1_id
+                edge_id: is_alias(e1_id) ? e1_UUID : e1_id,
+                node_id: is_alias(n1_id) ? n1_UUID : n1_id
             },
             {
-                edge_id: e1_alias ? e1_UUID : e1_id,
-                node_id: n2_alias ? n2_UUID : n2_id
+                edge_id: is_alias(e1_id) ? e1_UUID : e1_id,
+                node_id: is_alias(n2_id) ? n2_UUID : n2_id
             }
         ]
     }
@@ -125,6 +122,10 @@ export const gen_link_input = (config: LinkInput, refs = {}): Relation => {
 
 // @ts-ignore
 /**
+ * generates a cluster of link inputs to allow correct
+ * references to be associated between links that are
+ * related (clustered) together
+ * 
  * @example
  *  gen_link_cluster_input([
  *     {
@@ -170,9 +171,13 @@ export const gen_link_cluster_input = (configs: Array<LinkInput>): LinksConfig =
 
             if (!ids) return a
 
-            const { n1_alias, n2_alias, e1_alias } = ids
+            const { n1_id, n2_id, e1_id } = ids
 
-            Object.entries({ n1_alias, n2_alias, e1_alias }).forEach(([ key, is_alias ]) => {
+            Object.entries({
+                n1_id: is_alias(n1_id),
+                n2_id: is_alias(n2_id),
+                e1_id: is_alias(e1_id)
+            }).forEach(([ key, is_alias ]) => {
                 if (is_alias) {
                     // id is an alias, add ref UUID
                     const [ alias_entry ] = key.split("_")
@@ -197,39 +202,73 @@ export const gen_link_cluster_input = (configs: Array<LinkInput>): LinksConfig =
 }
 
 /**
- * pseudo:
- * - use case 1: create = Node (new) + Assets (new)
- * - use case 2: assign = Node (old) + Assets (new)
- * - use case 3: update = Node (old) + Assets (old)
+ * generates associations between a set of assets and a node
+ * -> inputs for asset creation/mutations.
+ * 
+ * @example
+ * gen_assets_for_node_input({
+ *      node: {
+ *          id: "node_id",
+ *          status: "DRAFT"
+ *      },
+ *      assets: [
+ *           {
+ *                 id      : "new id",
+ *                 type    : ass_type.V_IMAGE,
+ *                 name    : "fancy image",
+ *                 content : "https://i.picsum.photos/..."
+ *             },
+ *             {
+ *                 id      : "new id",
+ *                 type    : ass_type.V_IMAGE,
+ *                 name    : "another fancy image",
+ *                 content : "https://i.picsum.photos/..."
+ *             }
+ *      ]
+ * })
+ *
+ * //=>{
+ * //=>     node: {
+ * //=>         id: "fef47b75-8850-44d9-8b57-79a46ff35fdb"",
+ * //=>         status: "DRAFT"
+ * //=>     },
+ * //=>     assets: [
+ * //=>          {
+ * //=>                id      : "e1e2a1bf-6eda-479c-a54c-fda7f893cef8"",
+ * //=>                node_id : "fef47b75-8850-44d9-8b57-79a46ff35fdb"",
+ * //=>                type    : ass_type.V_IMAGE,
+ * //=>                name    : "fancy image",
+ * //=>                content : "https://i.picsum.photos/..."
+ * //=>            },
+ * //=>            {
+ * //=>                id      : "c54df3a1-5a50-4f01-9ced-bd1b5963e88b",
+ * //=>                node_id : "fef47b75-8850-44d9-8b57-79a46ff35fdb"",
+ * //=>                type    : ass_type.V_IMAGE,
+ * //=>                name    : "another fancy image",
+ * //=>                content : "https://i.picsum.photos/..."
+ * //=>            }
+ * //=>     ]
+ * //=>}
  */
-export const gen_assets_for_node_input = (config: AssetInput): Array<Asset> => {
-    const { node, assets } = config
+export const gen_assets_for_node_input = (config: AssetGroupInput): AssetConfig => {
+    let { node, assets } = config
+
     if (!node) {
-        // use case 2
-    }
-    if (!assets) {
-        // use case 2
-        // treat config assets array, not object
+        // @ts-ignore
+        node = { id: uuid(), status: nod_status.DRAFT }
     }
     const { id, ...ns } = node
-    const alias = id.length < 5
-    const node_id = alias ? uuid() : id
+    const node_id = is_alias(id) ? uuid() : id
 
-    const results = assets.map(asset => {
-        const { id, ...as } = asset
-        const alias = id.length < 5
-        const alias_id = alias ? uuid() : id
-        return { id: alias_id, node_id, ...as }
+    const assets_linked = assets.map(asset => {
+        const { id, ...etc } = asset
+        const alias_id = is_alias(id) ? uuid() : id
+        const result = { id: alias_id, node_id, ...etc }
+        return result
     })
 
-    if (alias)
-        return {
-            node: { node_id, ...ns },
-            assets: results
-        }
-
     return {
-        node,
-        assets: results
+        node: { id: node_id, ...ns },
+        assets: assets_linked
     }
 }

@@ -1,6 +1,6 @@
 import { gen_link_input, gen_link_cluster_input, gen_assets_for_node_input } from "../../lib/utils/inputs"
 import { abbreviateIDVals } from "../utils"
-import { create_assets, dummy_links } from "./data"
+import { create_assets_new_node, create_assets_old_node, dummy_links } from "./data"
 import { nod_status, nod_type, edg_type } from "../../src/api"
 
 // prettier-ignore
@@ -154,8 +154,12 @@ describe("gen_link_cluster_input", () => {
 })
 
 describe("gen_assets_for_node_input", () => {
+    test("new node", () => {
+        const res = gen_assets_for_node_input(create_assets_new_node)
+        expect(res.node.id).toEqual(res.assets[0].node_id)
+    })
     test("existing node", () => {
-        const res = gen_assets_for_node_input(create_assets)
-        expect(res).toMatchObject({})
+        const res = gen_assets_for_node_input(create_assets_old_node)
+        expect(res.assets[0].node_id).toBe("this is a long id, so it will remain")
     })
 })

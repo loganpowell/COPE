@@ -1,14 +1,3 @@
-import dotenv from "dotenv"
-dotenv.config()
-
-export const auth = {
-    user1_owner: process.env.MOCK_USER_POOL_ID_1,
-    user2_NA: process.env.MOCK_USER_POOL_ID_2,
-    user3_viewers: process.env.MOCK_USER_POOL_ID_3_VIEWERS,
-    user4_admins: process.env.MOCK_USER_POOL_ID_4_ADMINS,
-    user5_editors: process.env.MOCK_USER_POOL_ID_5_EDITORS
-}
-
 //
 //
 //   e88~~8e  888-~88e 888  888 888-~88e-~88e  d88~\
@@ -70,7 +59,7 @@ export type Node = {
     id?: string
     createdAt?: string
     status: NodeStatus
-    type: NodeType
+    type?: NodeType
 } | null
 
 export type Edge = {
@@ -109,6 +98,11 @@ export type Asset = {
     name: string
 }
 
+export type AssetConfig = {
+    node?: any
+    assets: Array<Asset>
+}
+
 //
 //  ,e,            d8                      88~\
 //   "  888-~88e _d88__  e88~~8e  888-~\ _888__   /~~~8e   e88~~\  e88~~8e   d88~\
@@ -124,7 +118,7 @@ export interface LinkInput {
     edge: Edge
 }
 
-export interface AssetInput {
+export interface AssetGroupInput {
     node: Node | null
     assets: Array<Asset>
 }

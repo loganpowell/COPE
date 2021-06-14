@@ -9,12 +9,12 @@ export const getAsset = /* GraphQL */ `
       createdAt
       type
       name
+      owner
       content
       _version
       _deleted
       _lastChangedAt
       updatedAt
-      owner
     }
   }
 `;
@@ -31,12 +31,12 @@ export const listAssets = /* GraphQL */ `
         createdAt
         type
         name
+        owner
         content
         _version
         _deleted
         _lastChangedAt
         updatedAt
-        owner
       }
       nextToken
       startedAt
@@ -66,30 +66,30 @@ export const assetsByNode = /* GraphQL */ `
         createdAt
         type
         name
+        owner
         content
         _version
         _deleted
         _lastChangedAt
         updatedAt
-        owner
       }
       nextToken
       startedAt
     }
   }
 `;
-export const assetsByTypeName = /* GraphQL */ `
-  query AssetsByTypeName(
+export const assetsByType = /* GraphQL */ `
+  query AssetsByType(
     $type: AssetType
-    $nameCreatedAt: ModelAssetAssets_by_type_nameCompositeKeyConditionInput
+    $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelAssetFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    assetsByTypeName(
+    assetsByType(
       type: $type
-      nameCreatedAt: $nameCreatedAt
+      createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -101,12 +101,47 @@ export const assetsByTypeName = /* GraphQL */ `
         createdAt
         type
         name
+        owner
         content
         _version
         _deleted
         _lastChangedAt
         updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const assetsByOwner = /* GraphQL */ `
+  query AssetsByOwner(
+    $owner: String
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelAssetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    assetsByOwner(
+      owner: $owner
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        node_id
+        createdAt
+        type
+        name
         owner
+        content
+        _version
+        _deleted
+        _lastChangedAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -132,12 +167,159 @@ export const syncAssets = /* GraphQL */ `
         createdAt
         type
         name
+        owner
         content
         _version
         _deleted
         _lastChangedAt
         updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const get_Asset = /* GraphQL */ `
+  query Get_Asset($id: ID!) {
+    get_Asset(id: $id) {
+      id
+      node_id
+      createdAt
+      type
+      name
+      owner
+      content
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
+    }
+  }
+`;
+export const list_Assets = /* GraphQL */ `
+  query List_Assets(
+    $filter: Model_AssetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    list_Assets(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        node_id
+        createdAt
+        type
+        name
         owner
+        content
+        _version
+        _deleted
+        _lastChangedAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const _assetsByNode = /* GraphQL */ `
+  query _assetsByNode(
+    $node_id: ID
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: Model_AssetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    _assetsByNode(
+      node_id: $node_id
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        node_id
+        createdAt
+        type
+        name
+        owner
+        content
+        _version
+        _deleted
+        _lastChangedAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const _assetsByTypeOwner = /* GraphQL */ `
+  query _assetsByTypeOwner(
+    $type: AssetType
+    $ownerCreatedAt: Model_Asset_Assets_by_type_ownerCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: Model_AssetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    _assetsByTypeOwner(
+      type: $type
+      ownerCreatedAt: $ownerCreatedAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        node_id
+        createdAt
+        type
+        name
+        owner
+        content
+        _version
+        _deleted
+        _lastChangedAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const _assetsByOwner = /* GraphQL */ `
+  query _assetsByOwner(
+    $owner: String
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: Model_AssetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    _assetsByOwner(
+      owner: $owner
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        node_id
+        createdAt
+        type
+        name
+        owner
+        content
+        _version
+        _deleted
+        _lastChangedAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -163,15 +345,42 @@ export const sync_Assets = /* GraphQL */ `
         createdAt
         type
         name
+        owner
         content
         _version
         _deleted
         _lastChangedAt
         updatedAt
-        owner
       }
       nextToken
       startedAt
+    }
+  }
+`;
+export const getNode = /* GraphQL */ `
+  query GetNode($id: ID!) {
+    getNode(id: $id) {
+      id
+      status
+      type
+      createdAt
+      updatedAt
+      owner
+      _version
+      _deleted
+      _lastChangedAt
+      assets {
+        nextToken
+        startedAt
+      }
+      _assets {
+        nextToken
+        startedAt
+      }
+      edges {
+        nextToken
+        startedAt
+      }
     }
   }
 `;
@@ -188,40 +397,13 @@ export const listNodes = /* GraphQL */ `
         type
         createdAt
         updatedAt
+        owner
         _version
         _deleted
         _lastChangedAt
-        owner
       }
       nextToken
       startedAt
-    }
-  }
-`;
-export const getNode = /* GraphQL */ `
-  query GetNode($id: ID!) {
-    getNode(id: $id) {
-      id
-      status
-      type
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      assets {
-        nextToken
-        startedAt
-      }
-      _assets {
-        nextToken
-        startedAt
-      }
-      owner
-      edges {
-        nextToken
-        startedAt
-      }
     }
   }
 `;
@@ -248,10 +430,43 @@ export const nodesByTypeStatus = /* GraphQL */ `
         type
         createdAt
         updatedAt
+        owner
         _version
         _deleted
         _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const nodesByStatusType = /* GraphQL */ `
+  query NodesByStatusType(
+    $status: NodeStatus
+    $typeCreatedAt: ModelNodeNodes_by_status_type_createdAtCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelNodeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    nodesByStatusType(
+      status: $status
+      typeCreatedAt: $typeCreatedAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        status
+        type
+        createdAt
+        updatedAt
         owner
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
       startedAt
@@ -277,13 +492,32 @@ export const syncNodes = /* GraphQL */ `
         type
         createdAt
         updatedAt
+        owner
         _version
         _deleted
         _lastChangedAt
-        owner
       }
       nextToken
       startedAt
+    }
+  }
+`;
+export const getEdge = /* GraphQL */ `
+  query GetEdge($id: ID!) {
+    getEdge(id: $id) {
+      id
+      type
+      createdAt
+      owner
+      weight
+      _version
+      _deleted
+      _lastChangedAt
+      updatedAt
+      nodes {
+        nextToken
+        startedAt
+      }
     }
   }
 `;
@@ -298,49 +532,30 @@ export const listEdges = /* GraphQL */ `
         id
         type
         createdAt
+        owner
         weight
         _version
         _deleted
         _lastChangedAt
         updatedAt
-        owner
       }
       nextToken
       startedAt
     }
   }
 `;
-export const getEdge = /* GraphQL */ `
-  query GetEdge($id: ID!) {
-    getEdge(id: $id) {
-      id
-      type
-      createdAt
-      weight
-      _version
-      _deleted
-      _lastChangedAt
-      updatedAt
-      owner
-      nodes {
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
-export const edgesByTypeWeight = /* GraphQL */ `
-  query EdgesByTypeWeight(
+export const edgesByType = /* GraphQL */ `
+  query EdgesByType(
     $type: EdgeType
-    $weightCreatedAt: ModelEdgeEdges_by_type_weightCompositeKeyConditionInput
+    $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelEdgeFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    edgesByTypeWeight(
+    edgesByType(
       type: $type
-      weightCreatedAt: $weightCreatedAt
+      createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -350,12 +565,12 @@ export const edgesByTypeWeight = /* GraphQL */ `
         id
         type
         createdAt
+        owner
         weight
         _version
         _deleted
         _lastChangedAt
         updatedAt
-        owner
       }
       nextToken
       startedAt
@@ -379,12 +594,12 @@ export const syncEdges = /* GraphQL */ `
         id
         type
         createdAt
+        owner
         weight
         _version
         _deleted
         _lastChangedAt
         updatedAt
-        owner
       }
       nextToken
       startedAt
@@ -408,12 +623,12 @@ export const syncEdgeNodes = /* GraphQL */ `
         id
         edge_id
         node_id
+        owner
         _version
         _deleted
         _lastChangedAt
         createdAt
         updatedAt
-        owner
       }
       nextToken
       startedAt

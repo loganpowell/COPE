@@ -1,10 +1,3 @@
-export declare const auth: {
-    user1_owner: string;
-    user2_NA: string;
-    user3_viewers: string;
-    user4_admins: string;
-    user5_editors: string;
-};
 export declare enum NodeStatus {
     DRAFT = "DRAFT",
     REVIEWED = "REVIEWED",
@@ -42,7 +35,7 @@ export declare type Node = {
     id?: string;
     createdAt?: string;
     status: NodeStatus;
-    type: NodeType;
+    type?: NodeType;
 } | null;
 export declare type Edge = {
     id?: string;
@@ -73,11 +66,15 @@ export declare type Asset = {
     type: AssetType;
     name: string;
 };
+export declare type AssetConfig = {
+    node?: any;
+    assets: Array<Asset>;
+};
 export interface LinkInput {
     nodes: Array<Node | null>;
     edge: Edge;
 }
-export interface AssetInput {
+export interface AssetGroupInput {
     node: Node | null;
     assets: Array<Asset>;
 }

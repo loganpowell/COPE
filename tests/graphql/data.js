@@ -52,19 +52,27 @@ export const dummy_links = [
     { nodes: [], edge: {} }
 ]
 
-export const create_assets = [
+const assets = [
     {
         id      : "new id", //TODO: USE SAME LOGIC FOR REFERENCING/ADDING ASSETS AS NODES
-        node_id : "node_id",
         type    : ass_type.V_IMAGE,
         name    : "fancy image",
         content : "https://i.picsum.photos/id/650/200/300.jpg?hmac=iNg9Umek-SwBR_yU0igvABZSTcRJFdhp1zyaqp0PdIw"
     },
     {
         id      : "new id",
-        node_id : "node_id",
         type    : ass_type.V_IMAGE,
-        name    : "fancy image",
+        name    : "another fancy image",
         content : "https://i.picsum.photos/id/650/200/300.jpg?hmac=iNg9Umek-SwBR_yU0igvABZSTcRJFdhp1zyaqp0PdIw"
     }
 ]
+
+export const create_assets_new_node = {
+    assets
+}
+export const create_assets_old_node = {
+    node   : {
+        id : "this is a long id, so it will remain"
+    },
+    assets
+}
