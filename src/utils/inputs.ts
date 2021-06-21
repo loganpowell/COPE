@@ -1,13 +1,15 @@
 import { v4 as uuid } from "uuid"
 import { Relation, LinkInput, LinksConfig, AssetGroupInput, Asset, AssetConfig } from "../api"
-import { nod_status, nod_type, edg_type, ass_type } from "../../src/api/consts"
-import { E2BIG } from "node:constants"
+import { NodeStatus, NodeType, EdgeType, AssetType } from "../models"
 
 //generateWord(1) //?
 //generateSentence(2) //?
 //generateParagraph(2, 3) //?
 
-export const is_alias = id => id.length < 10
+/**
+ * any node id with length less than a threshold is treated as an alias
+ */
+export const is_alias = (id, threshold = 10) => id.length < threshold
 /**
  * generates unique ids and aliases from LinkInput config object
  * 
@@ -81,7 +83,7 @@ const gen_id_references = (config, refs = {}) => {
  * // =>     null, 
  * // =>     { id: 'bebc9d30-f844-4579-892d-e7b177c2a4e7', status: 'A', type: 'B' } 
  * // =>   ], 
- * // =>   edge: null, 
+ * // =>   edge: null, // reference = no new edge
  * // =>   edge_nodes: [ 
  * // =>      { edge_id: 'also a (edge) reference', node_id: 'this is a reference' }, 
  * // =>      { edge_id: 'also a (edge) reference', node_id: 'bebc9d30-f844-4579-892d-e7b177c2a4e7' } 
@@ -122,6 +124,7 @@ export const gen_link_input = (config: LinkInput, refs = {}): Relation => {
 
 // @ts-ignore
 /**
+ * 
  * generates a cluster of link inputs to allow correct
  * references to be associated between links that are
  * related (clustered) together
@@ -214,13 +217,13 @@ export const gen_link_cluster_input = (configs: Array<LinkInput>): LinksConfig =
  *      assets: [
  *           {
  *                 id      : "new id",
- *                 type    : ass_type.V_IMAGE,
+ *                 type    : AssetType.V_IMAGE,
  *                 name    : "fancy image",
  *                 content : "https://i.picsum.photos/..."
  *             },
  *             {
  *                 id      : "new id",
- *                 type    : ass_type.V_IMAGE,
+ *                 type    : AssetType.V_IMAGE,
  *                 name    : "another fancy image",
  *                 content : "https://i.picsum.photos/..."
  *             }
@@ -236,14 +239,14 @@ export const gen_link_cluster_input = (configs: Array<LinkInput>): LinksConfig =
  * //=>          {
  * //=>                id      : "e1e2a1bf-6eda-479c-a54c-fda7f893cef8"",
  * //=>                node_id : "fef47b75-8850-44d9-8b57-79a46ff35fdb"",
- * //=>                type    : ass_type.V_IMAGE,
+ * //=>                type    : AssetType.V_IMAGE,
  * //=>                name    : "fancy image",
  * //=>                content : "https://i.picsum.photos/..."
  * //=>            },
  * //=>            {
  * //=>                id      : "c54df3a1-5a50-4f01-9ced-bd1b5963e88b",
  * //=>                node_id : "fef47b75-8850-44d9-8b57-79a46ff35fdb"",
- * //=>                type    : ass_type.V_IMAGE,
+ * //=>                type    : AssetType.V_IMAGE,
  * //=>                name    : "another fancy image",
  * //=>                content : "https://i.picsum.photos/..."
  * //=>            }
@@ -255,13 +258,13 @@ export const gen_assets_for_node_input = (config: AssetGroupInput): AssetConfig 
 
     if (!node) {
         // @ts-ignore
-        node = { id: uuid(), status: nod_status.DRAFT }
+        node = { id: uuid(), status: NodeStatus.DRAFT }
     }
     const { id, ...ns } = node
     const node_id = is_alias(id) ? uuid() : id
 
     const assets_linked = assets.map(asset => {
-        const { id, ...etc } = asset
+        const { id = uuid(), ...etc } = asset
         const alias_id = is_alias(id) ? uuid() : id
         const result = { id: alias_id, node_id, ...etc }
         return result

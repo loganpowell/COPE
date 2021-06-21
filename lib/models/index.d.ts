@@ -3,36 +3,24 @@ export const _Asset: import("@aws-amplify/datastore").PersistentModelConstructor
 export const Node: import("@aws-amplify/datastore").PersistentModelConstructor<any> | import("@aws-amplify/datastore").NonModelTypeConstructor<any>;
 export const EdgeNode: import("@aws-amplify/datastore").PersistentModelConstructor<any> | import("@aws-amplify/datastore").NonModelTypeConstructor<any>;
 export const Edge: import("@aws-amplify/datastore").PersistentModelConstructor<any> | import("@aws-amplify/datastore").NonModelTypeConstructor<any>;
-export namespace AssetType {
-    const DEPRECATED: string;
-    const V_IMAGE: string;
-    const V_VIDEO: string;
-    const V_AUDIO: string;
-    const T_BIO: string;
-    const T_HEADLINE_140: string;
-    const T_TITLE: string;
-    const T_LEDE: string;
-    const T_SUMMARY: string;
-    const T_BODY: string;
-    const L_REFERENCE: string;
-    const F_PDF: string;
-}
 export namespace NodeType {
-    const PER_PERSON: string;
-    const PER_AUTHOR: string;
-    const PER_EMPLOYEE: string;
-    const PER_HISTORICAL: string;
-    const GEO_STATE_01: string;
-    const GEO_STATE_02: string;
-    const A_LESSON: string;
+    const H_AUTHOR: string;
+    const H_TEAM: string;
     const A_ARTICLE: string;
     const A_PAGE: string;
     const A_APPLICATION: string;
-    const GR_COURSE: string;
-    const GR_SERIES: string;
-    const GR_LIST: string;
+    const A_GEM: string;
+    const S_ACS: string;
+    const S_DECENNIAL: string;
+    const S_CBP: string;
+    const V_1990: string;
+    const V_2000: string;
+    const V_2010: string;
+    const V_2020: string;
+    const C_SERIES: string;
+    const C_LIST: string;
 }
-export namespace Status {
+export namespace NodeStatus {
     const DRAFT: string;
     const REVIEWED: string;
     const PUBLISHED: string;
@@ -40,10 +28,30 @@ export namespace Status {
     const DELETED: string;
 }
 export namespace EdgeType {
-    const WORKED_WITH: string;
-    const HAS_MEMBER: string;
     const AUTHORED: string;
-    const HAS_CHILD: string;
-    const IS_BEFORE: string;
+    const HAS_NEXT: string;
     const HAS_PART: string;
+    const HAS_CHILD: string;
+}
+export namespace AssetType {
+    const DEPRECATED: string;
+    const A_IMAGE: string;
+    const A_OG_IMAGE: string;
+    const A_OG_AUDIO: string;
+    const A_OG_VIDEO: string;
+    const A_VIDEO: string;
+    const A_AUDIO: string;
+    const T_OG_TITLE: string;
+    const T_OG_DESCRIPTION: string;
+    const T_OG_TYPE: string;
+    const T_LEDE: string;
+    const T_BODY: string;
+    const M_DATA: string;
+    const M_MAP: string;
+    const M_VIZ: string;
+    const M_API: string;
+    const F_PDF: string;
+    const F_KML: string;
+    const F_SHP: string;
+    const F_CSV: string;
 }

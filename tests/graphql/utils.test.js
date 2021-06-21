@@ -1,7 +1,7 @@
 import { gen_link_input, gen_link_cluster_input, gen_assets_for_node_input } from "../../lib/utils/inputs"
 import { abbreviateIDVals } from "../utils"
 import { create_assets_new_node, create_assets_old_node, dummy_links } from "./data"
-import { nod_status, nod_type, edg_type } from "../../src/api"
+import { NodeStatus, NodeType, EdgeType } from "../../lib/models"
 
 // prettier-ignore
 describe("gen_link_input", () => {
@@ -10,10 +10,10 @@ describe("gen_link_input", () => {
         const res_abv = abbreviateIDVals(res)
         const test = {
             nodes      : [ 
-                { id: "id0", status: nod_status.DRAFT, type: nod_type.A_ARTICLE }, 
-                { id: "id1", status: nod_status.PUBLISHED, type: nod_type.GR_COURSE } 
+                { id: "id0", status: NodeStatus.DRAFT, type: NodeType.A_ARTICLE }, 
+                { id: "id1", status: NodeStatus.PUBLISHED, type: NodeType.GR_COURSE } 
             ],
-            edge       : { id: "edge_id", type: edg_type.HAS_CHILD, weight: null },
+            edge       : { id: "edge_id", type: EdgeType.HAS_CHILD, weight: null },
             edge_nodes : [ 
                 { edge_id: "edge_id", node_id: "id0" }, 
                 { edge_id: "edge_id", node_id: "id1" } 
@@ -27,8 +27,8 @@ describe("gen_link_input", () => {
         const res_abv = abbreviateIDVals(res)
         const test = {
             nodes      : [ 
-                { id: "id0", status: nod_status.DRAFT, type: nod_type.A_ARTICLE }, 
-                { id: "id1", status: nod_status.PUBLISHED, type: nod_type.GR_COURSE } 
+                { id: "id0", status: NodeStatus.DRAFT, type: NodeType.A_ARTICLE }, 
+                { id: "id1", status: NodeStatus.PUBLISHED, type: NodeType.GR_COURSE } 
             ],
             edge       : null,
             edge_nodes : [ 
@@ -47,7 +47,7 @@ describe("gen_link_input", () => {
                 null, 
                 null 
             ],
-            edge       : { id: "edge_id", type: edg_type.HAS_CHILD, weight: null },
+            edge       : { id: "edge_id", type: EdgeType.HAS_CHILD, weight: null },
             edge_nodes : [
                  { edge_id: "edge_id", node_id: "id0" }, 
                  { edge_id: "edge_id", node_id: "id1" } 
@@ -62,9 +62,9 @@ describe("gen_link_input", () => {
         const test = {
             nodes      : [ 
                 null, 
-                { id: "id1", status: nod_status.PUBLISHED, type: nod_type.GR_COURSE } 
+                { id: "id1", status: NodeStatus.PUBLISHED, type: NodeType.GR_COURSE } 
             ],
-            edge       : { id: "edge_id", type: edg_type.HAS_CHILD, weight: null },
+            edge       : { id: "edge_id", type: EdgeType.HAS_CHILD, weight: null },
             edge_nodes : [ 
                 { edge_id: "edge_id", node_id: "id0" }, 
                 { edge_id: "edge_id", node_id: "id1" } 
@@ -78,10 +78,10 @@ describe("gen_link_input", () => {
         const res_abv = abbreviateIDVals(res)
         const test = {
             nodes      : [ 
-                { id: "id0", status: nod_status.DRAFT, type: nod_type.A_ARTICLE }, 
+                { id: "id0", status: NodeStatus.DRAFT, type: NodeType.A_ARTICLE }, 
                 null 
             ],
-            edge       : { id: "edge_id", type: edg_type.HAS_CHILD, weight: null },
+            edge       : { id: "edge_id", type: EdgeType.HAS_CHILD, weight: null },
             edge_nodes : [ 
                 { edge_id: "edge_id", node_id: "id0" }, 
                 { edge_id: "edge_id", node_id: "id1" } 
@@ -96,7 +96,7 @@ describe("gen_link_input", () => {
         const test = {
             nodes      : [ 
                 null, 
-                { id: "id1", status: nod_status.PUBLISHED, type: nod_type.GR_COURSE } 
+                { id: "id1", status: NodeStatus.PUBLISHED, type: NodeType.GR_COURSE } 
             ],
             edge       : null,
             edge_nodes : [ 
@@ -112,7 +112,7 @@ describe("gen_link_input", () => {
         const res_abv = abbreviateIDVals(res)
         const test = {
             nodes      : [ 
-                { id: "id0", status: nod_status.DRAFT, type: nod_type.A_ARTICLE }, 
+                { id: "id0", status: NodeStatus.DRAFT, type: NodeType.A_ARTICLE }, 
                 null 
             ],
             edge       : null,

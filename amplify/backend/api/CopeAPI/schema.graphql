@@ -14,6 +14,18 @@ enum NodeType {
     A_ARTICLE
     A_PAGE # findable by router/deeplink
     A_APPLICATION
+    A_GEM
+
+    # Survey
+    S_ACS
+    S_DECENNIAL
+    S_CBP
+
+    # Vintage
+    V_1990
+    V_2000
+    V_2010
+    V_2020
 
     # Collections/Groupings/branches #############
     C_SERIES # Ordered/linked list
@@ -40,7 +52,6 @@ enum EdgeType {
     HAS_CHILD
 }
 
-
 enum AssetType {
     # Documentation #############################
     """
@@ -51,14 +62,26 @@ enum AssetType {
 
     # Multimedia Assets ##############################
     A_IMAGE
+    A_OG_IMAGE # open graph (https://ogp.me/#metadata)
+    A_OG_AUDIO
+    A_OG_VIDEO
     A_VIDEO
     A_AUDIO
 
-    # JSON objects
-    J_OPEN_GRAPH # json object with k:v (e.g. { "og:title": ... })
-
     # Text (Markdown enabled) #######################
+    # open graph ⚠ needs client-side validation (custom UI) for optimal/max char length
+                        # optimal   | max
+    T_OG_TITLE          # 55        | 95
+    T_OG_DESCRIPTION    # 55        | 200
+    T_OG_TYPE
+    T_LEDE
     T_BODY
+    
+    # Meta: each tag must be a separate resource-type in order for it to be able to be searched by
+    M_DATA
+    M_MAP
+    M_VIZ
+    M_API
 
     # Files ######################################
     F_PDF
@@ -66,8 +89,6 @@ enum AssetType {
     F_SHP
     F_CSV
 }
-
-
 
 interface Resource {
     id              : ID!
@@ -168,7 +189,6 @@ type Node
     edges           : [ EdgeNode ]      @connection (keyName: "EdgeNodes_by_node", fields: ["id"])
 }
 
-
 type Edge 
     @model
     @auth (rules: [
@@ -191,7 +211,8 @@ type Edge
     nodes           : [ EdgeNode ]      @connection (keyName: "EdgeNodes_by_edge", fields: ["id"])
 }
 
-# EdgeNodes insertion order is important [ from, to ] = direction of relationship/type
+# NOTE: Implementation detail (facilitates N:N connection between edges and nodes) = not queryable 
+# EdgeNodes insertion order is (TBD if important) [ from, to ] = direction of relationship/type
 # creation of these needs to be done deliberately in order (use spool)
 type EdgeNode
     @auth (rules: [
@@ -200,6 +221,7 @@ type EdgeNode
         { allow: groups, operations: [ read                 ], groups: ["Viewers"]           },
         { allow: public, operations: [ read                 ]                                }
     ])
+    #@model
     @model (queries: null)
     @key ( name: "EdgeNodes_by_edge", fields: ["edge_id", "node_id"] )
     @key ( name: "EdgeNodes_by_node", fields: ["node_id", "edge_id"] ) 

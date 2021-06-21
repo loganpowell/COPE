@@ -1,3 +1,5 @@
+import { NodeType, NodeStatus, EdgeType, AssetType } from "../models"
+
 //
 //
 //   e88~~8e  888-~88e 888  888 888-~88e-~88e  d88~\
@@ -8,42 +10,7 @@
 //
 //
 
-export enum NodeStatus {
-    DRAFT = "DRAFT",
-    REVIEWED = "REVIEWED",
-    PUBLISHED = "PUBLISHED",
-    EDITED = "EDITED",
-    DELETED = "DELETED"
-}
-
-export enum NodeType {
-    PER_AUTHOR = "PER_AUTHOR",
-    A_ARTICLE = "A_ARTICLE",
-    A_PAGE = "A_PAGE",
-    GR_COURSE = "GR_COURSE",
-    A_LESSON = "A_LESSON"
-}
-
-export enum EdgeType {
-    AUTHORED = "AUTHORED",
-    HAS_CHILD = "HAS_CHILD",
-    IS_BEFORE = "IS_BEFORE",
-    HAS_PART = "HAS_PART"
-}
-
-export enum AssetType {
-    V_IMAGE = "V_IMAGE",
-    V_VIDEO = "V_VIDEO",
-    V_AUDIO = "V_AUDIO",
-    T_BIO = "T_BIO",
-    T_HEADLINE_140 = "T_HEADLINE_140",
-    T_TITLE = "T_TITLE",
-    T_LEDE = "T_LEDE",
-    T_SUMMARY = "T_SUMMARY",
-    T_BODY = "T_BODY",
-    L_REFERENCE = "L_REFERENCE",
-    F_PDF = "F_PDF"
-}
+// REMOVED: use "./src/modesl/index.d.ts" instead
 
 //
 //    d8
@@ -57,8 +24,8 @@ export enum AssetType {
 
 export type Node = {
     id?: string
+    status?: NodeStatus
     createdAt?: string
-    status: NodeStatus
     type?: NodeType
 } | null
 
@@ -93,13 +60,13 @@ export type Asset = {
     id?: string
     createdAt?: string
     content?: string
-    node_id: string
+    node_id?: string
     type: AssetType
     name: string
 }
 
 export type AssetConfig = {
-    node?: any
+    node?: Node
     assets: Array<Asset>
 }
 

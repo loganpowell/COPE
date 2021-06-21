@@ -15,7 +15,7 @@ import {
     updateEdgeNode,
     update_Asset
 } from "../../src/graphql/mutations"
-import { _Asset, Asset, Edge, Node, EdgeNode } from "../../src/models"
+import { _Asset, Asset, Edge, Node, EdgeNode } from "../../lib/models"
 import Amplify from "@aws-amplify/core"
 import { DataStore } from "@aws-amplify/datastore"
 import { auth, ass_type, edg_type, nod_status, nod_type } from "../../lib/api"
