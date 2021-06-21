@@ -100,12 +100,11 @@ export const gemCRUD = async (config: GemCRUDInput, operation = "create") => {
             })
         )
         const { id } = ds_node
-        const { gem: { assets }, link } = gem_input({ ...config, id })
+        const { gem: { assets } } = gem_input({ ...config, id })
         await assets.forEach(async asset => {
             const { type, name, content } = asset
             let res = await DataStore.save(
                 // @ts-ignore
-
                 new Asset({
                     node_id: id,
                     type,
@@ -113,24 +112,23 @@ export const gemCRUD = async (config: GemCRUDInput, operation = "create") => {
                     content
                 })
             )
-            console.log({ res })
         })
-        //console.log({ node, assets, link })
         if (parentNode) {
             // same issue as with Nodes, Edge id must be sourced from DataStore
             const ds_edge = await DataStore.save(
                 // @ts-ignore
                 new Edge({ type: EdgeType.HAS_CHILD })
             )
-            console.log({ ds_edge })
             // many:many relationship requires a special sort of PITA
             const parent = await DataStore.save(new EdgeNode({ edge: ds_edge, node: parentNode }))
             const child = await DataStore.save(new EdgeNode({ edge: ds_edge, node: ds_node }))
-            console.log({ parent, child })
         }
         let all_nodes = await DataStore.query(Node, Predicates.ALL)
         let all_assets = await DataStore.query(Asset, Predicates.ALL)
-        console.log({ all_nodes, all_assets })
+        let all_Edges = await DataStore.query(Edge, Predicates.ALL)
+        let all_EdgeNodes = await DataStore.query(EdgeNode, Predicates.ALL)
+        console.log({ all_nodes, all_assets, all_Edges })
+        console.log("all_EdgeNodes", JSON.stringify(all_EdgeNodes, null, 2))
         return { node_id: id }
     }
 }

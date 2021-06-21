@@ -42,7 +42,7 @@ gem_input({
         })
     )
     gemCRUD({
-        name_50_chars_or_less : "some random name gos here!",
+        name_50_chars_or_less : "some random name goes here ",
         status                : NodeStatus.DRAFT,
         //parent_node_id        : "some parent node id goes here"
         parentNode
