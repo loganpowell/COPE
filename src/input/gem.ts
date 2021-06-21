@@ -91,7 +91,9 @@ export const gemCRUD = async (config: GemCRUDInput, operation = "create") => {
     if (operation === "create") {
         // FIXME: DataStore doesn't allow setting ID:
         // https://github.com/aws-amplify/amplify-js/issues/6264#issuecomment-864676815
-        // so, we have to create the Node first and bypass client UUID gen for gem_input
+        // I've also posted my support for using IDs instead of DataStore record instances
+        // on this issue: https://github.com/aws-amplify/amplify-js/issues/6615#issuecomment-865069304
+        // Until then, we have to create the Node first and bypass client UUID gen for gem_input
         const ds_node = await DataStore.save(
             // @ts-ignore
             new Node({
