@@ -97,6 +97,7 @@ interface Resource {
     type            : AssetType!
     name            : String!
     content         : String
+    editors         : [ String ]
 }
 
 # Assets are sub-atomic, i.e., they are not - by themselves
@@ -111,14 +112,27 @@ interface Resource {
 type Asset implements Resource 
     @model
     @auth (rules: [
-        { allow: owner, ownerField: "owner", identityClaim: "email"                          },
-        { allow: groups, operations: [ read, update, delete ], groups: ["Admins", "Editors"] },
-        { allow: groups, operations: [ read                 ], groups: ["Viewers"]           },
-        { allow: public, operations: [ read                 ]                                }
+        { allow: owner,                                         ownerField: "owner",    identityClaim: "email"   },
+        { allow: owner,  operations: [ read, update ],          ownerField: "editors",  identityClaim: "email"   },
+        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                    },
+        { allow: groups, operations: [ read                 ],  groups: ["Viewers"]                              },
+        { allow: public, operations: [ read                 ]                                                    }
     ])
-    @key ( name: "Assets_by_node", fields: ["node_id", "createdAt"], queryField: "assetsByNode" )
-    @key ( name: "Assets_by_type", fields: ["type", "createdAt"], queryField: "assetsByType" )
-    @key ( name: "Assets_by_owner", fields: ["owner", "createdAt"], queryField: "assetsByOwner" )
+    @key ( 
+        name: "Assets_by_node",      
+        fields: ["node_id", "createdAt"],           
+        queryField: "assetsByNode" 
+    )
+    @key ( 
+        name: "Assets_by_type",      
+        fields: ["type", "createdAt"],              
+        queryField: "assetsByType" 
+    )
+    @key ( 
+        name: "Assets_by_owner",     
+        fields: ["owner", "createdAt"],             
+        queryField: "assetsByOwner" 
+    )
 {
     id              : ID!
     node_id         : ID!
@@ -127,19 +141,32 @@ type Asset implements Resource
     name            : String!
     owner           : String
     content         : String
+    editors         : [ String ]
 }
 
 type _Asset implements Resource
     @model
     @auth (rules: [
-        { allow: owner, ownerField: "owner", identityClaim: "email"                          },
-        { allow: groups, operations: [ read, update, delete ], groups: ["Admins", "Editors"] },
-        # 📌 TODO: figure out how to enable owner-assigned editors to CRUD
-        #{ allow: owner,  operations: [ read, update, delete ], ownerField: "editors",         }
+        { allow: owner,                                         ownerField: "owner",    identityClaim: "email" },
+        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                  },
+        # https://docs.amplify.aws/cli/graphql-transformer/auth#owner-authorization
+        { allow: owner,  operations: [ read, update         ],  ownerField: "editors",  identityClaim: "email" }
     ])
-    @key ( name: "_Assets_by_node", fields: ["node_id", "createdAt"], queryField: "_assetsByNode" )
-    @key ( name: "_Assets_by_type_owner", fields: ["type", "owner", "createdAt"], queryField: "_assetsByTypeOwner" )
-    @key ( name: "_Assets_by_owner", fields: ["owner", "createdAt"], queryField: "_assetsByOwner" )
+    @key ( 
+        name: "_Assets_by_node",
+        fields: ["node_id", "createdAt"],       
+        queryField: "_assetsByNode" 
+    )
+    @key ( 
+        name: "_Assets_by_type_owner",
+        fields: ["type", "owner", "createdAt"], 
+        queryField: "_assetsByTypeOwner" 
+    )
+    @key ( 
+        name: "_Assets_by_owner",
+        fields: ["owner", "createdAt"],         
+        queryField: "_assetsByOwner" 
+    )
 {
     id              : ID!
     node_id         : ID!
@@ -148,7 +175,7 @@ type _Asset implements Resource
     name            : String!
     owner           : String
     content         : String
-    #editors         : [ String ]
+    editors         : [ String ]
 }
 
 ################################################################################
@@ -162,10 +189,10 @@ type _Asset implements Resource
 type Node
     @model
     @auth (rules: [
-        { allow: owner, ownerField: "owner", identityClaim: "email"                          },
-        { allow: groups, operations: [ read, update, delete ], groups: ["Admins", "Editors"] },
-        { allow: groups, operations: [ read                 ], groups: ["Viewers"]           },
-        { allow: public, operations: [ read                 ]                                }
+        { allow: owner,                                         ownerField: "owner",    identityClaim: "email" },
+        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                  },
+        { allow: groups, operations: [ read                 ],  groups: ["Viewers"]                            },
+        { allow: public, operations: [ read                 ]                                                  }
     ])
     @key (
         name: "Nodes_by_type_status_createdAt",     # name: GSI Index Name 
@@ -176,6 +203,11 @@ type Node
         name: "Nodes_by_status_type_createdAt",     # name: GSI Index Name 
         fields: ["status", "type", "createdAt"],    # type = partition key | status#createdAt = composite sort key
         queryField: "nodesByStatusType"             # GraphQL query name
+    )
+    @key (
+        name: "Nodes_by_status_createdAt",
+        fields: ["status", "createdAt"],
+        queryField: "nodesByStatus"
     )
 {
     id              : ID!
@@ -192,10 +224,10 @@ type Node
 type Edge 
     @model
     @auth (rules: [
-        { allow: owner, ownerField: "owner", identityClaim: "email"                          },
-        { allow: groups, operations: [ read, update, delete ], groups: ["Admins", "Editors"] },
-        { allow: groups, operations: [ read                 ], groups: ["Viewers"]           },
-        { allow: public, operations: [ read                 ]                                }
+        { allow: owner,                                         ownerField: "owner",    identityClaim: "email" },
+        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                  },
+        { allow: groups, operations: [ read                 ],  groups: ["Viewers"]                            },
+        { allow: public, operations: [ read                 ]                                                  }
     ])
     @key (
         name: "Edges_by_type", 
@@ -216,15 +248,22 @@ type Edge
 # creation of these needs to be done deliberately in order (use spool)
 type EdgeNode
     @auth (rules: [
-        { allow: owner, ownerField: "owner", identityClaim: "email"                          },
-        { allow: groups, operations: [ read, update, delete ], groups: ["Admins", "Editors"] },
-        { allow: groups, operations: [ read                 ], groups: ["Viewers"]           },
-        { allow: public, operations: [ read                 ]                                }
+        { allow: owner,                                         ownerField: "owner",    identityClaim: "email"  },
+        { allow: owner,  operations: [ read, update         ],  ownerField: "editors",  identityClaim: "email"  },
+        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                   },
+        { allow: groups, operations: [ read                 ],  groups: ["Viewers"]                             },
+        { allow: public, operations: [ read                 ]                                                   }
     ])
     #@model
     @model (queries: null)
-    @key ( name: "EdgeNodes_by_edge", fields: ["edge_id", "node_id"] )
-    @key ( name: "EdgeNodes_by_node", fields: ["node_id", "edge_id"] ) 
+    @key ( 
+        name: "EdgeNodes_by_edge", 
+        fields: ["edge_id", "node_id"] 
+    )
+    @key ( 
+        name: "EdgeNodes_by_node", 
+        fields: ["node_id", "edge_id"] 
+    ) 
 {
     id              : ID!
     edge_id         : ID!

@@ -1,4 +1,0 @@
-var _sum = require("./sum");
-const target = document.getElementById("app");
-const fill = `Sum of 1 and 1 = ${_sum.sum(1, 1)}`;
-target.innerText = fill;

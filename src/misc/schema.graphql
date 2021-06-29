@@ -1,60 +1,39 @@
 
-enum AssetType {
-    # Documentation #############################
-    """
-    A [description](http://spec.graphql.org/_Asset/#sec-Descriptions), 
-    here in parentheses, is `markdown` friendly!
-    """
-    DEPRECATED @deprecated(reason: "the reason is _also_ `markdown` friendly!") 
-
-    # Traditional Assets ##############################
-    A_IMAGE
-    A_VIDEO
-    A_AUDIO
-
-    # Text #######################################
-    T_BIO
-    T_HEADLINE_140
-    T_TITLE
-    T_LEDE
-    T_SUMMARY
-    T_BODY
-
-    # Links ######################################
-    L_REFERENCE
-
-    # Files ######################################
-    F_PDF
-}
-
 
 enum NodeType {
-    # Person #####################################
-    PER_PERSON
-    PER_AUTHOR
-    PER_EMPLOYEE
-    PER_HISTORICAL
+    # Human #####################################
+    H_AUTHOR
+    H_TEAM
 
     # Geographic Hierarchy #######################
     # summary level = 040 (State)
-    GEO_STATE_01 
-    GEO_STATE_02
+    # GEO_01 # Alabama
     # ...
 
     # Thing ######################################
-    A_LESSON
     A_ARTICLE
     A_PAGE # findable by router/deeplink
     A_APPLICATION
+    A_GEM
+
+    # Survey
+    S_ACS
+    S_DECENNIAL
+    S_CBP
+
+    # Vintage
+    V_1990
+    V_2000
+    V_2010
+    V_2020
 
     # Collections/Groupings/branches #############
-    GR_COURSE
-    GR_SERIES # Ordered/linked list
-    GR_LIST # Ordered/sortable
+    C_SERIES # Ordered/linked list
+    C_LIST # Ordered/sortable
 
 }
 
-enum Status {
+enum NodeStatus {
     DRAFT
     REVIEWED
     PUBLISHED
@@ -63,19 +42,53 @@ enum Status {
 }
 
 enum EdgeType {
-    # Human to Human
-    WORKED_WITH
-    # Human to Group
-    HAS_MEMBER
     # Human to Asset
     AUTHORED
-    # Asset to Asset
-    HAS_CHILD
-    IS_BEFORE # linked list
-    # Asset to Group
+    # linked list/ordered
+    HAS_NEXT
+    # Group to Subgroup
     HAS_PART
+    # Node to Node: Hierarchical
+    HAS_CHILD
 }
 
+enum AssetType {
+    # Documentation #############################
+    """
+    A [description](http://spec.graphql.org/_Asset/#sec-Descriptions), 
+    here in parentheses, is `markdown` friendly!
+    """
+    DEPRECATED @deprecated(reason: "the reason is _also_ `markdown` friendly!") 
+
+    # Multimedia Assets ##############################
+    A_IMAGE
+    A_OG_IMAGE # open graph (https://ogp.me/#metadata)
+    A_OG_AUDIO
+    A_OG_VIDEO
+    A_VIDEO
+    A_AUDIO
+
+    # Text (Markdown enabled) #######################
+    # open graph ⚠ needs client-side validation (custom UI) for optimal/max char length
+                        # optimal   | max
+    T_OG_TITLE          # 55        | 95
+    T_OG_DESCRIPTION    # 55        | 200
+    T_OG_TYPE
+    T_LEDE
+    T_BODY
+    
+    # Meta: each tag must be a separate resource-type in order for it to be able to be searched by
+    M_DATA
+    M_MAP
+    M_VIZ
+    M_API
+
+    # Files ######################################
+    F_PDF
+    F_KML
+    F_SHP
+    F_CSV
+}
 
 interface Resource {
     id              : ID!
@@ -84,6 +97,7 @@ interface Resource {
     type            : AssetType!
     name            : String!
     content         : String
+    editors         : [ String ]
 }
 
 # Assets are sub-atomic, i.e., they are not - by themselves
@@ -98,25 +112,26 @@ interface Resource {
 type Asset implements Resource 
     @model
     @auth (rules: [
-        { allow: owner                                                                       },
-        { allow: groups, operations: [ read, update, delete ], groups: ["Admins", "Editors"] },
-        { allow: groups, operations: [ read                 ], groups: ["Viewers"]           },
-        { allow: public, operations: [ read                 ]                                }
+        { allow: owner,                                         ownerField: "owner",    identityClaim: "email"   },
+        { allow: owner,  operations: [ read, update ],          ownerField: "editors",  identityClaim: "email"   },
+        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                    },
+        { allow: groups, operations: [ read                 ],  groups: ["Viewers"]                              },
+        { allow: public, operations: [ read                 ]                                                    }
     ])
-    #@key (
-    #    name: "Assets_by_type",
-    #    fields: ["type", "createdAt"]
-    #    queryField: "AssetsByType"
-    #)
-    @key (
-        name: "Assets_by_node"
-        fields: ["node_id", "createdAt"]
-        queryField: "assetsByNode"
+    @key ( 
+        name: "Assets_by_node",      
+        fields: ["node_id", "createdAt"],           
+        queryField: "assetsByNode" 
     )
-    @key (
-        name: "Assets_by_type_name"
-        fields: ["type", "name", "createdAt"]
-        queryField: "assetsByTypeName"
+    @key ( 
+        name: "Assets_by_type",      
+        fields: ["type", "createdAt"],              
+        queryField: "assetsByType" 
+    )
+    @key ( 
+        name: "Assets_by_owner",     
+        fields: ["owner", "createdAt"],             
+        queryField: "assetsByOwner" 
     )
 {
     id              : ID!
@@ -124,25 +139,43 @@ type Asset implements Resource
     createdAt       : AWSDateTime!
     type            : AssetType!
     name            : String!
+    owner           : String
     content         : String
+    editors         : [ String ]
 }
 
 type _Asset implements Resource
+    @model
     @auth (rules: [
-        { allow: owner                                                                       },
-        { allow: groups, operations: [ read, update, delete ], groups: ["Admins", "Editors"] },
-        #{ allow: owner,  operations: [ read, update, delete ], ownerField: "editors",         }
+        { allow: owner,                                         ownerField: "owner",    identityClaim: "email" },
+        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                  },
+        # https://docs.amplify.aws/cli/graphql-transformer/auth#owner-authorization
+        { allow: owner,  operations: [ read, update         ],  ownerField: "editors",  identityClaim: "email" }
     ])
-    @model (queries: null)
-    @key ( name: "_Assets_by_node", fields: ["node_id"] )
+    @key ( 
+        name: "_Assets_by_node",
+        fields: ["node_id", "createdAt"],       
+        queryField: "_assetsByNode" 
+    )
+    @key ( 
+        name: "_Assets_by_type_owner",
+        fields: ["type", "owner", "createdAt"], 
+        queryField: "_assetsByTypeOwner" 
+    )
+    @key ( 
+        name: "_Assets_by_owner",
+        fields: ["owner", "createdAt"],         
+        queryField: "_assetsByOwner" 
+    )
 {
     id              : ID!
-    node_id         : ID! 
+    node_id         : ID!
     createdAt       : AWSDateTime!
     type            : AssetType!
     name            : String!
+    owner           : String
     content         : String
-    #editors         : [ String ]
+    editors         : [ String ]
 }
 
 ################################################################################
@@ -156,66 +189,86 @@ type _Asset implements Resource
 type Node
     @model
     @auth (rules: [
-        { allow: owner                                                                       },
-        { allow: groups, operations: [ read, update, delete ], groups: ["Admins", "Editors"] },
-        { allow: groups, operations: [ read                 ], groups: ["Viewers"]           },
-        { allow: public, operations: [ read                 ]                                }
+        { allow: owner,                                         ownerField: "owner",    identityClaim: "email" },
+        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                  },
+        { allow: groups, operations: [ read                 ],  groups: ["Viewers"]                            },
+        { allow: public, operations: [ read                 ]                                                  }
     ])
     @key (
         name: "Nodes_by_type_status_createdAt",     # name: GSI Index Name 
         fields: ["type", "status", "createdAt"],    # type = partition key | status#createdAt = composite sort key
         queryField: "nodesByTypeStatus"             # GraphQL query name
     )
+    @key (
+        name: "Nodes_by_status_type_createdAt",     # name: GSI Index Name 
+        fields: ["status", "type", "createdAt"],    # type = partition key | status#createdAt = composite sort key
+        queryField: "nodesByStatusType"             # GraphQL query name
+    )
+    @key (
+        name: "Nodes_by_status_createdAt",
+        fields: ["status", "createdAt"],
+        queryField: "nodesByStatus"
+    )
 {
     id              : ID!
-    status          : Status!
+    status          : NodeStatus!
     type            : NodeType!
     createdAt       : AWSDateTime!
     updatedAt       : AWSDateTime!                  # automatically associated
-    #owner          : String!                       # automatically associated
+    owner           : String
     assets          : [ Asset ]         @connection (keyName: "Assets_by_node", fields: ["id"])
     _assets         : [ _Asset ]        @connection (keyName: "_Assets_by_node", fields: ["id"])
     edges           : [ EdgeNode ]      @connection (keyName: "EdgeNodes_by_node", fields: ["id"])
 }
 
-
 type Edge 
     @model
     @auth (rules: [
-        { allow: owner                                                                       },
-        { allow: groups, operations: [ read, update, delete ], groups: ["Admins", "Editors"] },
-        { allow: groups, operations: [ read                 ], groups: ["Viewers"]           },
-        { allow: public, operations: [ read                 ]                                }
+        { allow: owner,                                         ownerField: "owner",    identityClaim: "email" },
+        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                  },
+        { allow: groups, operations: [ read                 ],  groups: ["Viewers"]                            },
+        { allow: public, operations: [ read                 ]                                                  }
     ])
     @key (
-        name: "Edges_by_type_weight", 
-        fields: ["type", "weight", "createdAt"]
-        queryField: "edgesByTypeWeight"
+        name: "Edges_by_type", 
+        fields: ["type", "createdAt"]
+        queryField: "edgesByType"
     )
 {
     id              : ID!
     type            : EdgeType!
     createdAt       : AWSDateTime!
+    owner           : String
     weight          : Int
     nodes           : [ EdgeNode ]      @connection (keyName: "EdgeNodes_by_edge", fields: ["id"])
 }
 
-# EdgeNodes insertion order is important [ from, to ] = direction of relationship/type
+# NOTE: Implementation detail (facilitates N:N connection between edges and nodes) = not queryable 
+# EdgeNodes insertion order is (TBD if important) [ from, to ] = direction of relationship/type
 # creation of these needs to be done deliberately in order (use spool)
 type EdgeNode
     @auth (rules: [
-        { allow: owner                                                                       },
-        { allow: groups, operations: [ read, update, delete ], groups: ["Admins", "Editors"] },
-        { allow: groups, operations: [ read                 ], groups: ["Viewers"]           },
-        { allow: public, operations: [ read                 ]                                }
+        { allow: owner,                                         ownerField: "owner",    identityClaim: "email"  },
+        { allow: owner,  operations: [ read, update         ],  ownerField: "editors",  identityClaim: "email"  },
+        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                   },
+        { allow: groups, operations: [ read                 ],  groups: ["Viewers"]                             },
+        { allow: public, operations: [ read                 ]                                                   }
     ])
+    #@model
     @model (queries: null)
-    @key ( name: "EdgeNodes_by_edge", fields: ["edge_id", "node_id"] )
-    @key ( name: "EdgeNodes_by_node", fields: ["node_id", "edge_id"] ) 
+    @key ( 
+        name: "EdgeNodes_by_edge", 
+        fields: ["edge_id", "node_id"] 
+    )
+    @key ( 
+        name: "EdgeNodes_by_node", 
+        fields: ["node_id", "edge_id"] 
+    ) 
 {
     id              : ID!
     edge_id         : ID!
     node_id         : ID!
     edge            : Edge!             @connection (fields: ["edge_id"])
     node            : Node!             @connection (fields: ["node_id"])
+    owner           : String
 }

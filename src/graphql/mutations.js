@@ -14,6 +14,7 @@ export const createAsset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -34,6 +35,7 @@ export const updateAsset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -54,6 +56,7 @@ export const deleteAsset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -74,6 +77,7 @@ export const create_Asset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -94,6 +98,7 @@ export const update_Asset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -114,6 +119,7 @@ export const delete_Asset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -314,6 +320,7 @@ export const createEdgeNode = /* GraphQL */ `
         _lastChangedAt
         updatedAt
       }
+      editors
     }
   }
 `;
@@ -354,6 +361,7 @@ export const updateEdgeNode = /* GraphQL */ `
         _lastChangedAt
         updatedAt
       }
+      editors
     }
   }
 `;
@@ -394,6 +402,7 @@ export const deleteEdgeNode = /* GraphQL */ `
         _lastChangedAt
         updatedAt
       }
+      editors
     }
   }
 `;

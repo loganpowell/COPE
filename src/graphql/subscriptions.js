@@ -2,8 +2,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateAsset = /* GraphQL */ `
-  subscription OnCreateAsset($owner: String) {
-    onCreateAsset(owner: $owner) {
+  subscription OnCreateAsset($owner: String, $editors: String) {
+    onCreateAsset(owner: $owner, editors: $editors) {
       id
       node_id
       createdAt
@@ -11,6 +11,7 @@ export const onCreateAsset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -19,8 +20,8 @@ export const onCreateAsset = /* GraphQL */ `
   }
 `;
 export const onUpdateAsset = /* GraphQL */ `
-  subscription OnUpdateAsset($owner: String) {
-    onUpdateAsset(owner: $owner) {
+  subscription OnUpdateAsset($owner: String, $editors: String) {
+    onUpdateAsset(owner: $owner, editors: $editors) {
       id
       node_id
       createdAt
@@ -28,6 +29,7 @@ export const onUpdateAsset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -36,8 +38,8 @@ export const onUpdateAsset = /* GraphQL */ `
   }
 `;
 export const onDeleteAsset = /* GraphQL */ `
-  subscription OnDeleteAsset($owner: String) {
-    onDeleteAsset(owner: $owner) {
+  subscription OnDeleteAsset($owner: String, $editors: String) {
+    onDeleteAsset(owner: $owner, editors: $editors) {
       id
       node_id
       createdAt
@@ -45,6 +47,7 @@ export const onDeleteAsset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -53,8 +56,8 @@ export const onDeleteAsset = /* GraphQL */ `
   }
 `;
 export const onCreate_Asset = /* GraphQL */ `
-  subscription OnCreate_Asset($owner: String) {
-    onCreate_Asset(owner: $owner) {
+  subscription OnCreate_Asset($owner: String, $editors: String) {
+    onCreate_Asset(owner: $owner, editors: $editors) {
       id
       node_id
       createdAt
@@ -62,6 +65,7 @@ export const onCreate_Asset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -70,8 +74,8 @@ export const onCreate_Asset = /* GraphQL */ `
   }
 `;
 export const onUpdate_Asset = /* GraphQL */ `
-  subscription OnUpdate_Asset($owner: String) {
-    onUpdate_Asset(owner: $owner) {
+  subscription OnUpdate_Asset($owner: String, $editors: String) {
+    onUpdate_Asset(owner: $owner, editors: $editors) {
       id
       node_id
       createdAt
@@ -79,6 +83,7 @@ export const onUpdate_Asset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -87,8 +92,8 @@ export const onUpdate_Asset = /* GraphQL */ `
   }
 `;
 export const onDelete_Asset = /* GraphQL */ `
-  subscription OnDelete_Asset($owner: String) {
-    onDelete_Asset(owner: $owner) {
+  subscription OnDelete_Asset($owner: String, $editors: String) {
+    onDelete_Asset(owner: $owner, editors: $editors) {
       id
       node_id
       createdAt
@@ -96,6 +101,7 @@ export const onDelete_Asset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -242,8 +248,8 @@ export const onDeleteEdge = /* GraphQL */ `
   }
 `;
 export const onCreateEdgeNode = /* GraphQL */ `
-  subscription OnCreateEdgeNode($owner: String) {
-    onCreateEdgeNode(owner: $owner) {
+  subscription OnCreateEdgeNode($owner: String, $editors: String) {
+    onCreateEdgeNode(owner: $owner, editors: $editors) {
       id
       edge_id
       node_id
@@ -275,12 +281,13 @@ export const onCreateEdgeNode = /* GraphQL */ `
         _lastChangedAt
         updatedAt
       }
+      editors
     }
   }
 `;
 export const onUpdateEdgeNode = /* GraphQL */ `
-  subscription OnUpdateEdgeNode($owner: String) {
-    onUpdateEdgeNode(owner: $owner) {
+  subscription OnUpdateEdgeNode($owner: String, $editors: String) {
+    onUpdateEdgeNode(owner: $owner, editors: $editors) {
       id
       edge_id
       node_id
@@ -312,12 +319,13 @@ export const onUpdateEdgeNode = /* GraphQL */ `
         _lastChangedAt
         updatedAt
       }
+      editors
     }
   }
 `;
 export const onDeleteEdgeNode = /* GraphQL */ `
-  subscription OnDeleteEdgeNode($owner: String) {
-    onDeleteEdgeNode(owner: $owner) {
+  subscription OnDeleteEdgeNode($owner: String, $editors: String) {
+    onDeleteEdgeNode(owner: $owner, editors: $editors) {
       id
       edge_id
       node_id
@@ -349,6 +357,7 @@ export const onDeleteEdgeNode = /* GraphQL */ `
         _lastChangedAt
         updatedAt
       }
+      editors
     }
   }
 `;

@@ -11,6 +11,7 @@ export const getAsset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -33,6 +34,7 @@ export const listAssets = /* GraphQL */ `
         name
         owner
         content
+        editors
         _version
         _deleted
         _lastChangedAt
@@ -68,6 +70,7 @@ export const assetsByNode = /* GraphQL */ `
         name
         owner
         content
+        editors
         _version
         _deleted
         _lastChangedAt
@@ -103,6 +106,7 @@ export const assetsByType = /* GraphQL */ `
         name
         owner
         content
+        editors
         _version
         _deleted
         _lastChangedAt
@@ -138,6 +142,7 @@ export const assetsByOwner = /* GraphQL */ `
         name
         owner
         content
+        editors
         _version
         _deleted
         _lastChangedAt
@@ -169,6 +174,7 @@ export const syncAssets = /* GraphQL */ `
         name
         owner
         content
+        editors
         _version
         _deleted
         _lastChangedAt
@@ -189,6 +195,7 @@ export const get_Asset = /* GraphQL */ `
       name
       owner
       content
+      editors
       _version
       _deleted
       _lastChangedAt
@@ -211,6 +218,7 @@ export const list_Assets = /* GraphQL */ `
         name
         owner
         content
+        editors
         _version
         _deleted
         _lastChangedAt
@@ -246,6 +254,7 @@ export const _assetsByNode = /* GraphQL */ `
         name
         owner
         content
+        editors
         _version
         _deleted
         _lastChangedAt
@@ -281,6 +290,7 @@ export const _assetsByTypeOwner = /* GraphQL */ `
         name
         owner
         content
+        editors
         _version
         _deleted
         _lastChangedAt
@@ -316,6 +326,7 @@ export const _assetsByOwner = /* GraphQL */ `
         name
         owner
         content
+        editors
         _version
         _deleted
         _lastChangedAt
@@ -347,6 +358,7 @@ export const sync_Assets = /* GraphQL */ `
         name
         owner
         content
+        editors
         _version
         _deleted
         _lastChangedAt
@@ -452,6 +464,39 @@ export const nodesByStatusType = /* GraphQL */ `
     nodesByStatusType(
       status: $status
       typeCreatedAt: $typeCreatedAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        status
+        type
+        createdAt
+        updatedAt
+        owner
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const nodesByStatus = /* GraphQL */ `
+  query NodesByStatus(
+    $status: NodeStatus
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelNodeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    nodesByStatus(
+      status: $status
+      createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -629,6 +674,7 @@ export const syncEdgeNodes = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        editors
       }
       nextToken
       startedAt
