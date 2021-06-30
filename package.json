@@ -17,9 +17,7 @@
         "jest": "jest --watchAll",
         "delay": "node ./node_modules/npm-delay 60000",
         "test": "npm run madge && concurrently \"amplify mock\" \"npm run delay && npm run typewatch\" \"npm run delay && npm run jest\"",
-        "git": "npm run ncu && git add . && git commit -m",
-        "build": "npm run clean && cross-env NODE_ENV=production parcel build client/index.html -d dist --no-source-maps --no-cache --public-url ./",
-        "dev": "npm run madge && concurrently \"amplify mock\" \"npm run delay && parcel client/index.html -p 8080 --open -d dist watch\" \"npm run delay && npm run typewatch\""
+        "git": "npm run ncu && git add . && git commit -m"
     },
     "keywords": [],
     "publishConfig": {
@@ -60,9 +58,7 @@
         "ts-node": "^10.0.0",
         "typescript": "^4.3.4"
     },
-    "browserslist": [
-        "last 3 Chrome versions"
-    ],
+    "browserslist": [ "last 3 Chrome versions" ],
     "prettier": {
         "singleQuote": false,
         "printWidth": 120,

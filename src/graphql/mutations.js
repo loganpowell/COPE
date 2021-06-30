@@ -15,9 +15,6 @@ export const createAsset = /* GraphQL */ `
       owner
       content
       editors
-      _version
-      _deleted
-      _lastChangedAt
       updatedAt
     }
   }
@@ -36,9 +33,6 @@ export const updateAsset = /* GraphQL */ `
       owner
       content
       editors
-      _version
-      _deleted
-      _lastChangedAt
       updatedAt
     }
   }
@@ -57,9 +51,6 @@ export const deleteAsset = /* GraphQL */ `
       owner
       content
       editors
-      _version
-      _deleted
-      _lastChangedAt
       updatedAt
     }
   }
@@ -78,9 +69,6 @@ export const create_Asset = /* GraphQL */ `
       owner
       content
       editors
-      _version
-      _deleted
-      _lastChangedAt
       updatedAt
     }
   }
@@ -99,9 +87,6 @@ export const update_Asset = /* GraphQL */ `
       owner
       content
       editors
-      _version
-      _deleted
-      _lastChangedAt
       updatedAt
     }
   }
@@ -120,9 +105,6 @@ export const delete_Asset = /* GraphQL */ `
       owner
       content
       editors
-      _version
-      _deleted
-      _lastChangedAt
       updatedAt
     }
   }
@@ -139,20 +121,14 @@ export const createNode = /* GraphQL */ `
       createdAt
       updatedAt
       owner
-      _version
-      _deleted
-      _lastChangedAt
       assets {
         nextToken
-        startedAt
       }
       _assets {
         nextToken
-        startedAt
       }
       edges {
         nextToken
-        startedAt
       }
     }
   }
@@ -169,20 +145,14 @@ export const updateNode = /* GraphQL */ `
       createdAt
       updatedAt
       owner
-      _version
-      _deleted
-      _lastChangedAt
       assets {
         nextToken
-        startedAt
       }
       _assets {
         nextToken
-        startedAt
       }
       edges {
         nextToken
-        startedAt
       }
     }
   }
@@ -199,20 +169,14 @@ export const deleteNode = /* GraphQL */ `
       createdAt
       updatedAt
       owner
-      _version
-      _deleted
-      _lastChangedAt
       assets {
         nextToken
-        startedAt
       }
       _assets {
         nextToken
-        startedAt
       }
       edges {
         nextToken
-        startedAt
       }
     }
   }
@@ -228,13 +192,9 @@ export const createEdge = /* GraphQL */ `
       createdAt
       owner
       weight
-      _version
-      _deleted
-      _lastChangedAt
       updatedAt
       nodes {
         nextToken
-        startedAt
       }
     }
   }
@@ -250,13 +210,9 @@ export const updateEdge = /* GraphQL */ `
       createdAt
       owner
       weight
-      _version
-      _deleted
-      _lastChangedAt
       updatedAt
       nodes {
         nextToken
-        startedAt
       }
     }
   }
@@ -272,13 +228,9 @@ export const deleteEdge = /* GraphQL */ `
       createdAt
       owner
       weight
-      _version
-      _deleted
-      _lastChangedAt
       updatedAt
       nodes {
         nextToken
-        startedAt
       }
     }
   }
@@ -293,9 +245,6 @@ export const createEdgeNode = /* GraphQL */ `
       edge_id
       node_id
       owner
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
       node {
@@ -305,9 +254,6 @@ export const createEdgeNode = /* GraphQL */ `
         createdAt
         updatedAt
         owner
-        _version
-        _deleted
-        _lastChangedAt
       }
       edge {
         id
@@ -315,9 +261,6 @@ export const createEdgeNode = /* GraphQL */ `
         createdAt
         owner
         weight
-        _version
-        _deleted
-        _lastChangedAt
         updatedAt
       }
       editors
@@ -334,9 +277,6 @@ export const updateEdgeNode = /* GraphQL */ `
       edge_id
       node_id
       owner
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
       node {
@@ -346,9 +286,6 @@ export const updateEdgeNode = /* GraphQL */ `
         createdAt
         updatedAt
         owner
-        _version
-        _deleted
-        _lastChangedAt
       }
       edge {
         id
@@ -356,9 +293,6 @@ export const updateEdgeNode = /* GraphQL */ `
         createdAt
         owner
         weight
-        _version
-        _deleted
-        _lastChangedAt
         updatedAt
       }
       editors
@@ -375,9 +309,6 @@ export const deleteEdgeNode = /* GraphQL */ `
       edge_id
       node_id
       owner
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
       node {
@@ -387,9 +318,6 @@ export const deleteEdgeNode = /* GraphQL */ `
         createdAt
         updatedAt
         owner
-        _version
-        _deleted
-        _lastChangedAt
       }
       edge {
         id
@@ -397,9 +325,6 @@ export const deleteEdgeNode = /* GraphQL */ `
         createdAt
         owner
         weight
-        _version
-        _deleted
-        _lastChangedAt
         updatedAt
       }
       editors
