@@ -1,3 +1,12 @@
+#   
+#                                                    
+#    e88~~8e  888-~88e 888  888 888-~88e-~88e  d88~\ 
+#   d888  88b 888  888 888  888 888  888  888 C888   
+#   8888__888 888  888 888  888 888  888  888  Y88b  
+#   Y888    , 888  888 888  888 888  888  888   888D 
+#    "88___/  888  888 "88_-888 888  888  888 \_88P  
+#                                                    
+#   
 
 
 enum NodeType {
@@ -46,6 +55,7 @@ enum EdgeType {
     AUTHORED
     # linked list/ordered
     HAS_NEXT
+    HAS_PREVIOUS
     # Group to Subgroup
     HAS_PART
     # Node to Node: Hierarchical
@@ -90,6 +100,16 @@ enum AssetType {
     F_CSV
 }
 
+#   
+#                                       d8          
+#     /~~~8e   d88~\  d88~\  e88~~8e  _d88__  d88~\ 
+#         88b C888   C888   d888  88b  888   C888   
+#    e88~-888  Y88b   Y88b  8888__888  888    Y88b  
+#   C888  888   888D   888D Y888    ,  888     888D 
+#    "88_-888 \_88P  \_88P   "88___/   "88_/ \_88P  
+#                                                   
+#   
+
 interface Resource {
     id              : ID!
     node_id         : ID!
@@ -109,28 +129,29 @@ interface Resource {
 #   copied to a new Node (e.g., Node:Author = [ image, name,
 #   specialization_tags ])
 
+
 type Asset implements Resource 
     @model
     @auth (rules: [
-        { allow: owner,                                         ownerField: "owner",    identityClaim: "email"   },
-        { allow: owner,  operations: [ read, update ],          ownerField: "editors",  identityClaim: "email"   },
-        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                    },
-        { allow: groups, operations: [ read                 ],  groups: ["Viewers"]                              },
-        { allow: public, operations: [ read                 ]                                                    }
+        { allow: owner,                                 ownerField: "owner",    identityClaim: "email"   },
+        { allow: owner,  operations: [ read, update ],  ownerField: "editors",  identityClaim: "email"   },
+        { allow: groups,                                groups: ["Admins", "Editors"]                    },
+        { allow: groups, operations: [ read         ],  groups: ["Viewers"]                              },
+        { allow: public, operations: [ read         ]                                                    }
     ])
     @key ( 
-        name: "Assets_by_node",      
-        fields: ["node_id", "createdAt"],           
-        queryField: "assetsByNode" 
+        name: "Assets_by_node",             # name: GSI Index Name 
+        fields: ["node_id", "createdAt"],   # type = partition key | status#createdAt = composite sort key
+        queryField: "assetsByNode"          # GraphQL query name
     )
     @key ( 
-        name: "Assets_by_type",      
-        fields: ["type", "createdAt"],              
-        queryField: "assetsByType" 
+        name: "Assets_by_type",
+        fields: ["type", "createdAt"],
+        queryField: "assetsByType"
     )
     @key ( 
-        name: "Assets_by_owner",     
-        fields: ["owner", "createdAt"],             
+        name: "Assets_by_owner",
+        fields: ["owner", "createdAt"],
         queryField: "assetsByOwner" 
     )
 {
@@ -147,15 +168,15 @@ type Asset implements Resource
 type _Asset implements Resource
     @model
     @auth (rules: [
-        { allow: owner,                                         ownerField: "owner",    identityClaim: "email" },
-        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                  },
+        { allow: owner,                                 ownerField: "owner",    identityClaim: "email" },
+        { allow: groups,                                groups: ["Admins", "Editors"]                  },
         # https://docs.amplify.aws/cli/graphql-transformer/auth#owner-authorization
-        { allow: owner,  operations: [ read, update         ],  ownerField: "editors",  identityClaim: "email" }
+        { allow: owner,  operations: [ read, update ],  ownerField: "editors",  identityClaim: "email" }
     ])
     @key ( 
         name: "_Assets_by_node",
-        fields: ["node_id", "createdAt"],       
-        queryField: "_assetsByNode" 
+        fields: ["node_id", "createdAt"],
+        queryField: "_assetsByNode"
     )
     @key ( 
         name: "_Assets_by_type_owner",
@@ -178,9 +199,15 @@ type _Asset implements Resource
     editors         : [ String ]
 }
 
-################################################################################
-################################# NODES ########################################
-################################################################################
+#  
+#                          888                  
+#  888-~88e  e88~-_   e88~\888  e88~~8e   d88~\ 
+#  888  888 d888   i d888  888 d888  88b C888   
+#  888  888 8888   | 8888  888 8888__888  Y88b  
+#  888  888 Y888   ' Y888  888 Y888    ,   888D 
+#  888  888  "88_-~   "88_/888  "88___/  \_88P  
+#                                               
+#  
 
 # NOTES:
 # https://docs.amplify.aws/cli/graphql-transformer/key#designing-data-models-using-key
@@ -189,20 +216,20 @@ type _Asset implements Resource
 type Node
     @model
     @auth (rules: [
-        { allow: owner,                                         ownerField: "owner",    identityClaim: "email" },
-        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                  },
-        { allow: groups, operations: [ read                 ],  groups: ["Viewers"]                            },
-        { allow: public, operations: [ read                 ]                                                  }
+        { allow: owner,                                 ownerField: "owner", identityClaim: "email" },
+        { allow: groups,                                groups: ["Admins", "Editors"]               },
+        { allow: groups, operations: [ read         ],  groups: ["Viewers"]                         },
+        { allow: public, operations: [ read         ]                                               }
     ])
     @key (
-        name: "Nodes_by_type_status_createdAt",     # name: GSI Index Name 
-        fields: ["type", "status", "createdAt"],    # type = partition key | status#createdAt = composite sort key
-        queryField: "nodesByTypeStatus"             # GraphQL query name
+        name: "Nodes_by_type_status_createdAt",
+        fields: ["type", "status", "createdAt"],
+        queryField: "nodesByTypeStatus"
     )
     @key (
-        name: "Nodes_by_status_type_createdAt",     # name: GSI Index Name 
-        fields: ["status", "type", "createdAt"],    # type = partition key | status#createdAt = composite sort key
-        queryField: "nodesByStatusType"             # GraphQL query name
+        name: "Nodes_by_status_type_createdAt",
+        fields: ["status", "type", "createdAt"],
+        queryField: "nodesByStatusType"
     )
     @key (
         name: "Nodes_by_status_createdAt",
@@ -216,18 +243,28 @@ type Node
     createdAt       : AWSDateTime!
     updatedAt       : AWSDateTime!                  # automatically associated
     owner           : String
-    assets          : [ Asset ]         @connection (keyName: "Assets_by_node", fields: ["id"])
-    _assets         : [ _Asset ]        @connection (keyName: "_Assets_by_node", fields: ["id"])
-    edges           : [ EdgeNode ]      @connection (keyName: "EdgeNodes_by_node", fields: ["id"])
+    assets          : [ Asset ]     @connection (keyName: "Assets_by_node", fields: ["id"])
+    _assets         : [ _Asset ]    @connection (keyName: "_Assets_by_node", fields: ["id"])
+    edges           : [ EdgeNode ]  @connection (keyName: "EdgeNodes_by_node", fields: ["id"])
 }
+
+#   
+#                   888       /                  
+#    e88~~8e   e88~\888 e88~88e  e88~~8e   d88~\ 
+#   d888  88b d888  888 888 888 d888  88b C888   
+#   8888__888 8888  888 "88_88" 8888__888  Y88b  
+#   Y888    , Y888  888  /      Y888    ,   888D 
+#    "88___/   "88_/888 Cb       "88___/  \_88P  
+#                        Y8""8D                  
+#   
 
 type Edge 
     @model
     @auth (rules: [
-        { allow: owner,                                         ownerField: "owner",    identityClaim: "email" },
-        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                  },
-        { allow: groups, operations: [ read                 ],  groups: ["Viewers"]                            },
-        { allow: public, operations: [ read                 ]                                                  }
+        { allow: owner,                                 ownerField: "owner",    identityClaim: "email" },
+        { allow: groups,                                groups: ["Admins", "Editors"]                  },
+        { allow: groups, operations: [ read         ],  groups: ["Viewers"]                            },
+        { allow: public, operations: [ read         ]                                                  }
     ])
     @key (
         name: "Edges_by_type", 
@@ -240,7 +277,7 @@ type Edge
     createdAt       : AWSDateTime!
     owner           : String
     weight          : Int
-    nodes           : [ EdgeNode ]      @connection (keyName: "EdgeNodes_by_edge", fields: ["id"])
+    nodes           : [ EdgeNode ]  @connection (keyName: "EdgeNodes_by_edge", fields: ["id"])
 }
 
 # NOTE: Implementation detail (facilitates N:N connection between edges and nodes) = not queryable 
@@ -248,11 +285,11 @@ type Edge
 # creation of these needs to be done deliberately in order (use spool)
 type EdgeNode
     @auth (rules: [
-        { allow: owner,                                         ownerField: "owner",    identityClaim: "email"  },
-        { allow: owner,  operations: [ read, update         ],  ownerField: "editors",  identityClaim: "email"  },
-        { allow: groups, operations: [ read, update, delete ],  groups: ["Admins", "Editors"]                   },
-        { allow: groups, operations: [ read                 ],  groups: ["Viewers"]                             },
-        { allow: public, operations: [ read                 ]                                                   }
+        { allow: owner,                                 ownerField: "owner",    identityClaim: "email"  },
+        { allow: owner,  operations: [ read, update ],  ownerField: "editors",  identityClaim: "email"  },
+        { allow: groups,                                groups: ["Admins", "Editors"]                   },
+        { allow: groups, operations: [ read         ],  groups: ["Viewers"]                             },
+        { allow: public, operations: [ read         ]                                                   }
     ])
     #@model
     @model (queries: null)
@@ -268,7 +305,7 @@ type EdgeNode
     id              : ID!
     edge_id         : ID!
     node_id         : ID!
-    edge            : Edge!             @connection (fields: ["edge_id"])
-    node            : Node!             @connection (fields: ["node_id"])
+    edge            : Edge!         @connection (fields: ["edge_id"])
+    node            : Node!         @connection (fields: ["node_id"])
     owner           : String
 }

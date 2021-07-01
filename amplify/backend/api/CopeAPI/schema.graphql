@@ -55,6 +55,7 @@ enum EdgeType {
     AUTHORED
     # linked list/ordered
     HAS_NEXT
+    HAS_PREVIOUS
     # Group to Subgroup
     HAS_PART
     # Node to Node: Hierarchical
@@ -139,18 +140,18 @@ type Asset implements Resource
         { allow: public, operations: [ read         ]                                                    }
     ])
     @key ( 
-        name: "Assets_by_node",      
-        fields: ["node_id", "createdAt"],           
-        queryField: "assetsByNode" 
+        name: "Assets_by_node",             # name: GSI Index Name 
+        fields: ["node_id", "createdAt"],   # type = partition key | status#createdAt = composite sort key
+        queryField: "assetsByNode"          # GraphQL query name
     )
     @key ( 
-        name: "Assets_by_type",      
-        fields: ["type", "createdAt"],              
-        queryField: "assetsByType" 
+        name: "Assets_by_type",
+        fields: ["type", "createdAt"],
+        queryField: "assetsByType"
     )
     @key ( 
-        name: "Assets_by_owner",     
-        fields: ["owner", "createdAt"],             
+        name: "Assets_by_owner",
+        fields: ["owner", "createdAt"],
         queryField: "assetsByOwner" 
     )
 {
@@ -174,8 +175,8 @@ type _Asset implements Resource
     ])
     @key ( 
         name: "_Assets_by_node",
-        fields: ["node_id", "createdAt"],       
-        queryField: "_assetsByNode" 
+        fields: ["node_id", "createdAt"],
+        queryField: "_assetsByNode"
     )
     @key ( 
         name: "_Assets_by_type_owner",
@@ -215,20 +216,20 @@ type _Asset implements Resource
 type Node
     @model
     @auth (rules: [
-        { allow: owner,                        ownerField: "owner",    identityClaim: "email" },
-        { allow: groups,                       groups: ["Admins", "Editors"]                  },
-        { allow: groups, operations: [ read ], groups: ["Viewers"]                            },
-        { allow: public, operations: [ read ]                                                 }
+        { allow: owner,                                 ownerField: "owner", identityClaim: "email" },
+        { allow: groups,                                groups: ["Admins", "Editors"]               },
+        { allow: groups, operations: [ read         ],  groups: ["Viewers"]                         },
+        { allow: public, operations: [ read         ]                                               }
     ])
     @key (
-        name: "Nodes_by_type_status_createdAt",     # name: GSI Index Name 
-        fields: ["type", "status", "createdAt"],    # type = partition key | status#createdAt = composite sort key
-        queryField: "nodesByTypeStatus"             # GraphQL query name
+        name: "Nodes_by_type_status_createdAt",
+        fields: ["type", "status", "createdAt"],
+        queryField: "nodesByTypeStatus"
     )
     @key (
-        name: "Nodes_by_status_type_createdAt",     # name: GSI Index Name 
-        fields: ["status", "type", "createdAt"],    # type = partition key | status#createdAt = composite sort key
-        queryField: "nodesByStatusType"             # GraphQL query name
+        name: "Nodes_by_status_type_createdAt",
+        fields: ["status", "type", "createdAt"],
+        queryField: "nodesByStatusType"
     )
     @key (
         name: "Nodes_by_status_createdAt",
@@ -242,9 +243,9 @@ type Node
     createdAt       : AWSDateTime!
     updatedAt       : AWSDateTime!                  # automatically associated
     owner           : String
-    assets          : [ Asset ]         @connection (keyName: "Assets_by_node", fields: ["id"])
-    _assets         : [ _Asset ]        @connection (keyName: "_Assets_by_node", fields: ["id"])
-    edges           : [ EdgeNode ]      @connection (keyName: "EdgeNodes_by_node", fields: ["id"])
+    assets          : [ Asset ]     @connection (keyName: "Assets_by_node", fields: ["id"])
+    _assets         : [ _Asset ]    @connection (keyName: "_Assets_by_node", fields: ["id"])
+    edges           : [ EdgeNode ]  @connection (keyName: "EdgeNodes_by_node", fields: ["id"])
 }
 
 #   
@@ -260,10 +261,10 @@ type Node
 type Edge 
     @model
     @auth (rules: [
-        { allow: owner,                         ownerField: "owner",    identityClaim: "email" },
-        { allow: groups,                        groups: ["Admins", "Editors"]                  },
-        { allow: groups, operations: [ read ],  groups: ["Viewers"]                            },
-        { allow: public, operations: [ read ]                                                  }
+        { allow: owner,                                 ownerField: "owner",    identityClaim: "email" },
+        { allow: groups,                                groups: ["Admins", "Editors"]                  },
+        { allow: groups, operations: [ read         ],  groups: ["Viewers"]                            },
+        { allow: public, operations: [ read         ]                                                  }
     ])
     @key (
         name: "Edges_by_type", 
@@ -276,7 +277,7 @@ type Edge
     createdAt       : AWSDateTime!
     owner           : String
     weight          : Int
-    nodes           : [ EdgeNode ]      @connection (keyName: "EdgeNodes_by_edge", fields: ["id"])
+    nodes           : [ EdgeNode ]  @connection (keyName: "EdgeNodes_by_edge", fields: ["id"])
 }
 
 # NOTE: Implementation detail (facilitates N:N connection between edges and nodes) = not queryable 
@@ -304,7 +305,7 @@ type EdgeNode
     id              : ID!
     edge_id         : ID!
     node_id         : ID!
-    edge            : Edge!             @connection (fields: ["edge_id"])
-    node            : Node!             @connection (fields: ["node_id"])
+    edge            : Edge!         @connection (fields: ["edge_id"])
+    node            : Node!         @connection (fields: ["node_id"])
     owner           : String
 }
