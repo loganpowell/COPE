@@ -37,11 +37,6 @@
           ]
         }
       ]
-    },
-    "COPECognitoPostConfirmTriggerAddToViewers": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
     }
   },
   "api": {
@@ -75,7 +70,7 @@
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
               "apiKeyExpirationDays": 365,
-              "description": "COPE_key"
+              "description": "CopeAPI"
             }
           },
           "additionalAuthenticationProviders": [

@@ -198,11 +198,30 @@ action on the User Pool.
    have to refresh the page - if you landed on it before you
    created the Lambda - to see the Lambda in the list.
 6. Choose Save changes.
-7. You can log your Lambda function using CloudWatch in the
-   Lambda console. For more information see Accessing
-   CloudWatch Logs for Lambda.
 
+⚠ ERRORS? ⚠
 
+If you get an error like this:
+```
+Error: ENOENT: no such file or directory, lstat '<full path>\COPE\amplify\#current-cloud-backend\api\CopeAPI'
+```
+
+Something got corrupted and you will have to delete the
+`amplify` directory under the root folder of the project
+then pull the app down. If you've not pushed it, you will
+also need to reinitialize the GraphQL API.
+
+You can find your App ID in the Amplify console in AWS
+console. Navigate to your App name and in the main panel -
+top left - you'll see a link to the environment (e.g.,
+`dev`). At the bottom of the environment page you'll see a
+command that looks like this:
+
+```
+amplify pull --appId d17wg1ypllrfa8 --envName dev
+```
+
+Then you will 
 <!--////////////////////  LINKS  /////////////////////-->
 [Automatically Adding Cognito Users to a Group on Sign up]: https://bobbyhadz.com/blog/aws-cognito-add-user-to-group
 

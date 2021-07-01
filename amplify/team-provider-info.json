@@ -13,16 +13,13 @@
     },
     "categories": {
       "auth": {
+        "userPoolGroups": {},
         "copeAuth": {}
       },
       "function": {
         "AdminQueriesd1a30926": {
           "deploymentBucketName": "amplify-cope-dev-180042-deployment",
           "s3Key": "amplify-builds/AdminQueriesd1a30926-5a512f52564f3557596d-build.zip"
-        },
-        "COPECognitoPostConfirmTriggerAddToViewers": {
-          "deploymentBucketName": "amplify-cope-dev-180042-deployment",
-          "s3Key": "amplify-builds/COPECognitoPostConfirmTriggerAddToViewers-563064486f4b63563555-build.zip"
         }
       }
     }
