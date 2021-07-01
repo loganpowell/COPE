@@ -17,9 +17,9 @@
         "copeAuth": {}
       },
       "function": {
-        "AdminQueriesd1a30926": {
+        "AdminQueriesae6420d7": {
           "deploymentBucketName": "amplify-cope-dev-180042-deployment",
-          "s3Key": "amplify-builds/AdminQueriesd1a30926-5a512f52564f3557596d-build.zip"
+          "s3Key": "amplify-builds/AdminQueriesae6420d7-6e586f36756433305265-build.zip"
         }
       }
     }

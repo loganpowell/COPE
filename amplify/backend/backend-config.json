@@ -24,7 +24,7 @@
     }
   },
   "function": {
-    "AdminQueriesd1a30926": {
+    "AdminQueriesae6420d7": {
       "service": "Lambda",
       "providerPlugin": "awscloudformation",
       "build": true,
@@ -43,6 +43,7 @@
     "AdminQueries": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
+      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
       "dependsOn": [
         {
           "category": "auth",
@@ -53,7 +54,7 @@
         },
         {
           "category": "function",
-          "resourceName": "AdminQueriesd1a30926",
+          "resourceName": "AdminQueriesae6420d7",
           "attributes": [
             "Arn",
             "Name"
@@ -70,7 +71,7 @@
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
               "apiKeyExpirationDays": 365,
-              "description": "CopeAPI"
+              "description": "CopeAPIKey"
             }
           },
           "additionalAuthenticationProviders": [

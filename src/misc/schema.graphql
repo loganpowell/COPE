@@ -65,7 +65,7 @@ enum EdgeType {
 enum AssetType {
     # Documentation #############################
     """
-    A [description](http://spec.graphql.org/_Asset/#sec-Descriptions), 
+    A [description](http://spec.graphql.org/June2018/#sec-Descriptions), 
     here in parentheses, is `markdown` friendly!
     """
     DEPRECATED @deprecated(reason: "the reason is _also_ `markdown` friendly!") 
@@ -165,7 +165,7 @@ type Asset implements Resource
     editors         : [ String ]
 }
 
-type _Asset implements Resource
+type Proxy implements Resource
     @model
     @auth (rules: [
         { allow: owner,                                 ownerField: "owner",    identityClaim: "email" },
@@ -174,19 +174,19 @@ type _Asset implements Resource
         { allow: owner,  operations: [ read, update ],  ownerField: "editors",  identityClaim: "email" }
     ])
     @key ( 
-        name: "_Assets_by_node",
+        name: "Proxies_by_node",
         fields: ["node_id", "createdAt"],
-        queryField: "_assetsByNode"
+        queryField: "proxiesByNode"
     )
     @key ( 
-        name: "_Assets_by_type_owner",
-        fields: ["type", "owner", "createdAt"], 
-        queryField: "_assetsByTypeOwner" 
+        name: "Proxies_by_owner_type",
+        fields: ["owner", "type", "createdAt"], 
+        queryField: "proxiesByOwnerType" 
     )
     @key ( 
-        name: "_Assets_by_owner",
+        name: "Proxies_by_owner",
         fields: ["owner", "createdAt"],         
-        queryField: "_assetsByOwner" 
+        queryField: "proxiesByOwner" 
     )
 {
     id              : ID!
@@ -244,7 +244,7 @@ type Node
     updatedAt       : AWSDateTime!                  # automatically associated
     owner           : String
     assets          : [ Asset ]     @connection (keyName: "Assets_by_node", fields: ["id"])
-    _assets         : [ _Asset ]    @connection (keyName: "_Assets_by_node", fields: ["id"])
+    proxies         : [ Proxy ]     @connection (keyName: "Proxies_by_node", fields: ["id"])
     edges           : [ EdgeNode ]  @connection (keyName: "EdgeNodes_by_node", fields: ["id"])
 }
 

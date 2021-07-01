@@ -68,8 +68,38 @@ COPE uses two types of authorization:
 TODO:
 https://medium.com/@fullstackpho/aws-amplify-multi-auth-graphql-public-read-and-authenticated-create-update-delete-1bf5443b0ad1
 
+## Add Admin Queries
 
+```
+λ amplify update auth
+Please note that certain attributes may not be overwritten if you choose to use defaults settings.
+Using service: Cognito, provided by: awscloudformation
+ What do you want to do? Create or update Admin queries API
+? Do you want to restrict access to the admin queries API to a specific Group Yes
+? Select the group to restrict access with: Admins
+
+```
 --- 
+##  🐉  🐉  🐉 
+
+Amplify still has some rough edges and you may run into some
+errors along the way
+
+```
+Following resources failed
+
+× An error occurred when pushing the resources to the cloud
+
+Resource is not in the state stackUpdateComplete
+An error occurred during the push operation: Resource is not in the state stackUpdateComplete
+```
+for this, use this:
+```
+
+```
+
+##  🐉  🐉  🐉 
+
 # Things that must be done outside of Amplify
 
 ## Add a User Pool Lambda Trigger to Automatically Add All Signed Users to the `Viewers` Group
