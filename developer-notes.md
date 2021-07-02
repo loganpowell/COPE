@@ -70,38 +70,6 @@ https://medium.com/@fullstackpho/aws-amplify-multi-auth-graphql-public-read-and-
 
 ## Add Admin Queries
 
-```
-λ amplify update auth
-Please note that certain attributes may not be overwritten if you choose to use defaults settings.
-Using service: Cognito, provided by: awscloudformation
- What do you want to do? Create or update Admin queries API
-? Do you want to restrict access to the admin queries API to a specific Group Yes
-? Select the group to restrict access with: Admins
-
-```
---- 
-##  🐉  🐉  🐉 
-
-Amplify still has some rough edges and you may run into some
-errors along the way
-
-```
-Following resources failed
-
-× An error occurred when pushing the resources to the cloud
-
-Resource is not in the state stackUpdateComplete
-An error occurred during the push operation: Resource is not in the state stackUpdateComplete
-```
-for this, use this:
-```
-
-```
-
-##  🐉  🐉  🐉 
-
-# Things that must be done outside of Amplify
-
 ## Add a User Pool Lambda Trigger to Automatically Add All Signed Users to the `Viewers` Group
 
 [Automatically Adding Cognito Users to a Group on Sign up]
@@ -186,9 +154,23 @@ added an inline policy. It should be named something like:
 
 `copeLambdaRole63f0443d-dev`
 
+To get to the IAM role, you can either go directly to the
+IAM console and find the role or you can go to the lambda
+itself in the Lambda console under the `Permissions` menu
+where you'll find a link to the IAM role under `Role name`. 
+
 The Post Confirmation lambda trigger needs to have the IAM
 permission to execute the `cognito-idp:AdminAddUserToGroup`
 action on the User Pool. 
+
+In IAM, under `Permissions`, you'll need to click on the
+`lambda-execution-policy` dropdown and then `Edit policy`.
+You will then edit the policy `JSON`, replacing the
+`"Resource":` `"arn..."` with your Userpool arn
+
+> You can find your Userpool arn under the `General
+> Settings` of your userpool listed as `Pool ARN` in AWS
+> Cognito console
 
 ```diff
 {
@@ -208,15 +190,11 @@ action on the User Pool.
 +           "Action": [
 +               "cognito-idp:AdminAddUserToGroup"
 +           ],
-+           "Resource": "arn:aws:cognito-idp:us-east-1:xxxxxxxxxxxx:userpool/us-east-1_pDcWh9rz6"
++           "Resource": "arn:aws:cognito-idp:us-east-1:xxxxxxxxxxxx:userpool/us-east-1_xxxxxxxx"
 +       }
     ]
 }
 ```
-
-> You can find your Userpool `"Resource": <arn>` under the
-> `General Settings` of your userpool listed as `Pool ARN` 
-> in AWS Cognito console
 
 2. Navigate to the Amazon Cognito console, choose Manage
    User Pools.
@@ -227,7 +205,46 @@ action on the User Pool.
    function from the Lambda function drop-down list. You may
    have to refresh the page - if you landed on it before you
    created the Lambda - to see the Lambda in the list.
-6. Choose Save changes.
+6. `Save changes` to your trigger
+
+
+
+
+
+
+
+
+```
+λ amplify update auth
+Please note that certain attributes may not be overwritten if you choose to use defaults settings.
+Using service: Cognito, provided by: awscloudformation
+ What do you want to do? Create or update Admin queries API
+? Do you want to restrict access to the admin queries API to a specific Group Yes
+? Select the group to restrict access with: Admins
+
+```
+--- 
+##  🐉  🐉  🐉 
+
+Amplify still has some rough edges and you may run into some
+errors along the way
+
+```
+Following resources failed
+
+× An error occurred when pushing the resources to the cloud
+
+Resource is not in the state stackUpdateComplete
+An error occurred during the push operation: Resource is not in the state stackUpdateComplete
+```
+for this, use this:
+```
+
+```
+
+##  🐉  🐉  🐉 
+
+
 
 ⚠ ERRORS? ⚠
 

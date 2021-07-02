@@ -14,6 +14,8 @@ export type CreateAssetInput = {
 };
 
 export enum AssetType {
+  // A [description](http://spec.graphql.org/June2018/#sec-Descriptions),
+  // here in parentheses, is `markdown` friendly!
   DEPRECATED = "DEPRECATED",
   A_IMAGE = "A_IMAGE",
   A_OG_IMAGE = "A_OG_IMAGE",
