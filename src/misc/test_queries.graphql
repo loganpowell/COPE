@@ -1,3 +1,64 @@
+fragment assetsAndProxies on Node {
+  assets {
+    items {
+      id
+      name
+      content
+    }
+  }
+  proxies {
+    items {
+      id
+      name
+      content
+    }
+  }
+}
+
+query listNodes {
+  listNodes {
+    items {
+      id
+      ...assetsAndProxies
+      edges {
+        items {
+          edge_id
+          edge {
+            type
+            nodes(sortDirection: DESC) {
+              items {
+                node_id
+                createdAt
+                updatedAt
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query getEdges {
+  getNode(id: "longrandomstringthatsmyiD5") {
+    edges {
+      items {
+        edge {
+          id
+          type
+          nodes {
+            items {
+              node {
+                type
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 # Example of using introspection to get enum values
 
 # shift-option/alt-click on a query below to jump to it in the explorer
@@ -20,7 +81,7 @@ fragment asset on Resource {
   id
   type
   node_id
-	name
+  name
   content
 }
 
