@@ -101,18 +101,18 @@ export const assetsByType = /* GraphQL */ `
     }
   }
 `;
-export const assetsByOwner = /* GraphQL */ `
-  query AssetsByOwner(
+export const assetsByOwnerType = /* GraphQL */ `
+  query AssetsByOwnerType(
     $owner: String
-    $createdAt: ModelStringKeyConditionInput
+    $typeCreatedAt: ModelAssetAssets_by_owner_typeCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelAssetFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    assetsByOwner(
+    assetsByOwnerType(
       owner: $owner
-      createdAt: $createdAt
+      typeCreatedAt: $typeCreatedAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -232,18 +232,18 @@ export const assetsPrByOwnerType = /* GraphQL */ `
     }
   }
 `;
-export const assetsPrByTypeName = /* GraphQL */ `
-  query AssetsPrByTypeName(
+export const assetsPrByType = /* GraphQL */ `
+  query AssetsPrByType(
     $type: AssetType
-    $name: ModelStringKeyConditionInput
+    $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelAssetPrFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    assetsPrByTypeName(
+    assetsPrByType(
       type: $type
-      name: $name
+      createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit

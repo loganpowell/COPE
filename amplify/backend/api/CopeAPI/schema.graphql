@@ -150,9 +150,9 @@ type Asset implements Resource
         queryField: "assetsByType"
     )
     @key ( 
-        name: "Assets_by_owner",
-        fields: ["owner", "createdAt"],
-        queryField: "assetsByOwner" 
+        name: "Assets_by_owner_type",
+        fields: ["owner", "type", "createdAt"],
+        queryField: "assetsByOwnerType" 
     )
 {
     id              : ID!
@@ -184,11 +184,11 @@ type AssetPr implements Resource
         fields: ["owner", "type", "createdAt"], 
         queryField: "assetsPrByOwnerType" 
     )
-    # handles searching by status | status & type | status & type & createdAt
+    # handles searching by type | type & createdAt
     @key ( 
-        name: "AssetsPr_by_type_name",
-        fields: ["type", "name"],         
-        queryField: "assetsPrByTypeName" 
+        name: "AssetsPr_by_type",
+        fields: ["type", "createdAt"],         
+        queryField: "assetsPrByType" 
     )
 {
     id              : ID!
