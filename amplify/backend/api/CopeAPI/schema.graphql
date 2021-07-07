@@ -140,9 +140,9 @@ type Asset implements Resource
         { allow: public, operations: [ read         ]                                                    }
     ])
     @key ( 
-        name: "Assets_by_node",             # name: GSI Index Name 
-        fields: ["node_id", "createdAt"],   # type = partition key | status#createdAt = composite sort key
-        queryField: "assetsByNode"          # GraphQL query name
+        name: "Assets_by_node",
+        fields: ["node_id"],
+        queryField: "assetsByNode"
     )
     @key ( 
         name: "Assets_by_type",
@@ -165,7 +165,7 @@ type Asset implements Resource
     editors         : [ String ]
 }
 
-type Proxy implements Resource
+type AssetPr implements Resource
     @model
     @auth (rules: [
         { allow: owner,                                 ownerField: "owner",    identityClaim: "email" },
@@ -174,19 +174,21 @@ type Proxy implements Resource
         { allow: owner,  operations: [ read, update ],  ownerField: "editors",  identityClaim: "email" }
     ])
     @key ( 
-        name: "Proxies_by_node",
-        fields: ["node_id", "createdAt"],
-        queryField: "proxiesByNode"
+        name: "AssetsPr_by_node",
+        fields: ["node_id"],
+        queryField: "assetsPrByNode"
     )
+    # handles searching by owner | owner & type | owner & type & createdAt
     @key ( 
-        name: "Proxies_by_owner_type",
+        name: "AssetsPr_by_owner_type",
         fields: ["owner", "type", "createdAt"], 
-        queryField: "proxiesByOwnerType" 
+        queryField: "assetsPrByOwnerType" 
     )
+    # handles searching by status | status & type | status & type & createdAt
     @key ( 
-        name: "Proxies_by_owner",
-        fields: ["owner", "createdAt"],         
-        queryField: "proxiesByOwner" 
+        name: "AssetsPr_by_type_name",
+        fields: ["type", "name"],         
+        queryField: "assetsPrByTypeName" 
     )
 {
     id              : ID!
@@ -221,20 +223,17 @@ type Node
         { allow: groups, operations: [ read         ],  groups: ["Viewers"]                         },
         { allow: public, operations: [ read         ]                                               }
     ])
-    @key (
-        name: "Nodes_by_type_status_createdAt",
-        fields: ["type", "status", "createdAt"],
-        queryField: "nodesByTypeStatus"
-    )
+    # handles searching by status | status & type | status & type & createdAt
     @key (
         name: "Nodes_by_status_type_createdAt",
         fields: ["status", "type", "createdAt"],
         queryField: "nodesByStatusType"
     )
+    # handles searching by owner | owner & status | owner & status & createdAt
     @key (
-        name: "Nodes_by_status_createdAt",
-        fields: ["status", "createdAt"],
-        queryField: "nodesByStatus"
+        name: "Nodes_by_owner_status_createdAt",
+        fields: ["owner", "status", "createdAt"],
+        queryField: "nodesByOwnerStatus"
     )
 {
     id              : ID!
@@ -244,7 +243,7 @@ type Node
     updatedAt       : AWSDateTime!                  # automatically associated
     owner           : String
     assets          : [ Asset ]     @connection (keyName: "Assets_by_node", fields: ["id"])
-    proxies         : [ Proxy ]     @connection (keyName: "Proxies_by_node", fields: ["id"])
+    assetsPr        : [ AssetPr ]   @connection (keyName: "AssetsPr_by_node", fields: ["id"])
     edges           : [ EdgeNode ]  @connection (keyName: "EdgeNodes_by_node", fields: ["id"])
 }
 
@@ -286,7 +285,6 @@ type Edge
 type EdgeNode
     @auth (rules: [
         { allow: owner,                                 ownerField: "owner",    identityClaim: "email"  },
-        { allow: owner,  operations: [ read, update ],  ownerField: "editors",  identityClaim: "email"  },
         { allow: groups,                                groups: ["Admins", "Editors"]                   },
         { allow: groups, operations: [ read         ],  groups: ["Viewers"]                             },
         { allow: public, operations: [ read         ]                                                   }

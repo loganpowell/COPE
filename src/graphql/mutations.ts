@@ -56,12 +56,12 @@ export const deleteAsset = /* GraphQL */ `
     }
   }
 `;
-export const createProxy = /* GraphQL */ `
-  mutation CreateProxy(
-    $input: CreateProxyInput!
-    $condition: ModelProxyConditionInput
+export const createAssetPr = /* GraphQL */ `
+  mutation CreateAssetPr(
+    $input: CreateAssetPrInput!
+    $condition: ModelAssetPrConditionInput
   ) {
-    createProxy(input: $input, condition: $condition) {
+    createAssetPr(input: $input, condition: $condition) {
       id
       node_id
       createdAt
@@ -74,12 +74,12 @@ export const createProxy = /* GraphQL */ `
     }
   }
 `;
-export const updateProxy = /* GraphQL */ `
-  mutation UpdateProxy(
-    $input: UpdateProxyInput!
-    $condition: ModelProxyConditionInput
+export const updateAssetPr = /* GraphQL */ `
+  mutation UpdateAssetPr(
+    $input: UpdateAssetPrInput!
+    $condition: ModelAssetPrConditionInput
   ) {
-    updateProxy(input: $input, condition: $condition) {
+    updateAssetPr(input: $input, condition: $condition) {
       id
       node_id
       createdAt
@@ -92,12 +92,12 @@ export const updateProxy = /* GraphQL */ `
     }
   }
 `;
-export const deleteProxy = /* GraphQL */ `
-  mutation DeleteProxy(
-    $input: DeleteProxyInput!
-    $condition: ModelProxyConditionInput
+export const deleteAssetPr = /* GraphQL */ `
+  mutation DeleteAssetPr(
+    $input: DeleteAssetPrInput!
+    $condition: ModelAssetPrConditionInput
   ) {
-    deleteProxy(input: $input, condition: $condition) {
+    deleteAssetPr(input: $input, condition: $condition) {
       id
       node_id
       createdAt
@@ -136,7 +136,7 @@ export const createNode = /* GraphQL */ `
         }
         nextToken
       }
-      proxies {
+      assetsPr {
         items {
           id
           node_id
@@ -158,7 +158,6 @@ export const createNode = /* GraphQL */ `
           owner
           createdAt
           updatedAt
-          editors
         }
         nextToken
       }
@@ -191,7 +190,7 @@ export const updateNode = /* GraphQL */ `
         }
         nextToken
       }
-      proxies {
+      assetsPr {
         items {
           id
           node_id
@@ -213,7 +212,6 @@ export const updateNode = /* GraphQL */ `
           owner
           createdAt
           updatedAt
-          editors
         }
         nextToken
       }
@@ -246,7 +244,7 @@ export const deleteNode = /* GraphQL */ `
         }
         nextToken
       }
-      proxies {
+      assetsPr {
         items {
           id
           node_id
@@ -268,7 +266,6 @@ export const deleteNode = /* GraphQL */ `
           owner
           createdAt
           updatedAt
-          editors
         }
         nextToken
       }
@@ -295,7 +292,6 @@ export const createEdge = /* GraphQL */ `
           owner
           createdAt
           updatedAt
-          editors
         }
         nextToken
       }
@@ -322,7 +318,6 @@ export const updateEdge = /* GraphQL */ `
           owner
           createdAt
           updatedAt
-          editors
         }
         nextToken
       }
@@ -349,7 +344,6 @@ export const deleteEdge = /* GraphQL */ `
           owner
           createdAt
           updatedAt
-          editors
         }
         nextToken
       }
@@ -378,7 +372,7 @@ export const createEdgeNode = /* GraphQL */ `
         assets {
           nextToken
         }
-        proxies {
+        assetsPr {
           nextToken
         }
         edges {
@@ -396,7 +390,6 @@ export const createEdgeNode = /* GraphQL */ `
           nextToken
         }
       }
-      editors
     }
   }
 `;
@@ -422,7 +415,7 @@ export const updateEdgeNode = /* GraphQL */ `
         assets {
           nextToken
         }
-        proxies {
+        assetsPr {
           nextToken
         }
         edges {
@@ -440,7 +433,6 @@ export const updateEdgeNode = /* GraphQL */ `
           nextToken
         }
       }
-      editors
     }
   }
 `;
@@ -466,7 +458,7 @@ export const deleteEdgeNode = /* GraphQL */ `
         assets {
           nextToken
         }
-        proxies {
+        assetsPr {
           nextToken
         }
         edges {
@@ -484,7 +476,6 @@ export const deleteEdgeNode = /* GraphQL */ `
           nextToken
         }
       }
-      editors
     }
   }
 `;

@@ -239,9 +239,17 @@ An error occurred during the push operation: Resource is not in the state stackU
 ```
 for this, use this:
 ```
-
 ```
 
+```
+Attempting to mutate more than 1 global secondary index at the same time.
+
+```
+for
+[this](https://docs.amplify.aws/cli/graphql-transformer/key#deploying-multiple-secondary-indices-gsi)
+To enable multiple GSI updates, set the
+`"enableiterativegsiupdates"` feature flag to true in your
+`amplify/cli.json` (located in the `amplify/` directory under root).
 ##  🐉  🐉  🐉 
 
 

@@ -42,7 +42,6 @@ export const listAssets = /* GraphQL */ `
 export const assetsByNode = /* GraphQL */ `
   query AssetsByNode(
     $node_id: ID
-    $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelAssetFilterInput
     $limit: Int
@@ -50,7 +49,6 @@ export const assetsByNode = /* GraphQL */ `
   ) {
     assetsByNode(
       node_id: $node_id
-      createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -135,9 +133,9 @@ export const assetsByOwner = /* GraphQL */ `
     }
   }
 `;
-export const getProxy = /* GraphQL */ `
-  query GetProxy($id: ID!) {
-    getProxy(id: $id) {
+export const getAssetPr = /* GraphQL */ `
+  query GetAssetPr($id: ID!) {
+    getAssetPr(id: $id) {
       id
       node_id
       createdAt
@@ -150,13 +148,13 @@ export const getProxy = /* GraphQL */ `
     }
   }
 `;
-export const listProxys = /* GraphQL */ `
-  query ListProxys(
-    $filter: ModelProxyFilterInput
+export const listAssetPrs = /* GraphQL */ `
+  query ListAssetPrs(
+    $filter: ModelAssetPrFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listProxys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listAssetPrs(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         node_id
@@ -172,18 +170,16 @@ export const listProxys = /* GraphQL */ `
     }
   }
 `;
-export const proxiesByNode = /* GraphQL */ `
-  query ProxiesByNode(
+export const assetsPrByNode = /* GraphQL */ `
+  query AssetsPrByNode(
     $node_id: ID
-    $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
-    $filter: ModelProxyFilterInput
+    $filter: ModelAssetPrFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    proxiesByNode(
+    assetsPrByNode(
       node_id: $node_id
-      createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -204,16 +200,16 @@ export const proxiesByNode = /* GraphQL */ `
     }
   }
 `;
-export const proxiesByOwnerType = /* GraphQL */ `
-  query ProxiesByOwnerType(
+export const assetsPrByOwnerType = /* GraphQL */ `
+  query AssetsPrByOwnerType(
     $owner: String
-    $typeCreatedAt: ModelProxyProxies_by_owner_typeCompositeKeyConditionInput
+    $typeCreatedAt: ModelAssetPrAssetsPr_by_owner_typeCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
-    $filter: ModelProxyFilterInput
+    $filter: ModelAssetPrFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    proxiesByOwnerType(
+    assetsPrByOwnerType(
       owner: $owner
       typeCreatedAt: $typeCreatedAt
       sortDirection: $sortDirection
@@ -236,18 +232,18 @@ export const proxiesByOwnerType = /* GraphQL */ `
     }
   }
 `;
-export const proxiesByOwner = /* GraphQL */ `
-  query ProxiesByOwner(
-    $owner: String
-    $createdAt: ModelStringKeyConditionInput
+export const assetsPrByTypeName = /* GraphQL */ `
+  query AssetsPrByTypeName(
+    $type: AssetType
+    $name: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
-    $filter: ModelProxyFilterInput
+    $filter: ModelAssetPrFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    proxiesByOwner(
-      owner: $owner
-      createdAt: $createdAt
+    assetsPrByTypeName(
+      type: $type
+      name: $name
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -291,7 +287,7 @@ export const getNode = /* GraphQL */ `
         }
         nextToken
       }
-      proxies {
+      assetsPr {
         items {
           id
           node_id
@@ -313,7 +309,6 @@ export const getNode = /* GraphQL */ `
           owner
           createdAt
           updatedAt
-          editors
         }
         nextToken
       }
@@ -337,45 +332,7 @@ export const listNodes = /* GraphQL */ `
         assets {
           nextToken
         }
-        proxies {
-          nextToken
-        }
-        edges {
-          nextToken
-        }
-      }
-      nextToken
-    }
-  }
-`;
-export const nodesByTypeStatus = /* GraphQL */ `
-  query NodesByTypeStatus(
-    $type: NodeType
-    $statusCreatedAt: ModelNodeNodes_by_type_status_createdAtCompositeKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelNodeFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    nodesByTypeStatus(
-      type: $type
-      statusCreatedAt: $statusCreatedAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        status
-        type
-        createdAt
-        updatedAt
-        owner
-        assets {
-          nextToken
-        }
-        proxies {
+        assetsPr {
           nextToken
         }
         edges {
@@ -413,7 +370,7 @@ export const nodesByStatusType = /* GraphQL */ `
         assets {
           nextToken
         }
-        proxies {
+        assetsPr {
           nextToken
         }
         edges {
@@ -424,18 +381,18 @@ export const nodesByStatusType = /* GraphQL */ `
     }
   }
 `;
-export const nodesByStatus = /* GraphQL */ `
-  query NodesByStatus(
-    $status: NodeStatus
-    $createdAt: ModelStringKeyConditionInput
+export const nodesByOwnerStatus = /* GraphQL */ `
+  query NodesByOwnerStatus(
+    $owner: String
+    $statusCreatedAt: ModelNodeNodes_by_owner_status_createdAtCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelNodeFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    nodesByStatus(
-      status: $status
-      createdAt: $createdAt
+    nodesByOwnerStatus(
+      owner: $owner
+      statusCreatedAt: $statusCreatedAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -451,7 +408,7 @@ export const nodesByStatus = /* GraphQL */ `
         assets {
           nextToken
         }
-        proxies {
+        assetsPr {
           nextToken
         }
         edges {
@@ -479,7 +436,6 @@ export const getEdge = /* GraphQL */ `
           owner
           createdAt
           updatedAt
-          editors
         }
         nextToken
       }
