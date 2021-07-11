@@ -19,13 +19,14 @@
         "allowJs": true,
         "watch": true
     },
-    "include": ["src"],
+    "include": ["src", "function"],
     "exclude": [
         "**/*.test.ts",
         "**/*.test.js",
         "**/*.repl.ts",
         "**/*.repl.js",
         "node_modules",
+        "function",
         "lib",
         "src/misc"
     ]

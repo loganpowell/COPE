@@ -1,3 +1,15 @@
 {
-  "lambdaLayers": []
+  "lambdaLayers": [],
+  "permissions": {
+    "auth": {
+      "copeAuth": [
+        "read"
+      ]
+    },
+    "api": {
+      "CopeAPI": [
+        "Mutation"
+      ]
+    }
+  }
 }

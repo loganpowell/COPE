@@ -10,6 +10,11 @@
 
 
 enum NodeType {
+    # --- 🔻 REQUIRED: DO NOT REPLACE/REMOVE 🔻 ---
+    R_ACCOUNT
+    # --- 🔺 REQUIRED: DO NOT REPLACE/REMOVE 🔺 ---
+
+
     # Human #####################################
     H_AUTHOR
     H_TEAM

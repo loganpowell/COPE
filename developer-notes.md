@@ -86,22 +86,26 @@ To add a user pool Lambda trigger with the console
 
 1. Create a Lambda function
 
-```
+```diff
 λ amplify function add
-? Select which capability you want to add: Lambda function (serverless function)
-? Provide an AWS Lambda function name: COPECognitoPostConfirmTriggerAddToViewers
-? Choose the runtime that you want to use: NodeJS
-? Choose the function template that you want to use: Hello World
+? Select which capability you want to add: 
++ Lambda function (serverless function)
+? Provide an AWS Lambda function name: 
++ COPECognitoPostConfirmTriggerAddToViewers
+? Choose the runtime that you want to use: 
++ NodeJS
+? Choose the function template that you want to use: 
++ Hello World
 
 Available advanced settings:
-- Resource access permissions
-- Scheduled recurring invocation
-- Lambda layers configuration
+_ Resource access permissions
+_ Scheduled recurring invocation
+_ Lambda layers configuration
 
-? Do you want to configure advanced settings? No
-? Do you want to edit the local lambda function now? Yes
-Edit the file in your editor: <full path>\COPECognitoPostConfirmTriggerAddToViewers\src\index.js
-? Press enter to continue
+? Do you want to configure advanced settings? 
++ No
+? Do you want to edit the local lambda function now? 
++ Yes
 ```
 
 
@@ -136,6 +140,15 @@ exports.handler = async (event, context, callback) => {
     }
 }
 ```
+---
+
+> UPDATE: The following access permissions can be done via
+> the Amplify CLI as well. See the section below titled:
+> __Granting your Lambda permissions to Appsync to create
+> ACCOUNT Node__
+
+---
+
 ```
 λ amplify function push
 
@@ -208,19 +221,87 @@ You will then edit the policy `JSON`, replacing the
 6. `Save changes` to your trigger
 
 
+## Granting your Lambda permissions to Appsync to create ACCOUNT Node
+
+We need to add another feature to our post confirmation
+trigger lambda: the ability to create an Account Node to
+provide us a way to attach any relevant info about the user
+while using the app.
+
+### Step 1: Add Environment Keys to your lambda:
+
+`ADMIN_EMAIL`
+`ADMIN_PASS`
+
+See [this medium post] for more another take or [this article] for another
 
 
+```diff
+λ amplify update function
+? Select which capability you want to update: Lambda function (serverless function)
+? Select the Lambda function you want to update COPECognitoPostConfirmTriggerAddToViewers
+General information
+_ Name: COPECognitoPostConfirmTriggerAddToViewers
+_ Runtime: nodejs
 
+Resource access permission
+_ CopeAPI (Mutation)
 
+Scheduled recurring invocation
+_ Not configured
 
+Lambda layers
+_ Not configured
+
+Environment variables:
+_ Not configured
+
+Secrets configuration
+_ Not configured
+
+? Which setting do you want to update? 
++ Resource access permissions
+? Select the categories you want this function to have access to. 
++ auth, 
++ api
+? Auth has 2 resources in this project. Select the one you would like your Lambda to access 
++ copeAuth
+? Select the operations you want to permit on copeAuth 
+read
++ create
+? Api has 2 resources in this project. Select the one you would like your Lambda to access 
++ CopeAPI
+? Select the operations you want to permit on CopeAPI 
++ Mutation
+
+You can access the following resource attributes as environment variables from your Lambda function
+        API_COPEAPI_GRAPHQLAPIENDPOINTOUTPUT
+        API_COPEAPI_GRAPHQLAPIIDOUTPUT
+        API_COPEAPI_GRAPHQLAPIKEYOUTPUT
+        AUTH_COPEAUTH_USERPOOLID
+? Do you want to edit the local lambda function now? 
++ Yes
 
 ```
+
+<!-- links -->
+[this medium post]:
+https://medium.com/@jan.hesters/how-to-use-aws-appsync-in-lambda-functions-e593a9cef1d5
+[this article]:
+https://adrianhall.github.io/cloud/2018/10/26/backend-graphql-trigger-appsync/
+<!-- links -->
+
+
+
+```diff
 λ amplify update auth
 Please note that certain attributes may not be overwritten if you choose to use defaults settings.
 Using service: Cognito, provided by: awscloudformation
  What do you want to do? Create or update Admin queries API
-? Do you want to restrict access to the admin queries API to a specific Group Yes
-? Select the group to restrict access with: Admins
+? Do you want to restrict access to the admin queries API to a specific Group 
++ Yes
+? Select the group to restrict access with: 
++ Admins
 
 ```
 --- 

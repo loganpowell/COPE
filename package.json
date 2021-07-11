@@ -10,6 +10,9 @@
     "homepage": "https://github.com/loganpowell/COPE",
     "scripts": {
         "clean": "rm -rf ./lib & rm -rf ./dist &  rm -rf .cache",
+        "cleanfn": "rm -rf ./amplify/backend/function/COPECognitoPostConfirmTriggerAddToViewers/src",
+        "copyfn": "cp -r ./function/src ./amplify/backend/function/COPECognitoPostConfirmTriggerAddToViewers",
+        "bundle": "npm run cleanfn && npm run copyfn",
         "madge": "madge --circular lib/",
         "typewatch": "tsc --project tsconfig.json",
         "types": "tsc --project tsconfig.build.json",

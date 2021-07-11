@@ -219,6 +219,7 @@ export enum NodeStatus {
 
 
 export enum NodeType {
+  R_ACCOUNT = "R_ACCOUNT",
   H_AUTHOR = "H_AUTHOR",
   H_TEAM = "H_TEAM",
   A_ARTICLE = "A_ARTICLE",
