@@ -1,0 +1,20 @@
+[
+    {
+        "new": {
+            "owner": "me@me.com",
+            "createdAt": "2021-07-16T11:14:37.592Z",
+            "__typename": "Edge",
+            "id": "testedge1",
+            "type": "HAS_PREVIOUS",
+            "updatedAt": "2021-07-16T11:27:59.416Z"
+        },
+        "old": {
+            "owner": "me@me.com",
+            "createdAt": "2021-07-16T11:14:37.592Z",
+            "__typename": "Edge",
+            "id": "testedge1",
+            "type": "HAS_CHILD",
+            "updatedAt": "2021-07-16T11:14:37.592Z"
+        }
+    }
+]

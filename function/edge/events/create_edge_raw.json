@@ -1,0 +1,43 @@
+{
+    "Records": [
+        {
+            "eventID": "28a85c18133ed37ef5b50ccf1bebd36a",
+            "eventName": "INSERT",
+            "eventVersion": "1.1",
+            "eventSource": "aws:dynamodb",
+            "awsRegion": "us-east-1",
+            "dynamodb": {
+                "ApproximateCreationDateTime": 1626434078,
+                "Keys": {
+                    "id": {
+                        "S": "testedge1"
+                    }
+                },
+                "NewImage": {
+                    "owner": {
+                        "S": "me@me.com"
+                    },
+                    "createdAt": {
+                        "S": "2021-07-16T11:14:37.592Z"
+                    },
+                    "__typename": {
+                        "S": "Edge"
+                    },
+                    "id": {
+                        "S": "testedge1"
+                    },
+                    "type": {
+                        "S": "HAS_CHILD"
+                    },
+                    "updatedAt": {
+                        "S": "2021-07-16T11:14:37.592Z"
+                    }
+                },
+                "SequenceNumber": "68879900000000074118552387",
+                "SizeBytes": 141,
+                "StreamViewType": "NEW_AND_OLD_IMAGES"
+            },
+            "eventSourceARN": "arn:aws:dynamodb:us-east-1:538069693173:table/Edge-5gkobp75jjd2vioh5harxftoji-dev/stream/2021-07-01T20:36:23.137"
+        }
+    ]
+}

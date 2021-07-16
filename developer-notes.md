@@ -72,6 +72,26 @@ https://medium.com/@fullstackpho/aws-amplify-multi-auth-graphql-public-read-and-
 
 ## Add a User Pool Lambda Trigger to Automatically Add All Signed Users to the `Viewers` Group
 
+> IMPORTANT NOTE: This configuration requires you to set
+> your Lambda to have more memory than the default (120MB).
+> You need to go to the lambda and set the memory to @1024.
+> See more details [in the docs](https://docs.amplify.aws/guides/functions/configuring-lambda/q/platform/js#updating-the-default-memory-size)
+
+`...\amplify\backend\function\<confirm>\<confirm>-cloudformation-template.json:`
+```diff
+"Resources": {
+  "LambdaFunction": {
+      ...
+      "Properties": {
+        "Runtime": "nodejs14.x",
++       "MemorySize": "1024", // Memory size now set to 1024 mb
+        "Layers": [],
+      }
+      ...
+    }
+  },
+}
+```
 > UPDATE: see the [Lambda Triggers] guide for how to
 > configure this Lambda completely within the Amplify CLI
 
@@ -235,10 +255,12 @@ trigger lambda: the ability to create an Account Node to
 provide us a way to attach any relevant info about the user
 while using the app.
 
-### Step 1: Add Environment Keys to your lambda:
+### Step 1: Add Secrets access to your lambda:
 
 `ADMIN_EMAIL`
 `ADMIN_PASS`
+
+Read [a blog post] from AWS to learn about creating and accessing Secrets
 
 See [this medium post] for more another take or [this article] for another
 
@@ -296,6 +318,7 @@ You can access the following resource attributes as environment variables from y
 https://medium.com/@jan.hesters/how-to-use-aws-appsync-in-lambda-functions-e593a9cef1d5
 [this article]:
 https://adrianhall.github.io/cloud/2018/10/26/backend-graphql-trigger-appsync/
+[a blog post]: https://aws.amazon.com/blogs/mobile/configure-environment-variables-and-secrets-for-your-lambda-functions-with-amplify-cli/
 <!-- links -->
 
 

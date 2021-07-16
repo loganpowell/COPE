@@ -30,7 +30,7 @@ const adminAddUserToGroup = ({ userPoolId, userName, groupName = "Viewers" }) =>
     const params = {
         GroupName  : groupName,
         UserPoolId : userPoolId,
-        Username   : userName
+        Username   : userName,
     }
 
     const cognitoIdp = new AWS.CognitoIdentityServiceProvider()
@@ -41,17 +41,27 @@ const adminAddUserToGroup = ({ userPoolId, userName, groupName = "Viewers" }) =>
  * Set these Environment variables in Lambda "configuration"
  * page.
  */
-const user = process.env.ADMIN_EMAIL
-const pass = process.env.ADMIN_PASS
+//const user = process.env.ADMIN_EMAIL
+//const pass = process.env.ADMIN_PASS
 
 exports.handler = async (event, context, callback) => {
+    // Get secrets from Secrets Store
+    const { Parameters } = await new AWS.SSM()
+        .getParameters({
+            Names          : [ "ADMIN_EMAIL", "ADMIN_PASS" ].map(secret => process.env[secret]),
+            WithDecryption : true,
+        })
+        .promise()
+
+    //console.log({ Parameters })
+    const [ user, pass ] = Parameters.map(p => p.Value)
     const { userPoolId, userName } = event
 
     try {
         const added = await adminAddUserToGroup({
             userPoolId,
             userName,
-            groupName  : "Viewers"
+            groupName  : "Viewers",
         })
         console.log("user added to Viewers group:", added)
         await logIn({ user, pass }).then(async ({ payload }) => {

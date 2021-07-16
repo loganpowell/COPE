@@ -69,6 +69,14 @@ const cleanupConnections = async records => {
 
 exports.handler = async event => {
     console.log("raw event:", JSON.stringify(event, null, 2))
+    const { Parameters } = await new AWS.SSM()
+        .getParameters({
+            Names          : [ "ADMIN_EMAIL", "ADMIN_PASS" ].map(secret => process.env[secret]),
+            WithDecryption : true,
+        })
+        .promise()
+
+    console.log({ Parameters })
     /*
     record.dynamodb will contain a DynamoDB change json
     describing the item changed in DynamoDB table. Please note
@@ -90,68 +98,3 @@ exports.handler = async event => {
 }
 
 //https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html
-//Example DynamoDB Streams record event:
-const ex = {
-    Records : [
-        {
-            eventID        : "1",
-            eventVersion   : "1.0",
-            dynamodb       : {
-                Keys           : {
-                    Id : {
-                        N : "101",
-                    },
-                },
-                NewImage       : {
-                    Message : {
-                        S : "New item!",
-                    },
-                    Id      : {
-                        N : "101",
-                    },
-                },
-                StreamViewType : "NEW_AND_OLD_IMAGES",
-                SequenceNumber : "111",
-                SizeBytes      : 26,
-            },
-            awsRegion      : "us-west-2",
-            eventName      : "INSERT",
-            eventSourceARN : "<eventsourcearn>",
-            eventSource    : "aws:dynamodb",
-        },
-        {
-            eventID        : "2",
-            eventVersion   : "1.0",
-            dynamodb       : {
-                OldImage       : {
-                    Message : {
-                        S : "New item!",
-                    },
-                    Id      : {
-                        N : "101",
-                    },
-                },
-                SequenceNumber : "222",
-                Keys           : {
-                    Id : {
-                        N : "101",
-                    },
-                },
-                SizeBytes      : 59,
-                NewImage       : {
-                    Message : {
-                        S : "This item has changed",
-                    },
-                    Id      : {
-                        N : "101",
-                    },
-                },
-                StreamViewType : "NEW_AND_OLD_IMAGES",
-            },
-            awsRegion      : "us-west-2",
-            eventName      : "MODIFY",
-            eventSourceARN : "<sourcearn>",
-            eventSource    : "aws:dynamodb",
-        },
-    ],
-}

@@ -21,7 +21,8 @@
         "no-console": 0,
         "no-use-before-define": 0,
         "no-var": 0,
-        "no-undef": 1
+        "no-undef": 1,
+        "prefer-const": 1
     },
     "extends": [
         "eslint:recommended",

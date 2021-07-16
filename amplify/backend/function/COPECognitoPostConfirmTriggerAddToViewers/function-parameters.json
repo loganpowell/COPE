@@ -11,5 +11,9 @@
         "Mutation"
       ]
     }
-  }
+  },
+  "secretNames": [
+    "ADMIN_EMAIL",
+    "ADMIN_PASS"
+  ]
 }

@@ -1,0 +1,63 @@
+{
+    "Records": [
+        {
+            "eventID": "e2acb7e216a6dda5799b1ec6aba87738",
+            "eventName": "MODIFY",
+            "eventVersion": "1.1",
+            "eventSource": "aws:dynamodb",
+            "awsRegion": "us-east-1",
+            "dynamodb": {
+                "ApproximateCreationDateTime": 1626434879,
+                "Keys": {
+                    "id": {
+                        "S": "testedge1"
+                    }
+                },
+                "NewImage": {
+                    "owner": {
+                        "S": "me@me.com"
+                    },
+                    "createdAt": {
+                        "S": "2021-07-16T11:14:37.592Z"
+                    },
+                    "__typename": {
+                        "S": "Edge"
+                    },
+                    "id": {
+                        "S": "testedge1"
+                    },
+                    "type": {
+                        "S": "HAS_PREVIOUS"
+                    },
+                    "updatedAt": {
+                        "S": "2021-07-16T11:27:59.416Z"
+                    }
+                },
+                "OldImage": {
+                    "owner": {
+                        "S": "me@me.com"
+                    },
+                    "createdAt": {
+                        "S": "2021-07-16T11:14:37.592Z"
+                    },
+                    "__typename": {
+                        "S": "Edge"
+                    },
+                    "id": {
+                        "S": "testedge1"
+                    },
+                    "type": {
+                        "S": "HAS_CHILD"
+                    },
+                    "updatedAt": {
+                        "S": "2021-07-16T11:14:37.592Z"
+                    }
+                },
+                "SequenceNumber": "68880000000000074119242461",
+                "SizeBytes": 274,
+                "StreamViewType": "NEW_AND_OLD_IMAGES"
+            },
+            "eventSourceARN": "arn:aws:dynamodb:us-east-1:538069693173:table/Edge-5gkobp75jjd2vioh5harxftoji-dev/stream/2021-07-01T20:36:23.137"
+        }
+    ]
+}
