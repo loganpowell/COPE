@@ -23,7 +23,11 @@
         },
         "COPECognitoPostConfirmTriggerAddToViewers": {
           "deploymentBucketName": "amplify-cope-dev-180042-deployment",
-          "s3Key": "amplify-builds/COPECognitoPostConfirmTriggerAddToViewers-6562546e72554b4b3534-build.zip"
+          "s3Key": "amplify-builds/COPECognitoPostConfirmTriggerAddToViewers-4178347647656e6d6d45-build.zip"
+        },
+        "CopeEdgeCRUDLambda": {
+          "deploymentBucketName": "amplify-cope-dev-180042-deployment",
+          "s3Key": "amplify-builds/CopeEdgeCRUDLambda-71522b454b3657425961-build.zip"
         }
       }
     }

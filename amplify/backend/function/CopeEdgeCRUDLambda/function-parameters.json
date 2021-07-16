@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "auth": {
+      "copeAuth": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "api": {
+      "CopeAPI": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

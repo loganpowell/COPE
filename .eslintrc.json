@@ -1,0 +1,38 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jest": true,
+        "node": true,
+        "commonjs": true
+    },
+    "rules": {
+        "no-unused-vars": 0,
+        "react/prop-types": 0,
+        "no-native-reassign": 0,
+        "no-negated-in-lhs": 0,
+        "no-unreachable": 1,
+        "@typescript-eslint/explicit-function-return-type": 0,
+        "@typescript-eslint/explicit-module-boundary-types": 0,
+        "@typescript-eslint/no-unused-expressions": 1,
+        "@typescript-eslint/ban-ts-comment": 0,
+        "@typescript-eslint/no-unused-vars": 0,
+        "@typescript-eslint/no-var-requires": 0,
+        "no-console": 0,
+        "no-use-before-define": 0,
+        "no-var": 0,
+        "no-undef": 1
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "root": true,
+    "plugins": ["@typescript-eslint"],
+    "parserOptions": {
+        "ecmaVersion": 11,
+        "ecmaFeatures": {}
+    },
+    "settings": {}
+}

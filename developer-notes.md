@@ -72,6 +72,13 @@ https://medium.com/@fullstackpho/aws-amplify-multi-auth-graphql-public-read-and-
 
 ## Add a User Pool Lambda Trigger to Automatically Add All Signed Users to the `Viewers` Group
 
+> UPDATE: see the [Lambda Triggers] guide for how to
+> configure this Lambda completely within the Amplify CLI
+
+<!-- links -->
+[Lambda Triggers]: https://docs.amplify.aws/cli/usage/lambda-triggers#set-up-lambda-triggers
+<!-- links -->
+
 [Automatically Adding Cognito Users to a Group on Sign up]
 
 By default, Amplify doesn't handle adding users to any
@@ -292,6 +299,82 @@ https://adrianhall.github.io/cloud/2018/10/26/backend-graphql-trigger-appsync/
 <!-- links -->
 
 
+## Triggering Cascading Operations on Edge CRUD:
+
+```diff
+λ amplify function add
+? Select which capability you want to add: 
++ Lambda function (serverless function)
+? Provide an AWS Lambda function name: 
++ CopeEdgeCRUDLambda
+? Choose the runtime that you want to use: 
++ NodeJS
+? Choose the function template that you want to use: 
++ Lambda trigger
+? What event source do you want to associate with Lambda trigger? 
++ Amazon DynamoDB Stream
+? Choose a DynamoDB event source option
++ Use API category graphql @model backed DynamoDB table(s) in the current Amplify project
+Selected resource
++ CopeAPI 
+Choose the graphql @model(s) 
++ Edge
+
+Available advanced settings:
+- Resource access permissions
+- Scheduled recurring invocation
+- Lambda layers configuration
+- Environment variables configuration
+- Secret values configuration
+
+? Do you want to configure advanced settings? 
++ Yes
+? Do you want to access other resources in this project from your Lambda function? 
++ Yes
+? Select the categories you want this function to have access to. 
++ auth
++ api
+? Auth has 2 resources in this project. Select the one you would like your Lambda to access 
++ copeAuth
+? Select the operations you want to permit on copeAuth 
++ create
++ read
++ update
++ delete
+? Api has 2 resources in this project. Select the one you would like your Lambda to access 
++ CopeAPI
+? Select the operations you want to permit on CopeAPI 
++ Query
++ Mutation
+
+You can access the following resource attributes as environment variables from your Lambda function
+        API_COPEAPI_GRAPHQLAPIENDPOINTOUTPUT
+        API_COPEAPI_GRAPHQLAPIIDOUTPUT
+        API_COPEAPI_GRAPHQLAPIKEYOUTPUT
+        AUTH_COPEAUTH_USERPOOLID
+        ENV
+        REGION
+? Do you want to invoke this function on a recurring schedule? 
++ No
+? Do you want to enable Lambda layers for this function? 
++ No
+? Do you want to configure environment variables for this function? 
++ No
+? Do you want to configure secret values this function can access? 
++ No
+? Do you want to edit the local lambda function now? 
++ Yes
+Edit the file in your editor: C:\...\COPE\amplify\backend\function\CopeEdgeCRUDLambda\src\index.js
+? Press enter to continue
+Successfully added resource CopeEdgeCRUDLambda locally.
+
+Next steps:
+Check out sample function code generated in <project-dir>/amplify/backend/function/CopeEdgeCRUDLambda/src
+"amplify function build" builds all of your functions currently in the project
+"amplify mock function <functionName>" runs your function locally
+"amplify push" builds all of your local backend resources and provisions them in the cloud
+"amplify publish" builds all of your local backend and front-end resources (if you added hosting category) and provisions them in the cloud
+```
 
 ```diff
 λ amplify update auth

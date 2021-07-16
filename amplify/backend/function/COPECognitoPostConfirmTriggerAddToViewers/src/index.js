@@ -30,7 +30,7 @@ const adminAddUserToGroup = ({ userPoolId, userName, groupName = "Viewers" }) =>
     const params = {
         GroupName  : groupName,
         UserPoolId : userPoolId,
-        Username   : userName
+        Username   : userName,
     }
 
     const cognitoIdp = new AWS.CognitoIdentityServiceProvider()
@@ -47,7 +47,7 @@ exports.handler = async (event, context, callback) => {
         const added = await adminAddUserToGroup({
             userPoolId,
             userName,
-            groupName  : "Viewers"
+            groupName  : "Viewers",
         })
         console.log("user added to Viewers group:", added)
         await logIn({ user, pass }).then(async ({ payload }) => {
