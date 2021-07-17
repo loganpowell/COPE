@@ -53,7 +53,7 @@ exports.handler = async (event, context, callback) => {
         })
         .promise()
 
-    console.log({ Parameters })
+    //console.log({ Parameters })
     const [ user, pass ] = Parameters.map(p => p.Value)
     const { userPoolId, userName } = event
 

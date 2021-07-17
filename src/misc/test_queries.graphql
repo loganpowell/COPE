@@ -1,3 +1,88 @@
+mutation createEdge {
+  createEdge(input: {id: "testedge2", type: HAS_CHILD}) {
+    id
+    nodes {
+      items {
+        node_id
+        edge_id
+      }
+    }
+  }
+}
+
+query readEdge {
+  getEdge(id: "testedge2") {
+    nodes {
+      items {
+        id
+        edge_id
+        node_id
+      }
+    }
+  }
+}
+
+mutation updateEdge {
+  updateEdge(input: {id: "testedge1", type: HAS_PREVIOUS}) {
+    id
+  }
+}
+
+mutation deleteEdge {
+  deleteEdge(input: {id: "testedge1"}) {
+    id
+    nodes{
+      items{
+        id
+      }
+    }
+  }
+}
+
+mutation createNodes {
+  node3: createNode(input: {id: "testNode3", status: DRAFT, type: A_PAGE}) {
+    id
+  }
+  node4: createNode(input: {id: "testNode4", status: DRAFT, type: A_ARTICLE}) {
+    id
+  }
+}
+
+mutation createEdgeNodes {
+  edgeNode1: createEdgeNode(input: {id: "edgeNode5", edge_id: "testedge2", node_id: "testNode1"}) {
+    id
+  }
+  edgeNode2: createEdgeNode(input: {id: "edgeNode6", edge_id: "testedge2", node_id: "testNode3"}) {
+    id
+  }
+}
+
+
+query readNode {
+  getNode(id: "testNode1") {
+    edges {
+      items {
+        # id
+      	edge{
+          id
+          type
+          nodes{
+            items{
+              createdAt
+              id
+              node{
+                id
+                # type
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
 fragment assetsAndProxies on Node {
   assets {
     items {
