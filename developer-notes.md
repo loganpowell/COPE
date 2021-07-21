@@ -324,6 +324,10 @@ https://adrianhall.github.io/cloud/2018/10/26/backend-graphql-trigger-appsync/
 
 ## Triggering Cascading Operations on Edge CRUD:
 
+> UPDATE: The easier (and equally effective) approach you
+> can take for this is to batch deletes via graphql
+> [aliases](). See [this example](https://github.com/loganpowell/COPE-client-utils/blob/master/src/commands/edges.ts#L144)
+
 ```diff
 λ amplify function add
 ? Select which capability you want to add: 
@@ -430,6 +434,33 @@ Once you have your groups configured, you can execute:
 + No
 
 ```
+
+In addition to setting up your S3 Object store via the
+`amplify` CLI, there are some additional settings you will
+need to set on your bucket directly:
+
+```diff
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::{your bucket}/{public|protected}/*"
+        }
+    ]
+}
+```
+A good resource for learning how to use storage from a
+client can be found [in a blog post by Nader
+Dabit](https://dev.to/dabit3/graphql-tutorial-how-to-manage-image-file-uploads-downloads-with-aws-appsync-aws-amplify-hga)
+
+
+---
+
+## Admin Queries
+
 ```diff
 λ amplify update auth
 Please note that certain attributes may not be overwritten if you choose to use defaults settings.
@@ -442,7 +473,7 @@ Using service: Cognito, provided by: awscloudformation
 
 ```
 --- 
-##  🐉  🐉  🐉 
+## There be dragons 🐉  🐉  🐉 
 
 Amplify still has some rough edges and you may run into some
 errors along the way
@@ -470,11 +501,10 @@ for
 To enable multiple GSI updates, set the
 `"enableiterativegsiupdates"` feature flag to true in your
 `amplify/cli.json` (located in the `amplify/` directory under root).
-##  🐉  🐉  🐉 
 
 
 
-⚠ ERRORS? ⚠
+## ⚠ ERRORS? ⚠
 
 If you get an error like this:
 ```
