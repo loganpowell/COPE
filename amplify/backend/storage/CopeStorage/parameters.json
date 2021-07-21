@@ -1,0 +1,33 @@
+{
+    "bucketName": "cope-storage-bucket",
+    "authPolicyName": "s3_amplify_1c63c370",
+    "unauthPolicyName": "s3_amplify_1c63c370",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "selectedGuestPermissions": [
+        "s3:GetObject",
+        "s3:ListBucket"
+    ],
+    "selectedAuthenticatedPermissions": [
+        "s3:GetObject",
+        "s3:ListBucket"
+    ],
+    "s3PermissionsGuestPublic": "s3:GetObject",
+    "s3PermissionsGuestUploads": "DISALLOW",
+    "GuestAllowList": "ALLOW",
+    "s3PermissionsAuthenticatedPublic": "s3:GetObject",
+    "s3PermissionsAuthenticatedProtected": "s3:GetObject",
+    "s3PermissionsAuthenticatedPrivate": "s3:GetObject",
+    "s3PermissionsAuthenticatedUploads": "DISALLOW",
+    "AuthenticatedAllowList": "ALLOW",
+    "triggerFunction": "NONE",
+    "s3PublicPolicy": "Public_policy_a25586db",
+    "s3UploadsPolicy": "Uploads_policy_a25586db",
+    "s3ProtectedPolicy": "Protected_policy_4961c5fb",
+    "s3PrivatePolicy": "Private_policy_4961c5fb",
+    "s3ReadPolicy": "read_policy_a25586db"
+}

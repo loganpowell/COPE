@@ -1,0 +1,16 @@
+{
+    "groupPermissionMap": {
+        "Admins": [
+            "create/update",
+            "read",
+            "delete"
+        ],
+        "Editors": [
+            "create/update",
+            "read"
+        ],
+        "Viewers": [
+            "read"
+        ]
+    }
+}

@@ -10,6 +10,7 @@ export const onCreateAsset = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -25,6 +26,7 @@ export const onUpdateAsset = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -40,6 +42,7 @@ export const onDeleteAsset = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -55,6 +58,7 @@ export const onCreateAssetPr = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -70,6 +74,7 @@ export const onUpdateAssetPr = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -85,6 +90,7 @@ export const onDeleteAssetPr = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -108,6 +114,7 @@ export const onCreateNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors
@@ -122,6 +129,7 @@ export const onCreateNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors
@@ -159,6 +167,7 @@ export const onUpdateNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors
@@ -173,6 +182,7 @@ export const onUpdateNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors
@@ -210,6 +220,7 @@ export const onDeleteNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors
@@ -224,6 +235,7 @@ export const onDeleteNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors

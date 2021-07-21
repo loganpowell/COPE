@@ -10,6 +10,7 @@ export const getAsset = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -30,6 +31,7 @@ export const listAssets = /* GraphQL */ `
         createdAt
         type
         name
+        index
         owner
         content
         editors
@@ -60,6 +62,7 @@ export const assetsByNode = /* GraphQL */ `
         createdAt
         type
         name
+        index
         owner
         content
         editors
@@ -92,6 +95,7 @@ export const assetsByType = /* GraphQL */ `
         createdAt
         type
         name
+        index
         owner
         content
         editors
@@ -124,6 +128,7 @@ export const assetsByOwnerType = /* GraphQL */ `
         createdAt
         type
         name
+        index
         owner
         content
         editors
@@ -141,6 +146,7 @@ export const getAssetPr = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -161,6 +167,7 @@ export const listAssetPrs = /* GraphQL */ `
         createdAt
         type
         name
+        index
         owner
         content
         editors
@@ -191,6 +198,7 @@ export const assetsPrByNode = /* GraphQL */ `
         createdAt
         type
         name
+        index
         owner
         content
         editors
@@ -223,6 +231,7 @@ export const assetsPrByOwnerType = /* GraphQL */ `
         createdAt
         type
         name
+        index
         owner
         content
         editors
@@ -255,6 +264,7 @@ export const assetsPrByType = /* GraphQL */ `
         createdAt
         type
         name
+        index
         owner
         content
         editors
@@ -280,6 +290,7 @@ export const getNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors
@@ -294,6 +305,7 @@ export const getNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors

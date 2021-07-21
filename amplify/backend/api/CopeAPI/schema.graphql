@@ -118,9 +118,11 @@ enum AssetType {
 interface Resource {
     id              : ID!
     node_id         : ID!
-    createdAt       : AWSDateTime! 
+    createdAt       : AWSDateTime!
     type            : AssetType!
     name            : String!
+    index           : Int
+    owner           : String
     content         : String
     editors         : [ String ]
 }
@@ -165,6 +167,7 @@ type Asset implements Resource
     createdAt       : AWSDateTime!
     type            : AssetType!
     name            : String!
+    index           : Int
     owner           : String
     content         : String
     editors         : [ String ]
@@ -201,6 +204,7 @@ type AssetPr implements Resource
     createdAt       : AWSDateTime!
     type            : AssetType!
     name            : String!
+    index           : Int
     owner           : String
     content         : String
     editors         : [ String ]

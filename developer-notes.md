@@ -399,6 +399,37 @@ Check out sample function code generated in <project-dir>/amplify/backend/functi
 "amplify publish" builds all of your local backend and front-end resources (if you added hosting category) and provisions them in the cloud
 ```
 
+# Storage
+
+In order for storage to be most easily and properly
+configured, first `amplify add auth` must be added to the
+project and configured appropriately.
+
+Once you have your groups configured, you can execute:
+```diff
+λ amplify add storage
+? Please select from one of the below mentioned services: 
++ Content (Images, audio, video, etc.)
+? Restrict access by? 
++ Both
+? Who should have access: 
++ Auth and guest users
+? What kind of access do you want for Authenticated users?
++ read
+? What kind of access do you want for Guest users?
++ read
+? Select groups:
++ Admins, Editors, Viewers
+? What kind of access do you want for Admins users? 
++ create/update, read, delete
+? What kind of access do you want for Editors users?
++ create/update, read
+? What kind of access do you want for Viewers users?
++ read
+? Do you want to add a Lambda Trigger for your S3 Bucket?
++ No
+
+```
 ```diff
 λ amplify update auth
 Please note that certain attributes may not be overwritten if you choose to use defaults settings.
@@ -428,6 +459,8 @@ for this, use this:
 ```
 ```
 
+### Enable Iterative GSI Updates
+[source](https://docs.amplify.aws/cli/graphql-transformer/key#deploying-multiple-secondary-indices-gsi)
 ```
 Attempting to mutate more than 1 global secondary index at the same time.
 

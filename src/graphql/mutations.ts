@@ -13,6 +13,7 @@ export const createAsset = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -31,6 +32,7 @@ export const updateAsset = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -49,6 +51,7 @@ export const deleteAsset = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -67,6 +70,7 @@ export const createAssetPr = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -85,6 +89,7 @@ export const updateAssetPr = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -103,6 +108,7 @@ export const deleteAssetPr = /* GraphQL */ `
       createdAt
       type
       name
+      index
       owner
       content
       editors
@@ -129,6 +135,7 @@ export const createNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors
@@ -143,6 +150,7 @@ export const createNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors
@@ -183,6 +191,7 @@ export const updateNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors
@@ -197,6 +206,7 @@ export const updateNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors
@@ -237,6 +247,7 @@ export const deleteNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors
@@ -251,6 +262,7 @@ export const deleteNode = /* GraphQL */ `
           createdAt
           type
           name
+          index
           owner
           content
           editors

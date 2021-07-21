@@ -21,6 +21,7 @@
     },
     "include": ["src", "function"],
     "exclude": [
+        "**/aws-exports.js",
         "**/*.test.ts",
         "**/*.test.js",
         "**/*.repl.ts",
