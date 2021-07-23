@@ -140,11 +140,11 @@ interface Resource {
 type Asset implements Resource 
     @model
     @auth (rules: [
-        { allow: owner,                                 ownerField: "owner",    identityClaim: "email"   },
-        { allow: owner,  operations: [ read, update ],  ownerField: "editors",  identityClaim: "email"   },
-        { allow: groups,                                groups: ["Admins", "Editors"]                    },
-        { allow: groups, operations: [ read         ],  groups: ["Viewers"]                              },
-        { allow: public, operations: [ read         ]                                                    }
+        { allow: owner,                                   ownerField: "owner",    identityClaim: "email"   },
+        { allow: owner,  operations: [ read, update ],    ownerField: "editors",  identityClaim: "email"   },
+        { allow: groups,                                  groups: ["Admins", "Editors"]                    },
+        { allow: groups, operations: [ read         ],    groups: ["Viewers"]                              },
+        { allow: public, operations: [ read         ]                                                      }
     ])
     @key ( 
         name: "Assets_by_node",
@@ -176,10 +176,10 @@ type Asset implements Resource
 type AssetPr implements Resource
     @model
     @auth (rules: [
-        { allow: owner,                                 ownerField: "owner",    identityClaim: "email" },
-        { allow: groups,                                groups: ["Admins", "Editors"]                  },
+        { allow: owner,                                   ownerField: "owner",    identityClaim: "email" },
+        { allow: owner,  operations: [ read, update   ],  ownerField: "editors",  identityClaim: "email" },
+        { allow: groups,                                  groups: ["Admins", "Editors"]                  },
         # https://docs.amplify.aws/cli/graphql-transformer/auth#owner-authorization
-        { allow: owner,  operations: [ read, update ],  ownerField: "editors",  identityClaim: "email" }
     ])
     @key ( 
         name: "AssetsPr_by_node",
@@ -227,10 +227,10 @@ type AssetPr implements Resource
 type Node
     @model
     @auth (rules: [
-        { allow: owner,                                 ownerField: "owner", identityClaim: "email" },
-        { allow: groups,                                groups: ["Admins", "Editors"]               },
-        { allow: groups, operations: [ read         ],  groups: ["Viewers"]                         },
-        { allow: public, operations: [ read         ]                                               }
+        { allow: owner,                                  ownerField: "owner", identityClaim: "email" },
+        { allow: groups,                                 groups: ["Admins", "Editors"]               },
+        { allow: groups, operations: [ read           ], groups: ["Viewers"]                         },
+        { allow: public, operations: [ read           ]                                              }
     ])
     # handles searching by status | status & type | status & type & createdAt
     @key (
@@ -269,10 +269,10 @@ type Node
 type Edge 
     @model
     @auth (rules: [
-        { allow: owner,                                 ownerField: "owner",    identityClaim: "email" },
-        { allow: groups,                                groups: ["Admins", "Editors"]                  },
-        { allow: groups, operations: [ read         ],  groups: ["Viewers"]                            },
-        { allow: public, operations: [ read         ]                                                  }
+        { allow: owner,                                   ownerField: "owner",    identityClaim: "email" },
+        { allow: groups,                                  groups: ["Admins", "Editors"]                  },
+        { allow: groups, operations: [ read           ],  groups: ["Viewers"]                            },
+        { allow: public, operations: [ read           ]                                                  }
     ])
     @key (
         name: "Edges_by_type", 
@@ -293,10 +293,10 @@ type Edge
 # creation of these needs to be done deliberately in order (use spool)
 type EdgeNode
     @auth (rules: [
-        { allow: owner,                                 ownerField: "owner",    identityClaim: "email"  },
-        { allow: groups,                                groups: ["Admins", "Editors"]                   },
-        { allow: groups, operations: [ read         ],  groups: ["Viewers"]                             },
-        { allow: public, operations: [ read         ]                                                   }
+        { allow: owner,                                   ownerField: "owner",    identityClaim: "email"  },
+        { allow: groups,                                  groups: ["Admins", "Editors"]                   },
+        { allow: groups, operations: [ read           ],  groups: ["Viewers"]                             },
+        { allow: public, operations: [ read           ]                                                   }
     ])
     #@model
     @model (queries: null)
