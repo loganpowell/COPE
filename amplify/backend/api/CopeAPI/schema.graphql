@@ -29,6 +29,7 @@ enum NodeType {
     A_PAGE # findable by router/deeplink
     A_APPLICATION
     A_GEM
+    A_COURSE
 
     # Survey
     S_ACS
@@ -42,6 +43,7 @@ enum NodeType {
     V_2020
 
     # Collections/Groupings/branches #############
+    C_COURSES
     C_SERIES # Ordered/linked list
     C_LIST # Ordered/sortable
 
