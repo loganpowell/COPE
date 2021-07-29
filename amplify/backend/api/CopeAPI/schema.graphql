@@ -101,6 +101,9 @@ enum AssetType {
     M_API
 
     # Files ######################################
+    F_IMAGE
+    F_AUDIO
+    F_VIDEO
     F_PDF
     F_KML
     F_SHP
