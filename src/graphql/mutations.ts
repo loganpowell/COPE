@@ -11,13 +11,13 @@ export const createAsset = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -30,13 +30,13 @@ export const updateAsset = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -49,13 +49,13 @@ export const deleteAsset = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -68,13 +68,13 @@ export const createAssetPr = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -87,13 +87,13 @@ export const updateAssetPr = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -106,13 +106,13 @@ export const deleteAssetPr = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -133,13 +133,13 @@ export const createNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }
@@ -148,13 +148,13 @@ export const createNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }
@@ -189,13 +189,13 @@ export const updateNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }
@@ -204,13 +204,13 @@ export const updateNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }
@@ -245,13 +245,13 @@ export const deleteNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }
@@ -260,13 +260,13 @@ export const deleteNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }

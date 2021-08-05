@@ -124,6 +124,7 @@ interface Resource {
     id              : ID!
     node_id         : ID!
     createdAt       : AWSDateTime!
+    updatedAt       : AWSDateTime!
     type            : AssetType!
     name            : String!
     index           : Int
@@ -170,6 +171,7 @@ type Asset implements Resource
     id              : ID!
     node_id         : ID!
     createdAt       : AWSDateTime!
+    updatedAt       : AWSDateTime!
     type            : AssetType!
     name            : String!
     index           : Int
@@ -207,6 +209,7 @@ type AssetPr implements Resource
     id              : ID!
     node_id         : ID!
     createdAt       : AWSDateTime!
+    updatedAt       : AWSDateTime!
     type            : AssetType!
     name            : String!
     index           : Int

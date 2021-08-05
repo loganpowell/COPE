@@ -8,13 +8,13 @@ export const getAsset = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -29,13 +29,13 @@ export const listAssets = /* GraphQL */ `
         id
         node_id
         createdAt
+        updatedAt
         type
         name
         index
         owner
         content
         editors
-        updatedAt
       }
       nextToken
     }
@@ -60,13 +60,13 @@ export const assetsByNode = /* GraphQL */ `
         id
         node_id
         createdAt
+        updatedAt
         type
         name
         index
         owner
         content
         editors
-        updatedAt
       }
       nextToken
     }
@@ -93,13 +93,13 @@ export const assetsByType = /* GraphQL */ `
         id
         node_id
         createdAt
+        updatedAt
         type
         name
         index
         owner
         content
         editors
-        updatedAt
       }
       nextToken
     }
@@ -126,13 +126,13 @@ export const assetsByOwnerType = /* GraphQL */ `
         id
         node_id
         createdAt
+        updatedAt
         type
         name
         index
         owner
         content
         editors
-        updatedAt
       }
       nextToken
     }
@@ -144,13 +144,13 @@ export const getAssetPr = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -165,13 +165,13 @@ export const listAssetPrs = /* GraphQL */ `
         id
         node_id
         createdAt
+        updatedAt
         type
         name
         index
         owner
         content
         editors
-        updatedAt
       }
       nextToken
     }
@@ -196,13 +196,13 @@ export const assetsPrByNode = /* GraphQL */ `
         id
         node_id
         createdAt
+        updatedAt
         type
         name
         index
         owner
         content
         editors
-        updatedAt
       }
       nextToken
     }
@@ -229,13 +229,13 @@ export const assetsPrByOwnerType = /* GraphQL */ `
         id
         node_id
         createdAt
+        updatedAt
         type
         name
         index
         owner
         content
         editors
-        updatedAt
       }
       nextToken
     }
@@ -262,13 +262,13 @@ export const assetsPrByType = /* GraphQL */ `
         id
         node_id
         createdAt
+        updatedAt
         type
         name
         index
         owner
         content
         editors
-        updatedAt
       }
       nextToken
     }
@@ -288,13 +288,13 @@ export const getNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }
@@ -303,13 +303,13 @@ export const getNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }

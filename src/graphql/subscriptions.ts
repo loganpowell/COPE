@@ -8,13 +8,13 @@ export const onCreateAsset = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -24,13 +24,13 @@ export const onUpdateAsset = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -40,13 +40,13 @@ export const onDeleteAsset = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -56,13 +56,13 @@ export const onCreateAssetPr = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -72,13 +72,13 @@ export const onUpdateAssetPr = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -88,13 +88,13 @@ export const onDeleteAssetPr = /* GraphQL */ `
       id
       node_id
       createdAt
+      updatedAt
       type
       name
       index
       owner
       content
       editors
-      updatedAt
     }
   }
 `;
@@ -112,13 +112,13 @@ export const onCreateNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }
@@ -127,13 +127,13 @@ export const onCreateNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }
@@ -165,13 +165,13 @@ export const onUpdateNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }
@@ -180,13 +180,13 @@ export const onUpdateNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }
@@ -218,13 +218,13 @@ export const onDeleteNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }
@@ -233,13 +233,13 @@ export const onDeleteNode = /* GraphQL */ `
           id
           node_id
           createdAt
+          updatedAt
           type
           name
           index
           owner
           content
           editors
-          updatedAt
         }
         nextToken
       }
