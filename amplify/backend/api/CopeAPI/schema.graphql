@@ -252,6 +252,11 @@ type Node
         fields: ["owner", "status", "createdAt"],
         queryField: "nodesByOwnerStatus"
     )
+    @key (
+        name: "Nodes_by_owner_type_createdAt",
+        fields: ["owner", "type", "createdAt"],
+        queryField: "nodesByOwnerType"
+    )
 {
     id              : ID!
     status          : NodeStatus!

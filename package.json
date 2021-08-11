@@ -67,10 +67,13 @@
     "browserslist": [ "last 3 Chrome versions" ],
     "prettier": {
         "singleQuote": false,
-        "printWidth": 120,
+        "printWidth": 100,
         "endOfLine": "lf",
         "tabWidth": 4,
         "semi": false,
-        "arrowParens": "avoid"
+        "arrowParens": "avoid",
+        "useTabs": false,
+        "trailingComma": "all",
+        "bracketSpacing": true
     }
 }
