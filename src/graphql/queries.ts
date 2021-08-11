@@ -431,6 +431,44 @@ export const nodesByOwnerStatus = /* GraphQL */ `
     }
   }
 `;
+export const nodesByOwnerType = /* GraphQL */ `
+  query NodesByOwnerType(
+    $owner: String
+    $typeCreatedAt: ModelNodeNodes_by_owner_type_createdAtCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelNodeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    nodesByOwnerType(
+      owner: $owner
+      typeCreatedAt: $typeCreatedAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        status
+        type
+        createdAt
+        updatedAt
+        owner
+        assets {
+          nextToken
+        }
+        assetsPr {
+          nextToken
+        }
+        edges {
+          nextToken
+        }
+      }
+      nextToken
+    }
+  }
+`;
 export const getEdge = /* GraphQL */ `
   query GetEdge($id: ID!) {
     getEdge(id: $id) {
