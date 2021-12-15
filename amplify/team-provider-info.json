@@ -27,5 +27,35 @@
         }
       }
     }
+  },
+  "migration": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cope-migration-161145-authRole",
+      "UnauthRoleArn": "arn:aws:iam::538069693173:role/amplify-cope-migration-161145-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::538069693173:role/amplify-cope-migration-161145-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-cope-migration-161145-deployment",
+      "UnauthRoleName": "amplify-cope-migration-161145-unauthRole",
+      "StackName": "amplify-cope-migration-161145",
+      "StackId": "arn:aws:cloudformation:us-east-1:538069693173:stack/amplify-cope-migration-161145/7277d550-5d22-11ec-bfc0-12a08b576ebb",
+      "AmplifyAppId": "d17wg1ypllrfa8"
+    },
+    "categories": {
+      "function": {
+        "AdminQueriesae6420d7": {
+          "deploymentBucketName": "amplify-cope-migration-161145-deployment",
+          "s3Key": "amplify-builds/AdminQueriesae6420d7-6d594a71644b4c324756-build.zip"
+        },
+        "COPECognitoPostConfirmTriggerAddToViewers": {
+          "secretsPathAmplifyAppId": "d17wg1ypllrfa8",
+          "deploymentBucketName": "amplify-cope-migration-161145-deployment",
+          "s3Key": "amplify-builds/COPECognitoPostConfirmTriggerAddToViewers-457367436f76334c666d-build.zip"
+        }
+      },
+      "auth": {
+        "userPoolGroups": {},
+        "copeAuth": {}
+      }
+    }
   }
 }

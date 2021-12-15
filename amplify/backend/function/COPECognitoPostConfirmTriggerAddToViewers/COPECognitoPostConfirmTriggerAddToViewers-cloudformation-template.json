@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Lambda Function resource stack creation using Amplify CLI",
+  "Description": "{\"createdOn\":\"Windows\",\"createdBy\":\"Amplify\",\"createdWith\":\"7.6.3\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
     "CloudWatchRule": {
       "Type": "String",
@@ -31,6 +31,9 @@
     "authcopeAuthUserPoolId": {
       "Type": "String",
       "Default": "authcopeAuthUserPoolId"
+    },
+    "secretsPathAmplifyAppId": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -107,7 +110,9 @@
                     "Fn::Sub": [
                       "/amplify/${appId}/${env}/AMPLIFY_${functionName}_",
                       {
-                        "appId": "d17wg1ypllrfa8",
+                        "appId": {
+                          "Ref": "secretsPathAmplifyAppId"
+                        },
                         "env": {
                           "Ref": "env"
                         },
@@ -127,7 +132,9 @@
                     "Fn::Sub": [
                       "/amplify/${appId}/${env}/AMPLIFY_${functionName}_",
                       {
-                        "appId": "d17wg1ypllrfa8",
+                        "appId": {
+                          "Ref": "secretsPathAmplifyAppId"
+                        },
                         "env": {
                           "Ref": "env"
                         },
@@ -356,7 +363,9 @@
                       "Fn::Sub": [
                         "/amplify/${appId}/${env}/AMPLIFY_${functionName}_",
                         {
-                          "appId": "d17wg1ypllrfa8",
+                          "appId": {
+                            "Ref": "secretsPathAmplifyAppId"
+                          },
                           "env": {
                             "Ref": "env"
                           },
