@@ -51,7 +51,9 @@ export type ModelAssetConditionInput = {
   type?: ModelAssetTypeInput | null,
   name?: ModelStringInput | null,
   index?: ModelIntInput | null,
+  owner?: ModelStringInput | null,
   content?: ModelStringInput | null,
+  editors?: ModelStringInput | null,
   and?: Array< ModelAssetConditionInput | null > | null,
   or?: Array< ModelAssetConditionInput | null > | null,
   not?: ModelAssetConditionInput | null,
@@ -209,7 +211,9 @@ export type ModelAssetPrConditionInput = {
   type?: ModelAssetTypeInput | null,
   name?: ModelStringInput | null,
   index?: ModelIntInput | null,
+  owner?: ModelStringInput | null,
   content?: ModelStringInput | null,
+  editors?: ModelStringInput | null,
   and?: Array< ModelAssetPrConditionInput | null > | null,
   or?: Array< ModelAssetPrConditionInput | null > | null,
   not?: ModelAssetPrConditionInput | null,
@@ -277,6 +281,7 @@ export type ModelNodeConditionInput = {
   type?: ModelNodeTypeInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
   and?: Array< ModelNodeConditionInput | null > | null,
   or?: Array< ModelNodeConditionInput | null > | null,
   not?: ModelNodeConditionInput | null,
@@ -307,19 +312,19 @@ export type Node = {
 
 export type ModelAssetConnection = {
   __typename: "ModelAssetConnection",
-  items?:  Array<Asset | null > | null,
+  items:  Array<Asset >,
   nextToken?: string | null,
 };
 
 export type ModelAssetPrConnection = {
   __typename: "ModelAssetPrConnection",
-  items?:  Array<AssetPr | null > | null,
+  items:  Array<AssetPr >,
   nextToken?: string | null,
 };
 
 export type ModelEdgeNodeConnection = {
   __typename: "ModelEdgeNodeConnection",
-  items?:  Array<EdgeNode | null > | null,
+  items:  Array<EdgeNode >,
   nextToken?: string | null,
 };
 
@@ -328,11 +333,11 @@ export type EdgeNode = {
   id: string,
   edge_id: string,
   node_id: string,
+  edge: Edge,
+  node: Node,
   owner?: string | null,
   createdAt: string,
   updatedAt: string,
-  node: Node,
-  edge: Edge,
 };
 
 export type Edge = {
@@ -342,8 +347,8 @@ export type Edge = {
   createdAt: string,
   owner?: string | null,
   weight?: number | null,
-  updatedAt: string,
   nodes?: ModelEdgeNodeConnection | null,
+  updatedAt: string,
 };
 
 export enum EdgeType {
@@ -379,6 +384,7 @@ export type CreateEdgeInput = {
 export type ModelEdgeConditionInput = {
   type?: ModelEdgeTypeInput | null,
   createdAt?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
   weight?: ModelIntInput | null,
   and?: Array< ModelEdgeConditionInput | null > | null,
   or?: Array< ModelEdgeConditionInput | null > | null,
@@ -412,6 +418,7 @@ export type CreateEdgeNodeInput = {
 export type ModelEdgeNodeConditionInput = {
   edge_id?: ModelIDInput | null,
   node_id?: ModelIDInput | null,
+  owner?: ModelStringInput | null,
   and?: Array< ModelEdgeNodeConditionInput | null > | null,
   or?: Array< ModelEdgeNodeConditionInput | null > | null,
   not?: ModelEdgeNodeConditionInput | null,
@@ -520,7 +527,7 @@ export type ModelNodeFilterInput = {
 
 export type ModelNodeConnection = {
   __typename: "ModelNodeConnection",
-  items?:  Array<Node | null > | null,
+  items:  Array<Node >,
   nextToken?: string | null,
 };
 
@@ -582,7 +589,7 @@ export type ModelEdgeFilterInput = {
 
 export type ModelEdgeConnection = {
   __typename: "ModelEdgeConnection",
-  items?:  Array<Edge | null > | null,
+  items:  Array<Edge >,
   nextToken?: string | null,
 };
 
@@ -728,7 +735,7 @@ export type CreateNodeMutation = {
     owner?: string | null,
     assets?:  {
       __typename: "ModelAssetConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "Asset",
         id: string,
         node_id: string,
@@ -740,12 +747,12 @@ export type CreateNodeMutation = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     assetsPr?:  {
       __typename: "ModelAssetPrConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "AssetPr",
         id: string,
         node_id: string,
@@ -757,12 +764,12 @@ export type CreateNodeMutation = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     edges?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -770,7 +777,7 @@ export type CreateNodeMutation = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
   } | null,
@@ -792,7 +799,7 @@ export type UpdateNodeMutation = {
     owner?: string | null,
     assets?:  {
       __typename: "ModelAssetConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "Asset",
         id: string,
         node_id: string,
@@ -804,12 +811,12 @@ export type UpdateNodeMutation = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     assetsPr?:  {
       __typename: "ModelAssetPrConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "AssetPr",
         id: string,
         node_id: string,
@@ -821,12 +828,12 @@ export type UpdateNodeMutation = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     edges?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -834,7 +841,7 @@ export type UpdateNodeMutation = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
   } | null,
@@ -856,7 +863,7 @@ export type DeleteNodeMutation = {
     owner?: string | null,
     assets?:  {
       __typename: "ModelAssetConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "Asset",
         id: string,
         node_id: string,
@@ -868,12 +875,12 @@ export type DeleteNodeMutation = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     assetsPr?:  {
       __typename: "ModelAssetPrConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "AssetPr",
         id: string,
         node_id: string,
@@ -885,12 +892,12 @@ export type DeleteNodeMutation = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     edges?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -898,7 +905,7 @@ export type DeleteNodeMutation = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
   } | null,
@@ -917,10 +924,9 @@ export type CreateEdgeMutation = {
     createdAt: string,
     owner?: string | null,
     weight?: number | null,
-    updatedAt: string,
     nodes?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -928,9 +934,10 @@ export type CreateEdgeMutation = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -947,10 +954,9 @@ export type UpdateEdgeMutation = {
     createdAt: string,
     owner?: string | null,
     weight?: number | null,
-    updatedAt: string,
     nodes?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -958,9 +964,10 @@ export type UpdateEdgeMutation = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -977,10 +984,9 @@ export type DeleteEdgeMutation = {
     createdAt: string,
     owner?: string | null,
     weight?: number | null,
-    updatedAt: string,
     nodes?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -988,9 +994,10 @@ export type DeleteEdgeMutation = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -1005,9 +1012,19 @@ export type CreateEdgeNodeMutation = {
     id: string,
     edge_id: string,
     node_id: string,
-    owner?: string | null,
-    createdAt: string,
-    updatedAt: string,
+    edge:  {
+      __typename: "Edge",
+      id: string,
+      type: EdgeType,
+      createdAt: string,
+      owner?: string | null,
+      weight?: number | null,
+      nodes?:  {
+        __typename: "ModelEdgeNodeConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    },
     node:  {
       __typename: "Node",
       id: string,
@@ -1029,19 +1046,9 @@ export type CreateEdgeNodeMutation = {
         nextToken?: string | null,
       } | null,
     },
-    edge:  {
-      __typename: "Edge",
-      id: string,
-      type: EdgeType,
-      createdAt: string,
-      owner?: string | null,
-      weight?: number | null,
-      updatedAt: string,
-      nodes?:  {
-        __typename: "ModelEdgeNodeConnection",
-        nextToken?: string | null,
-      } | null,
-    },
+    owner?: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -1056,9 +1063,19 @@ export type UpdateEdgeNodeMutation = {
     id: string,
     edge_id: string,
     node_id: string,
-    owner?: string | null,
-    createdAt: string,
-    updatedAt: string,
+    edge:  {
+      __typename: "Edge",
+      id: string,
+      type: EdgeType,
+      createdAt: string,
+      owner?: string | null,
+      weight?: number | null,
+      nodes?:  {
+        __typename: "ModelEdgeNodeConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    },
     node:  {
       __typename: "Node",
       id: string,
@@ -1080,19 +1097,9 @@ export type UpdateEdgeNodeMutation = {
         nextToken?: string | null,
       } | null,
     },
-    edge:  {
-      __typename: "Edge",
-      id: string,
-      type: EdgeType,
-      createdAt: string,
-      owner?: string | null,
-      weight?: number | null,
-      updatedAt: string,
-      nodes?:  {
-        __typename: "ModelEdgeNodeConnection",
-        nextToken?: string | null,
-      } | null,
-    },
+    owner?: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -1107,9 +1114,19 @@ export type DeleteEdgeNodeMutation = {
     id: string,
     edge_id: string,
     node_id: string,
-    owner?: string | null,
-    createdAt: string,
-    updatedAt: string,
+    edge:  {
+      __typename: "Edge",
+      id: string,
+      type: EdgeType,
+      createdAt: string,
+      owner?: string | null,
+      weight?: number | null,
+      nodes?:  {
+        __typename: "ModelEdgeNodeConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    },
     node:  {
       __typename: "Node",
       id: string,
@@ -1131,19 +1148,9 @@ export type DeleteEdgeNodeMutation = {
         nextToken?: string | null,
       } | null,
     },
-    edge:  {
-      __typename: "Edge",
-      id: string,
-      type: EdgeType,
-      createdAt: string,
-      owner?: string | null,
-      weight?: number | null,
-      updatedAt: string,
-      nodes?:  {
-        __typename: "ModelEdgeNodeConnection",
-        nextToken?: string | null,
-      } | null,
-    },
+    owner?: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -1168,15 +1175,17 @@ export type GetAssetQuery = {
 };
 
 export type ListAssetsQueryVariables = {
+  id?: string | null,
   filter?: ModelAssetFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
 };
 
 export type ListAssetsQuery = {
   listAssets?:  {
     __typename: "ModelAssetConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "Asset",
       id: string,
       node_id: string,
@@ -1188,7 +1197,7 @@ export type ListAssetsQuery = {
       owner?: string | null,
       content?: string | null,
       editors?: Array< string | null > | null,
-    } | null > | null,
+    } >,
     nextToken?: string | null,
   } | null,
 };
@@ -1204,7 +1213,7 @@ export type AssetsByNodeQueryVariables = {
 export type AssetsByNodeQuery = {
   assetsByNode?:  {
     __typename: "ModelAssetConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "Asset",
       id: string,
       node_id: string,
@@ -1216,7 +1225,7 @@ export type AssetsByNodeQuery = {
       owner?: string | null,
       content?: string | null,
       editors?: Array< string | null > | null,
-    } | null > | null,
+    } >,
     nextToken?: string | null,
   } | null,
 };
@@ -1233,7 +1242,7 @@ export type AssetsByTypeQueryVariables = {
 export type AssetsByTypeQuery = {
   assetsByType?:  {
     __typename: "ModelAssetConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "Asset",
       id: string,
       node_id: string,
@@ -1245,7 +1254,7 @@ export type AssetsByTypeQuery = {
       owner?: string | null,
       content?: string | null,
       editors?: Array< string | null > | null,
-    } | null > | null,
+    } >,
     nextToken?: string | null,
   } | null,
 };
@@ -1262,7 +1271,7 @@ export type AssetsByOwnerTypeQueryVariables = {
 export type AssetsByOwnerTypeQuery = {
   assetsByOwnerType?:  {
     __typename: "ModelAssetConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "Asset",
       id: string,
       node_id: string,
@@ -1274,7 +1283,7 @@ export type AssetsByOwnerTypeQuery = {
       owner?: string | null,
       content?: string | null,
       editors?: Array< string | null > | null,
-    } | null > | null,
+    } >,
     nextToken?: string | null,
   } | null,
 };
@@ -1300,15 +1309,17 @@ export type GetAssetPrQuery = {
 };
 
 export type ListAssetPrsQueryVariables = {
+  id?: string | null,
   filter?: ModelAssetPrFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
 };
 
 export type ListAssetPrsQuery = {
   listAssetPrs?:  {
     __typename: "ModelAssetPrConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "AssetPr",
       id: string,
       node_id: string,
@@ -1320,7 +1331,7 @@ export type ListAssetPrsQuery = {
       owner?: string | null,
       content?: string | null,
       editors?: Array< string | null > | null,
-    } | null > | null,
+    } >,
     nextToken?: string | null,
   } | null,
 };
@@ -1336,7 +1347,7 @@ export type AssetsPrByNodeQueryVariables = {
 export type AssetsPrByNodeQuery = {
   assetsPrByNode?:  {
     __typename: "ModelAssetPrConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "AssetPr",
       id: string,
       node_id: string,
@@ -1348,36 +1359,7 @@ export type AssetsPrByNodeQuery = {
       owner?: string | null,
       content?: string | null,
       editors?: Array< string | null > | null,
-    } | null > | null,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type AssetsPrByOwnerTypeQueryVariables = {
-  owner?: string | null,
-  typeCreatedAt?: ModelAssetPrAssetsPr_by_owner_typeCompositeKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelAssetPrFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type AssetsPrByOwnerTypeQuery = {
-  assetsPrByOwnerType?:  {
-    __typename: "ModelAssetPrConnection",
-    items?:  Array< {
-      __typename: "AssetPr",
-      id: string,
-      node_id: string,
-      createdAt: string,
-      updatedAt: string,
-      type: AssetType,
-      name: string,
-      index?: number | null,
-      owner?: string | null,
-      content?: string | null,
-      editors?: Array< string | null > | null,
-    } | null > | null,
+    } >,
     nextToken?: string | null,
   } | null,
 };
@@ -1394,7 +1376,7 @@ export type AssetsPrByTypeQueryVariables = {
 export type AssetsPrByTypeQuery = {
   assetsPrByType?:  {
     __typename: "ModelAssetPrConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "AssetPr",
       id: string,
       node_id: string,
@@ -1406,7 +1388,36 @@ export type AssetsPrByTypeQuery = {
       owner?: string | null,
       content?: string | null,
       editors?: Array< string | null > | null,
-    } | null > | null,
+    } >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type AssetsPrByOwnerTypeQueryVariables = {
+  owner?: string | null,
+  typeCreatedAt?: ModelAssetPrAssetsPr_by_owner_typeCompositeKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelAssetPrFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type AssetsPrByOwnerTypeQuery = {
+  assetsPrByOwnerType?:  {
+    __typename: "ModelAssetPrConnection",
+    items:  Array< {
+      __typename: "AssetPr",
+      id: string,
+      node_id: string,
+      createdAt: string,
+      updatedAt: string,
+      type: AssetType,
+      name: string,
+      index?: number | null,
+      owner?: string | null,
+      content?: string | null,
+      editors?: Array< string | null > | null,
+    } >,
     nextToken?: string | null,
   } | null,
 };
@@ -1426,7 +1437,7 @@ export type GetNodeQuery = {
     owner?: string | null,
     assets?:  {
       __typename: "ModelAssetConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "Asset",
         id: string,
         node_id: string,
@@ -1438,12 +1449,12 @@ export type GetNodeQuery = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     assetsPr?:  {
       __typename: "ModelAssetPrConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "AssetPr",
         id: string,
         node_id: string,
@@ -1455,12 +1466,12 @@ export type GetNodeQuery = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     edges?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -1468,22 +1479,24 @@ export type GetNodeQuery = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
   } | null,
 };
 
 export type ListNodesQueryVariables = {
+  id?: string | null,
   filter?: ModelNodeFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
 };
 
 export type ListNodesQuery = {
   listNodes?:  {
     __typename: "ModelNodeConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "Node",
       id: string,
       status: NodeStatus,
@@ -1503,7 +1516,7 @@ export type ListNodesQuery = {
         __typename: "ModelEdgeNodeConnection",
         nextToken?: string | null,
       } | null,
-    } | null > | null,
+    } >,
     nextToken?: string | null,
   } | null,
 };
@@ -1520,7 +1533,7 @@ export type NodesByStatusTypeQueryVariables = {
 export type NodesByStatusTypeQuery = {
   nodesByStatusType?:  {
     __typename: "ModelNodeConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "Node",
       id: string,
       status: NodeStatus,
@@ -1540,7 +1553,7 @@ export type NodesByStatusTypeQuery = {
         __typename: "ModelEdgeNodeConnection",
         nextToken?: string | null,
       } | null,
-    } | null > | null,
+    } >,
     nextToken?: string | null,
   } | null,
 };
@@ -1557,7 +1570,7 @@ export type NodesByOwnerStatusQueryVariables = {
 export type NodesByOwnerStatusQuery = {
   nodesByOwnerStatus?:  {
     __typename: "ModelNodeConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "Node",
       id: string,
       status: NodeStatus,
@@ -1577,7 +1590,7 @@ export type NodesByOwnerStatusQuery = {
         __typename: "ModelEdgeNodeConnection",
         nextToken?: string | null,
       } | null,
-    } | null > | null,
+    } >,
     nextToken?: string | null,
   } | null,
 };
@@ -1594,7 +1607,7 @@ export type NodesByOwnerTypeQueryVariables = {
 export type NodesByOwnerTypeQuery = {
   nodesByOwnerType?:  {
     __typename: "ModelNodeConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "Node",
       id: string,
       status: NodeStatus,
@@ -1614,7 +1627,7 @@ export type NodesByOwnerTypeQuery = {
         __typename: "ModelEdgeNodeConnection",
         nextToken?: string | null,
       } | null,
-    } | null > | null,
+    } >,
     nextToken?: string | null,
   } | null,
 };
@@ -1631,10 +1644,9 @@ export type GetEdgeQuery = {
     createdAt: string,
     owner?: string | null,
     weight?: number | null,
-    updatedAt: string,
     nodes?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -1642,34 +1654,37 @@ export type GetEdgeQuery = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
 export type ListEdgesQueryVariables = {
+  id?: string | null,
   filter?: ModelEdgeFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
 };
 
 export type ListEdgesQuery = {
   listEdges?:  {
     __typename: "ModelEdgeConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "Edge",
       id: string,
       type: EdgeType,
       createdAt: string,
       owner?: string | null,
       weight?: number | null,
-      updatedAt: string,
       nodes?:  {
         __typename: "ModelEdgeNodeConnection",
         nextToken?: string | null,
       } | null,
-    } | null > | null,
+      updatedAt: string,
+    } >,
     nextToken?: string | null,
   } | null,
 };
@@ -1686,26 +1701,25 @@ export type EdgesByTypeQueryVariables = {
 export type EdgesByTypeQuery = {
   edgesByType?:  {
     __typename: "ModelEdgeConnection",
-    items?:  Array< {
+    items:  Array< {
       __typename: "Edge",
       id: string,
       type: EdgeType,
       createdAt: string,
       owner?: string | null,
       weight?: number | null,
-      updatedAt: string,
       nodes?:  {
         __typename: "ModelEdgeNodeConnection",
         nextToken?: string | null,
       } | null,
-    } | null > | null,
+      updatedAt: string,
+    } >,
     nextToken?: string | null,
   } | null,
 };
 
 export type OnCreateAssetSubscriptionVariables = {
   owner?: string | null,
-  editors?: string | null,
 };
 
 export type OnCreateAssetSubscription = {
@@ -1726,7 +1740,6 @@ export type OnCreateAssetSubscription = {
 
 export type OnUpdateAssetSubscriptionVariables = {
   owner?: string | null,
-  editors?: string | null,
 };
 
 export type OnUpdateAssetSubscription = {
@@ -1747,7 +1760,6 @@ export type OnUpdateAssetSubscription = {
 
 export type OnDeleteAssetSubscriptionVariables = {
   owner?: string | null,
-  editors?: string | null,
 };
 
 export type OnDeleteAssetSubscription = {
@@ -1768,7 +1780,6 @@ export type OnDeleteAssetSubscription = {
 
 export type OnCreateAssetPrSubscriptionVariables = {
   owner?: string | null,
-  editors?: string | null,
 };
 
 export type OnCreateAssetPrSubscription = {
@@ -1789,7 +1800,6 @@ export type OnCreateAssetPrSubscription = {
 
 export type OnUpdateAssetPrSubscriptionVariables = {
   owner?: string | null,
-  editors?: string | null,
 };
 
 export type OnUpdateAssetPrSubscription = {
@@ -1810,7 +1820,6 @@ export type OnUpdateAssetPrSubscription = {
 
 export type OnDeleteAssetPrSubscriptionVariables = {
   owner?: string | null,
-  editors?: string | null,
 };
 
 export type OnDeleteAssetPrSubscription = {
@@ -1844,7 +1853,7 @@ export type OnCreateNodeSubscription = {
     owner?: string | null,
     assets?:  {
       __typename: "ModelAssetConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "Asset",
         id: string,
         node_id: string,
@@ -1856,12 +1865,12 @@ export type OnCreateNodeSubscription = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     assetsPr?:  {
       __typename: "ModelAssetPrConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "AssetPr",
         id: string,
         node_id: string,
@@ -1873,12 +1882,12 @@ export type OnCreateNodeSubscription = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     edges?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -1886,7 +1895,7 @@ export type OnCreateNodeSubscription = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
   } | null,
@@ -1907,7 +1916,7 @@ export type OnUpdateNodeSubscription = {
     owner?: string | null,
     assets?:  {
       __typename: "ModelAssetConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "Asset",
         id: string,
         node_id: string,
@@ -1919,12 +1928,12 @@ export type OnUpdateNodeSubscription = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     assetsPr?:  {
       __typename: "ModelAssetPrConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "AssetPr",
         id: string,
         node_id: string,
@@ -1936,12 +1945,12 @@ export type OnUpdateNodeSubscription = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     edges?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -1949,7 +1958,7 @@ export type OnUpdateNodeSubscription = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
   } | null,
@@ -1970,7 +1979,7 @@ export type OnDeleteNodeSubscription = {
     owner?: string | null,
     assets?:  {
       __typename: "ModelAssetConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "Asset",
         id: string,
         node_id: string,
@@ -1982,12 +1991,12 @@ export type OnDeleteNodeSubscription = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     assetsPr?:  {
       __typename: "ModelAssetPrConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "AssetPr",
         id: string,
         node_id: string,
@@ -1999,12 +2008,12 @@ export type OnDeleteNodeSubscription = {
         owner?: string | null,
         content?: string | null,
         editors?: Array< string | null > | null,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
     edges?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -2012,7 +2021,7 @@ export type OnDeleteNodeSubscription = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
   } | null,
@@ -2030,10 +2039,9 @@ export type OnCreateEdgeSubscription = {
     createdAt: string,
     owner?: string | null,
     weight?: number | null,
-    updatedAt: string,
     nodes?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -2041,9 +2049,10 @@ export type OnCreateEdgeSubscription = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -2059,10 +2068,9 @@ export type OnUpdateEdgeSubscription = {
     createdAt: string,
     owner?: string | null,
     weight?: number | null,
-    updatedAt: string,
     nodes?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -2070,9 +2078,10 @@ export type OnUpdateEdgeSubscription = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -2088,10 +2097,9 @@ export type OnDeleteEdgeSubscription = {
     createdAt: string,
     owner?: string | null,
     weight?: number | null,
-    updatedAt: string,
     nodes?:  {
       __typename: "ModelEdgeNodeConnection",
-      items?:  Array< {
+      items:  Array< {
         __typename: "EdgeNode",
         id: string,
         edge_id: string,
@@ -2099,9 +2107,10 @@ export type OnDeleteEdgeSubscription = {
         owner?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
+      } >,
       nextToken?: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -2115,9 +2124,19 @@ export type OnCreateEdgeNodeSubscription = {
     id: string,
     edge_id: string,
     node_id: string,
-    owner?: string | null,
-    createdAt: string,
-    updatedAt: string,
+    edge:  {
+      __typename: "Edge",
+      id: string,
+      type: EdgeType,
+      createdAt: string,
+      owner?: string | null,
+      weight?: number | null,
+      nodes?:  {
+        __typename: "ModelEdgeNodeConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    },
     node:  {
       __typename: "Node",
       id: string,
@@ -2139,19 +2158,9 @@ export type OnCreateEdgeNodeSubscription = {
         nextToken?: string | null,
       } | null,
     },
-    edge:  {
-      __typename: "Edge",
-      id: string,
-      type: EdgeType,
-      createdAt: string,
-      owner?: string | null,
-      weight?: number | null,
-      updatedAt: string,
-      nodes?:  {
-        __typename: "ModelEdgeNodeConnection",
-        nextToken?: string | null,
-      } | null,
-    },
+    owner?: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -2165,9 +2174,19 @@ export type OnUpdateEdgeNodeSubscription = {
     id: string,
     edge_id: string,
     node_id: string,
-    owner?: string | null,
-    createdAt: string,
-    updatedAt: string,
+    edge:  {
+      __typename: "Edge",
+      id: string,
+      type: EdgeType,
+      createdAt: string,
+      owner?: string | null,
+      weight?: number | null,
+      nodes?:  {
+        __typename: "ModelEdgeNodeConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    },
     node:  {
       __typename: "Node",
       id: string,
@@ -2189,19 +2208,9 @@ export type OnUpdateEdgeNodeSubscription = {
         nextToken?: string | null,
       } | null,
     },
-    edge:  {
-      __typename: "Edge",
-      id: string,
-      type: EdgeType,
-      createdAt: string,
-      owner?: string | null,
-      weight?: number | null,
-      updatedAt: string,
-      nodes?:  {
-        __typename: "ModelEdgeNodeConnection",
-        nextToken?: string | null,
-      } | null,
-    },
+    owner?: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -2215,9 +2224,19 @@ export type OnDeleteEdgeNodeSubscription = {
     id: string,
     edge_id: string,
     node_id: string,
-    owner?: string | null,
-    createdAt: string,
-    updatedAt: string,
+    edge:  {
+      __typename: "Edge",
+      id: string,
+      type: EdgeType,
+      createdAt: string,
+      owner?: string | null,
+      weight?: number | null,
+      nodes?:  {
+        __typename: "ModelEdgeNodeConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    },
     node:  {
       __typename: "Node",
       id: string,
@@ -2239,18 +2258,8 @@ export type OnDeleteEdgeNodeSubscription = {
         nextToken?: string | null,
       } | null,
     },
-    edge:  {
-      __typename: "Edge",
-      id: string,
-      type: EdgeType,
-      createdAt: string,
-      owner?: string | null,
-      weight?: number | null,
-      updatedAt: string,
-      nodes?:  {
-        __typename: "ModelEdgeNodeConnection",
-        nextToken?: string | null,
-      } | null,
-    },
+    owner?: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };

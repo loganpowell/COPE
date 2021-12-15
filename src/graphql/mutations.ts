@@ -295,7 +295,6 @@ export const createEdge = /* GraphQL */ `
       createdAt
       owner
       weight
-      updatedAt
       nodes {
         items {
           id
@@ -307,6 +306,7 @@ export const createEdge = /* GraphQL */ `
         }
         nextToken
       }
+      updatedAt
     }
   }
 `;
@@ -321,7 +321,6 @@ export const updateEdge = /* GraphQL */ `
       createdAt
       owner
       weight
-      updatedAt
       nodes {
         items {
           id
@@ -333,6 +332,7 @@ export const updateEdge = /* GraphQL */ `
         }
         nextToken
       }
+      updatedAt
     }
   }
 `;
@@ -347,7 +347,6 @@ export const deleteEdge = /* GraphQL */ `
       createdAt
       owner
       weight
-      updatedAt
       nodes {
         items {
           id
@@ -359,6 +358,7 @@ export const deleteEdge = /* GraphQL */ `
         }
         nextToken
       }
+      updatedAt
     }
   }
 `;
@@ -371,9 +371,17 @@ export const createEdgeNode = /* GraphQL */ `
       id
       edge_id
       node_id
-      owner
-      createdAt
-      updatedAt
+      edge {
+        id
+        type
+        createdAt
+        owner
+        weight
+        nodes {
+          nextToken
+        }
+        updatedAt
+      }
       node {
         id
         status
@@ -391,17 +399,9 @@ export const createEdgeNode = /* GraphQL */ `
           nextToken
         }
       }
-      edge {
-        id
-        type
-        createdAt
-        owner
-        weight
-        updatedAt
-        nodes {
-          nextToken
-        }
-      }
+      owner
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -414,9 +414,17 @@ export const updateEdgeNode = /* GraphQL */ `
       id
       edge_id
       node_id
-      owner
-      createdAt
-      updatedAt
+      edge {
+        id
+        type
+        createdAt
+        owner
+        weight
+        nodes {
+          nextToken
+        }
+        updatedAt
+      }
       node {
         id
         status
@@ -434,17 +442,9 @@ export const updateEdgeNode = /* GraphQL */ `
           nextToken
         }
       }
-      edge {
-        id
-        type
-        createdAt
-        owner
-        weight
-        updatedAt
-        nodes {
-          nextToken
-        }
-      }
+      owner
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -457,9 +457,17 @@ export const deleteEdgeNode = /* GraphQL */ `
       id
       edge_id
       node_id
-      owner
-      createdAt
-      updatedAt
+      edge {
+        id
+        type
+        createdAt
+        owner
+        weight
+        nodes {
+          nextToken
+        }
+        updatedAt
+      }
       node {
         id
         status
@@ -477,17 +485,9 @@ export const deleteEdgeNode = /* GraphQL */ `
           nextToken
         }
       }
-      edge {
-        id
-        type
-        createdAt
-        owner
-        weight
-        updatedAt
-        nodes {
-          nextToken
-        }
-      }
+      owner
+      createdAt
+      updatedAt
     }
   }
 `;

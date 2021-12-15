@@ -3,8 +3,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateAsset = /* GraphQL */ `
-  subscription OnCreateAsset($owner: String, $editors: String) {
-    onCreateAsset(owner: $owner, editors: $editors) {
+  subscription OnCreateAsset($owner: String) {
+    onCreateAsset(owner: $owner) {
       id
       node_id
       createdAt
@@ -19,8 +19,8 @@ export const onCreateAsset = /* GraphQL */ `
   }
 `;
 export const onUpdateAsset = /* GraphQL */ `
-  subscription OnUpdateAsset($owner: String, $editors: String) {
-    onUpdateAsset(owner: $owner, editors: $editors) {
+  subscription OnUpdateAsset($owner: String) {
+    onUpdateAsset(owner: $owner) {
       id
       node_id
       createdAt
@@ -35,8 +35,8 @@ export const onUpdateAsset = /* GraphQL */ `
   }
 `;
 export const onDeleteAsset = /* GraphQL */ `
-  subscription OnDeleteAsset($owner: String, $editors: String) {
-    onDeleteAsset(owner: $owner, editors: $editors) {
+  subscription OnDeleteAsset($owner: String) {
+    onDeleteAsset(owner: $owner) {
       id
       node_id
       createdAt
@@ -51,8 +51,8 @@ export const onDeleteAsset = /* GraphQL */ `
   }
 `;
 export const onCreateAssetPr = /* GraphQL */ `
-  subscription OnCreateAssetPr($owner: String, $editors: String) {
-    onCreateAssetPr(owner: $owner, editors: $editors) {
+  subscription OnCreateAssetPr($owner: String) {
+    onCreateAssetPr(owner: $owner) {
       id
       node_id
       createdAt
@@ -67,8 +67,8 @@ export const onCreateAssetPr = /* GraphQL */ `
   }
 `;
 export const onUpdateAssetPr = /* GraphQL */ `
-  subscription OnUpdateAssetPr($owner: String, $editors: String) {
-    onUpdateAssetPr(owner: $owner, editors: $editors) {
+  subscription OnUpdateAssetPr($owner: String) {
+    onUpdateAssetPr(owner: $owner) {
       id
       node_id
       createdAt
@@ -83,8 +83,8 @@ export const onUpdateAssetPr = /* GraphQL */ `
   }
 `;
 export const onDeleteAssetPr = /* GraphQL */ `
-  subscription OnDeleteAssetPr($owner: String, $editors: String) {
-    onDeleteAssetPr(owner: $owner, editors: $editors) {
+  subscription OnDeleteAssetPr($owner: String) {
+    onDeleteAssetPr(owner: $owner) {
       id
       node_id
       createdAt
@@ -265,7 +265,6 @@ export const onCreateEdge = /* GraphQL */ `
       createdAt
       owner
       weight
-      updatedAt
       nodes {
         items {
           id
@@ -277,6 +276,7 @@ export const onCreateEdge = /* GraphQL */ `
         }
         nextToken
       }
+      updatedAt
     }
   }
 `;
@@ -288,7 +288,6 @@ export const onUpdateEdge = /* GraphQL */ `
       createdAt
       owner
       weight
-      updatedAt
       nodes {
         items {
           id
@@ -300,6 +299,7 @@ export const onUpdateEdge = /* GraphQL */ `
         }
         nextToken
       }
+      updatedAt
     }
   }
 `;
@@ -311,7 +311,6 @@ export const onDeleteEdge = /* GraphQL */ `
       createdAt
       owner
       weight
-      updatedAt
       nodes {
         items {
           id
@@ -323,6 +322,7 @@ export const onDeleteEdge = /* GraphQL */ `
         }
         nextToken
       }
+      updatedAt
     }
   }
 `;
@@ -332,9 +332,17 @@ export const onCreateEdgeNode = /* GraphQL */ `
       id
       edge_id
       node_id
-      owner
-      createdAt
-      updatedAt
+      edge {
+        id
+        type
+        createdAt
+        owner
+        weight
+        nodes {
+          nextToken
+        }
+        updatedAt
+      }
       node {
         id
         status
@@ -352,17 +360,9 @@ export const onCreateEdgeNode = /* GraphQL */ `
           nextToken
         }
       }
-      edge {
-        id
-        type
-        createdAt
-        owner
-        weight
-        updatedAt
-        nodes {
-          nextToken
-        }
-      }
+      owner
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -372,9 +372,17 @@ export const onUpdateEdgeNode = /* GraphQL */ `
       id
       edge_id
       node_id
-      owner
-      createdAt
-      updatedAt
+      edge {
+        id
+        type
+        createdAt
+        owner
+        weight
+        nodes {
+          nextToken
+        }
+        updatedAt
+      }
       node {
         id
         status
@@ -392,17 +400,9 @@ export const onUpdateEdgeNode = /* GraphQL */ `
           nextToken
         }
       }
-      edge {
-        id
-        type
-        createdAt
-        owner
-        weight
-        updatedAt
-        nodes {
-          nextToken
-        }
-      }
+      owner
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -412,9 +412,17 @@ export const onDeleteEdgeNode = /* GraphQL */ `
       id
       edge_id
       node_id
-      owner
-      createdAt
-      updatedAt
+      edge {
+        id
+        type
+        createdAt
+        owner
+        weight
+        nodes {
+          nextToken
+        }
+        updatedAt
+      }
       node {
         id
         status
@@ -432,17 +440,9 @@ export const onDeleteEdgeNode = /* GraphQL */ `
           nextToken
         }
       }
-      edge {
-        id
-        type
-        createdAt
-        owner
-        weight
-        updatedAt
-        nodes {
-          nextToken
-        }
-      }
+      owner
+      createdAt
+      updatedAt
     }
   }
 `;

@@ -134,7 +134,9 @@ type Node
   type: NodeType!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
-  owner: String @index(name: "Nodes_by_owner_status_createdAt", queryField: "nodesByOwnerStatus", sortKeyFields: ["status", "createdAt"]) @index(name: "Nodes_by_owner_type_createdAt", queryField: "nodesByOwnerType", sortKeyFields: ["type", "createdAt"])
+  owner: String 
+    @index(name: "Nodes_by_owner_status_createdAt", queryField: "nodesByOwnerStatus", sortKeyFields: ["status", "createdAt"]) 
+    @index(name: "Nodes_by_owner_type_createdAt", queryField: "nodesByOwnerType", sortKeyFields: ["type", "createdAt"])
   assets: [Asset] @hasMany(indexName: "Assets_by_node", fields: ["id"])
   assetsPr: [AssetPr] @hasMany(indexName: "AssetsPr_by_node", fields: ["id"])
   edges: [EdgeNode] @hasMany(indexName: "EdgeNodes_by_node", fields: ["id"])
@@ -166,7 +168,7 @@ type EdgeNode
         {allow: public, operations: [read]}
     ]) 
 {
-  id: ID!
+  id: ID! @primaryKey
   edge_id: ID! @index(name: "EdgeNodes_by_edge", sortKeyFields: ["node_id"])
   node_id: ID! @index(name: "EdgeNodes_by_node", sortKeyFields: ["edge_id"])
   edge: Edge! @belongsTo(fields: ["edge_id"])
