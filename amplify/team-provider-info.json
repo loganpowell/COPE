@@ -1,33 +1,4 @@
 {
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-cope-dev-180042-authRole",
-      "UnauthRoleArn": "arn:aws:iam::538069693173:role/amplify-cope-dev-180042-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::538069693173:role/amplify-cope-dev-180042-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-cope-dev-180042-deployment",
-      "UnauthRoleName": "amplify-cope-dev-180042-unauthRole",
-      "StackName": "amplify-cope-dev-180042",
-      "StackId": "arn:aws:cloudformation:us-east-1:538069693173:stack/amplify-cope-dev-180042/8d493300-926c-11eb-93c1-1277ff2044b7",
-      "AmplifyAppId": "d17wg1ypllrfa8"
-    },
-    "categories": {
-      "auth": {
-        "userPoolGroups": {},
-        "copeAuth": {}
-      },
-      "function": {
-        "AdminQueriesae6420d7": {
-          "deploymentBucketName": "amplify-cope-dev-180042-deployment",
-          "s3Key": "amplify-builds/AdminQueriesae6420d7-6e586f36756433305265-build.zip"
-        },
-        "COPECognitoPostConfirmTriggerAddToViewers": {
-          "deploymentBucketName": "amplify-cope-dev-180042-deployment",
-          "s3Key": "amplify-builds/COPECognitoPostConfirmTriggerAddToViewers-49396a59524d68543638-build.zip"
-        }
-      }
-    }
-  },
   "migration": {
     "awscloudformation": {
       "AuthRoleName": "amplify-cope-migration-161145-authRole",
@@ -47,9 +18,9 @@
           "s3Key": "amplify-builds/AdminQueriesae6420d7-6d594a71644b4c324756-build.zip"
         },
         "COPECognitoPostConfirmTriggerAddToViewers": {
-          "secretsPathAmplifyAppId": "d17wg1ypllrfa8",
           "deploymentBucketName": "amplify-cope-migration-161145-deployment",
-          "s3Key": "amplify-builds/COPECognitoPostConfirmTriggerAddToViewers-457367436f76334c666d-build.zip"
+          "s3Key": "amplify-builds/COPECognitoPostConfirmTriggerAddToViewers-4361317246334753446e-build.zip",
+          "secretsPathAmplifyAppId": "d17wg1ypllrfa8"
         }
       },
       "auth": {

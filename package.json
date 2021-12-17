@@ -10,12 +10,12 @@
     "homepage": "https://github.com/loganpowell/COPE",
     "scripts": {
         "clean": "rm -rf ./lib & rm -rf ./dist &  rm -rf .cache",
-        "cleanfnC": "rm -rf ./amplify/backend/function/COPECognitoPostConfirmTriggerAddToViewers/src",
-        "copyfnC": "cp -r ./function/confirmed/src ./amplify/backend/function/COPECognitoPostConfirmTriggerAddToViewers",
-        "bundleC": "npm run cleanfnC && npm run copyfnC",
-        "cleanfnE": "rm -rf ./amplify/backend/function/CopeEdgeCRUDLambda/src",
-        "copyfnE": "cp -r ./function/edge/src ./amplify/backend/function/CopeEdgeCRUDLambda",
-        "bundleE": "npm run cleanfnE && npm run copyfnE",
+        "cleanFnConfirm": "rm -rf ./amplify/backend/function/COPECognitoPostConfirmTriggerAddToViewers/src",
+        "cpFnConfirm": "cp -r ./function/confirmed/src ./amplify/backend/function/COPECognitoPostConfirmTriggerAddToViewers",
+        "bndFnConfirm": "npm run cleanFnConfirm && npm run cpFnConfirm",
+        "cleanFnEdge": "rm -rf ./amplify/backend/function/CopeEdgeCRUDLambda/src",
+        "cpFnEdge": "cp -r ./function/edge/src ./amplify/backend/function/CopeEdgeCRUDLambda",
+        "bundleFnEdge": "npm run cleanFnEdge && npm run cpFnEdge",
         "madge": "madge --circular lib/",
         "typewatch": "tsc --project tsconfig.json",
         "types": "tsc --project tsconfig.build.json",
@@ -32,9 +32,9 @@
     "dependencies": {
         "@aws-amplify/auth": "^4.3.18",
         "@aws-amplify/core": "^4.3.10",
-        "@aws-amplify/storage": "^4.4.11"
+        "@aws-amplify/storage": "^4.4.11",
+        "@aws-sdk/client-ssm": "^3.44.0"
     },
-    "peerDependencies": {},
     "devDependencies": {
         "npm-delay": "^1.0.4",
         "prettier": "^2.5.1",

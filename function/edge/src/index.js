@@ -68,7 +68,7 @@ exports.handler = async (event, ctx, done) => {
         .promise()
 
     //console.log({ Parameters })
-    const [ user, pass ] = secrets.map(p => p.Value)
+    const [ user , pass ] = secrets.map(p => p.Value)
     /*
     record.dynamodb will contain a DynamoDB change json
     describing the item changed in DynamoDB table. Please note
