@@ -7,12 +7,14 @@
 Amplify Params - DO NOT EDIT */
 
 const { SSMClient, GetParametersCommand, GetParametersRequest } = require("@aws-sdk/client-ssm")
+const {
+    CognitoIdentityProviderClient,
+    AdminAddUserToGroupCommand,
+} = require("@aws-sdk/client-cognito-identity-provider")
 const { createAccountNode } = require("./createAccountNode.js")
 const { Amplify } = require("@aws-amplify/core")
 const { Auth } = require("@aws-amplify/auth")
 const { config } = require("./aws-exports.js")
-
-const client = new SSMClient({ region: "us-east-1" })
 
 Amplify.configure(config)
 
@@ -30,15 +32,16 @@ const logIn = async ({ user, pass }) => {
     return { payload: userSignedIn.signInUserSession.idToken.payload }
 }
 
-const adminAddUserToGroup = ({ userPoolId, userName, groupName = "Viewers" }) => {
+const adminAddUserToGroup = async ({ userPoolId, userName, groupName = "Viewers" }) => {
     const params = {
         GroupName: groupName,
         UserPoolId: userPoolId,
         Username: userName,
     }
 
-    const cognitoIdp = new AWS.CognitoIdentityServiceProvider()
-    return cognitoIdp.adminAddUserToGroup(params).promise()
+    const client = new CognitoIdentityProviderClient({ region: "us-east-1" })
+    const command = new AdminAddUserToGroupCommand(params)
+    return await client.send(command)
 }
 
 /**
@@ -47,6 +50,8 @@ const adminAddUserToGroup = ({ userPoolId, userName, groupName = "Viewers" }) =>
  */
 exports.handler = async (event, context, callback) => {
     // Get secrets from Secrets Store
+    const client = new SSMClient({ region: "us-east-1" })
+
     const command = GetParametersCommand({
         Names: ["ADMIN_EMAIL", "ADMIN_PASS"].map(secret => process.env[secret]),
         WithDecryption: true,
