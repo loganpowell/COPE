@@ -26,7 +26,7 @@ const CRUD = async ({ query, variables }) =>
         variables,
         // must specify auth mode for non-default (API key) calls
         // https://aws-amplify.github.io/amplify-js/api/enums/graphql_auth_mode.html
-        authMode  : GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
+        authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
     }).catch(e => {
         console.warn("Error during CRUD op:", JSON.stringify(e, null, 4))
     })
@@ -34,22 +34,22 @@ const CRUD = async ({ query, variables }) =>
 // https://github.com/aws-amplify/amplify-cli/issues/5239
 
 const listEdgeNodesGQL = /* GraphQL */ `
-    query listEdgeNodes ($id: ID!) {
-      getEdge(id: $id) {
-        nodes {
-          items {
-            id
-          }
+    query listEdgeNodes($id: ID!) {
+        getEdge(id: $id) {
+            nodes {
+                items {
+                    id
+                }
+            }
         }
-      }
     }
 `
 
 const deleteEdgeNodesGQL = /* GraphQL */ `
-    mutation deleteEdgeNodes ($id: ID!) {
+    mutation deleteEdgeNodes($id: ID!) {
         deleteEdgeNode(input: { id: $id }) {
             id
-            edge_id
+            edgeID
         }
     }
 `
@@ -62,13 +62,13 @@ exports.handler = async (event, ctx, done) => {
     //console.log("raw event:", JSON.stringify(event, null, 2))
     const { Parameters: secrets } = await new AWS.SSM()
         .getParameters({
-            Names          : [ "ADMIN_EMAIL", "ADMIN_PASS" ].map(secret => process.env[secret]),
-            WithDecryption : true,
+            Names: ["ADMIN_EMAIL", "ADMIN_PASS"].map(secret => process.env[secret]),
+            WithDecryption: true,
         })
         .promise()
 
     //console.log({ Parameters })
-    const [ user , pass ] = secrets.map(p => p.Value)
+    const [user, pass] = secrets.map(p => p.Value)
     /*
     record.dynamodb will contain a DynamoDB change json
     describing the item changed in DynamoDB table. Please note
@@ -92,8 +92,8 @@ exports.handler = async (event, ctx, done) => {
                             const { id, type } = OLD
                             console.log(`Deleting EdgeNodes for Edge: ${id}, type: ${type}`)
                             const attempt = await CRUD({
-                                query     : listEdgeNodesGQL,
-                                variables : { id },
+                                query: listEdgeNodesGQL,
+                                variables: { id },
                             })
                             console.log("attempt:", JSON.stringify(attempt, null, 4))
                             const items = attempt?.data?.getEdge?.items || null
@@ -101,12 +101,14 @@ exports.handler = async (event, ctx, done) => {
                             return await Promise.all(
                                 items.map(async ({ id }) => {
                                     if (!id) return { no_id_for_node_item: id }
-                                    const { data: { edge_id } } = await CRUD({
-                                        query     : deleteEdgeNodesGQL,
-                                        variables : { id },
+                                    const {
+                                        data: { edgeID },
+                                    } = await CRUD({
+                                        query: deleteEdgeNodesGQL,
+                                        variables: { id },
                                     })
-                                    console.log(`DELETED: EdgeNode ${id} for Edge ${edge_id}`)
-                                    return { EdgeNode_id: id, edge_id }
+                                    console.log(`DELETED: EdgeNode ${id} for Edge ${edgeID}`)
+                                    return { EdgenodeID: id, edgeID }
                                 }),
                             )
                         }

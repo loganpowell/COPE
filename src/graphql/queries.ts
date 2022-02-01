@@ -6,7 +6,7 @@ export const getAsset = /* GraphQL */ `
   query GetAsset($id: ID!) {
     getAsset(id: $id) {
       id
-      node_id
+      nodeID
       createdAt
       updatedAt
       type
@@ -35,7 +35,7 @@ export const listAssets = /* GraphQL */ `
     ) {
       items {
         id
-        node_id
+        nodeID
         createdAt
         updatedAt
         type
@@ -51,14 +51,14 @@ export const listAssets = /* GraphQL */ `
 `;
 export const assetsByNode = /* GraphQL */ `
   query AssetsByNode(
-    $node_id: ID
+    $nodeID: ID!
     $sortDirection: ModelSortDirection
     $filter: ModelAssetFilterInput
     $limit: Int
     $nextToken: String
   ) {
     assetsByNode(
-      node_id: $node_id
+      nodeID: $nodeID
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -66,7 +66,7 @@ export const assetsByNode = /* GraphQL */ `
     ) {
       items {
         id
-        node_id
+        nodeID
         createdAt
         updatedAt
         type
@@ -82,7 +82,7 @@ export const assetsByNode = /* GraphQL */ `
 `;
 export const assetsByType = /* GraphQL */ `
   query AssetsByType(
-    $type: AssetType
+    $type: AssetType!
     $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelAssetFilterInput
@@ -99,7 +99,7 @@ export const assetsByType = /* GraphQL */ `
     ) {
       items {
         id
-        node_id
+        nodeID
         createdAt
         updatedAt
         type
@@ -115,7 +115,7 @@ export const assetsByType = /* GraphQL */ `
 `;
 export const assetsByOwnerType = /* GraphQL */ `
   query AssetsByOwnerType(
-    $owner: String
+    $owner: String!
     $typeCreatedAt: ModelAssetAssets_by_owner_typeCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelAssetFilterInput
@@ -132,7 +132,7 @@ export const assetsByOwnerType = /* GraphQL */ `
     ) {
       items {
         id
-        node_id
+        nodeID
         createdAt
         updatedAt
         type
@@ -150,7 +150,7 @@ export const getAssetPr = /* GraphQL */ `
   query GetAssetPr($id: ID!) {
     getAssetPr(id: $id) {
       id
-      node_id
+      nodeID
       createdAt
       updatedAt
       type
@@ -179,7 +179,7 @@ export const listAssetPrs = /* GraphQL */ `
     ) {
       items {
         id
-        node_id
+        nodeID
         createdAt
         updatedAt
         type
@@ -195,14 +195,14 @@ export const listAssetPrs = /* GraphQL */ `
 `;
 export const assetsPrByNode = /* GraphQL */ `
   query AssetsPrByNode(
-    $node_id: ID
+    $nodeID: ID!
     $sortDirection: ModelSortDirection
     $filter: ModelAssetPrFilterInput
     $limit: Int
     $nextToken: String
   ) {
     assetsPrByNode(
-      node_id: $node_id
+      nodeID: $nodeID
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -210,7 +210,7 @@ export const assetsPrByNode = /* GraphQL */ `
     ) {
       items {
         id
-        node_id
+        nodeID
         createdAt
         updatedAt
         type
@@ -226,7 +226,7 @@ export const assetsPrByNode = /* GraphQL */ `
 `;
 export const assetsPrByType = /* GraphQL */ `
   query AssetsPrByType(
-    $type: AssetType
+    $type: AssetType!
     $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelAssetPrFilterInput
@@ -243,7 +243,7 @@ export const assetsPrByType = /* GraphQL */ `
     ) {
       items {
         id
-        node_id
+        nodeID
         createdAt
         updatedAt
         type
@@ -259,7 +259,7 @@ export const assetsPrByType = /* GraphQL */ `
 `;
 export const assetsPrByOwnerType = /* GraphQL */ `
   query AssetsPrByOwnerType(
-    $owner: String
+    $owner: String!
     $typeCreatedAt: ModelAssetPrAssetsPr_by_owner_typeCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelAssetPrFilterInput
@@ -276,7 +276,7 @@ export const assetsPrByOwnerType = /* GraphQL */ `
     ) {
       items {
         id
-        node_id
+        nodeID
         createdAt
         updatedAt
         type
@@ -302,7 +302,7 @@ export const getNode = /* GraphQL */ `
       assets {
         items {
           id
-          node_id
+          nodeID
           createdAt
           updatedAt
           type
@@ -317,7 +317,7 @@ export const getNode = /* GraphQL */ `
       assetsPr {
         items {
           id
-          node_id
+          nodeID
           createdAt
           updatedAt
           type
@@ -332,11 +332,11 @@ export const getNode = /* GraphQL */ `
       edges {
         items {
           id
-          edge_id
-          node_id
-          owner
+          nodeID
+          edgeID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -381,7 +381,7 @@ export const listNodes = /* GraphQL */ `
 `;
 export const nodesByStatusType = /* GraphQL */ `
   query NodesByStatusType(
-    $status: NodeStatus
+    $status: NodeStatus!
     $typeCreatedAt: ModelNodeNodes_by_status_type_createdAtCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelNodeFilterInput
@@ -419,7 +419,7 @@ export const nodesByStatusType = /* GraphQL */ `
 `;
 export const nodesByOwnerStatus = /* GraphQL */ `
   query NodesByOwnerStatus(
-    $owner: String
+    $owner: String!
     $statusCreatedAt: ModelNodeNodes_by_owner_status_createdAtCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelNodeFilterInput
@@ -457,7 +457,7 @@ export const nodesByOwnerStatus = /* GraphQL */ `
 `;
 export const nodesByOwnerType = /* GraphQL */ `
   query NodesByOwnerType(
-    $owner: String
+    $owner: String!
     $typeCreatedAt: ModelNodeNodes_by_owner_type_createdAtCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelNodeFilterInput
@@ -504,11 +504,11 @@ export const getEdge = /* GraphQL */ `
       nodes {
         items {
           id
-          edge_id
-          node_id
-          owner
+          nodeID
+          edgeID
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
@@ -548,7 +548,7 @@ export const listEdges = /* GraphQL */ `
 `;
 export const edgesByType = /* GraphQL */ `
   query EdgesByType(
-    $type: EdgeType
+    $type: EdgeType!
     $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelEdgeFilterInput
@@ -573,6 +573,81 @@ export const edgesByType = /* GraphQL */ `
           nextToken
         }
         updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getEdgeNode = /* GraphQL */ `
+  query GetEdgeNode($id: ID!) {
+    getEdgeNode(id: $id) {
+      id
+      nodeID
+      edgeID
+      node {
+        id
+        status
+        type
+        createdAt
+        updatedAt
+        owner
+        assets {
+          nextToken
+        }
+        assetsPr {
+          nextToken
+        }
+        edges {
+          nextToken
+        }
+      }
+      edge {
+        id
+        type
+        createdAt
+        owner
+        weight
+        nodes {
+          nextToken
+        }
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listEdgeNodes = /* GraphQL */ `
+  query ListEdgeNodes(
+    $filter: ModelEdgeNodeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEdgeNodes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        nodeID
+        edgeID
+        node {
+          id
+          status
+          type
+          createdAt
+          updatedAt
+          owner
+        }
+        edge {
+          id
+          type
+          createdAt
+          owner
+          weight
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        owner
       }
       nextToken
     }

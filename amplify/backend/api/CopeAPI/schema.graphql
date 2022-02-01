@@ -47,6 +47,7 @@ enum NodeType {
 
 enum NodeStatus {
     DRAFT
+    PRIVATE
     REVIEWED
     PUBLISHED
     EDITED
@@ -118,7 +119,7 @@ enum AssetType {
 #   
 interface Resource {
     id          : ID!
-    node_id     : ID!
+    nodeID      : ID!
     createdAt   : AWSDateTime!
     updatedAt   : AWSDateTime!
     type        : AssetType!
@@ -145,17 +146,21 @@ type Asset implements Resource
         { allow: owner,  operations: [ read, update ],    ownerField: "editors",  identityClaim: "email"   },
         { allow: groups,                                  groups: ["Admins", "Editors"]                    },
         { allow: groups, operations: [ read         ],    groups: ["Viewers"]                              },
-        { allow: public, operations: [ read         ]                                                      }
+        { allow: public, operations: [ read         ]     provider: iam                                    }
     ]) 
 {
-    id          : ID! @primaryKey
-    node_id     : ID! @index(name: "Assets_by_node", queryField: "assetsByNode")
+    id          : ID!           
+        @primaryKey
+    nodeID      : ID!           
+        @index(name: "Assets_by_node", queryField: "assetsByNode")
     createdAt   : AWSDateTime!
     updatedAt   : AWSDateTime!
-    type        : AssetType! @index(name: "Assets_by_type", queryField: "assetsByType", sortKeyFields: ["createdAt"])
+    type        : AssetType!    
+        @index(name: "Assets_by_type", queryField: "assetsByType", sortKeyFields: ["createdAt"])
     name        : String!
     index       : Int
-    owner       : String @index(name: "Assets_by_owner_type", queryField: "assetsByOwnerType", sortKeyFields: ["type", "createdAt"])
+    owner       : String        
+        @index(name: "Assets_by_owner_type", queryField: "assetsByOwnerType", sortKeyFields: ["type", "createdAt"])
     content     : String
     editors     : [String]
 }
@@ -169,16 +174,20 @@ type AssetPr implements Resource
         # https://docs.amplify.aws/cli/graphql-transformer/auth#owner-authorization
     ]) 
 {
-    id          : ID! @primaryKey
-    node_id     : ID! @index(name: "AssetsPr_by_node", queryField: "assetsPrByNode")
+    id          : ID!           
+        @primaryKey
+    nodeID      : ID!           
+        @index(name: "AssetsPr_by_node", queryField: "assetsPrByNode")
     createdAt   : AWSDateTime!
     updatedAt   : AWSDateTime!
-    # handles searching by type | type & createdAt
-    type        : AssetType! @index(name: "AssetsPr_by_type", queryField: "assetsPrByType", sortKeyFields: ["createdAt"])
+    type        : AssetType!    
+        # handles searching by type | type & createdAt
+        @index(name: "AssetsPr_by_type", queryField: "assetsPrByType", sortKeyFields: ["createdAt"])
     name        : String!
     index       : Int
-    # handles searching by owner | owner & type | owner & type & createdAt
-    owner       : String @index(name: "AssetsPr_by_owner_type", queryField: "assetsPrByOwnerType", sortKeyFields: ["type", "createdAt"])
+    owner       : String        
+        # handles searching by owner | owner & type | owner & type & createdAt
+        @index(name: "AssetsPr_by_owner_type", queryField: "assetsPrByOwnerType", sortKeyFields: ["type", "createdAt"])
     content     : String
     editors     : [String]
 }
@@ -198,15 +207,17 @@ type AssetPr implements Resource
 type Node 
     @model 
     @auth(rules: [
-        {allow: owner, ownerField: "owner", identityClaim: "email"}, 
-        {allow: groups, groups: ["Admins", "Editors"]}, 
-        {allow: groups, operations: [read], groups: ["Viewers"]}, 
-        {allow: public, operations: [read]}
+        { allow: owner,                                   ownerField: "owner", } # identityClaim: "email"}, 
+        { allow: groups,                                  groups: ["Admins", "Editors"] }, 
+        { allow: groups, operations: [ read         ],    groups: ["Viewers"] }, 
+        { allow: public, operations: [ read         ],    provider: iam }
     ]) 
 {
-    id          : ID! @primaryKey
+    id          : ID!           
+        @primaryKey
     # handles searching by status | status & type | status & type & createdAt
-    status      : NodeStatus! @index(name: "Nodes_by_status_type_createdAt", queryField: "nodesByStatusType", sortKeyFields: ["type", "createdAt"])
+    status      : NodeStatus!   
+        @index(name: "Nodes_by_status_type_createdAt", queryField: "nodesByStatusType", sortKeyFields: ["type", "createdAt"])
     type        : NodeType!
     createdAt   : AWSDateTime!
     updatedAt   : AWSDateTime!
@@ -215,9 +226,13 @@ type Node
         @index(name: "Nodes_by_owner_status_createdAt", queryField: "nodesByOwnerStatus", sortKeyFields: ["status", "createdAt"]) 
         # handles searching by owner | owner & type | owner & type & createdAt
         @index(name: "Nodes_by_owner_type_createdAt", queryField: "nodesByOwnerType", sortKeyFields: ["type", "createdAt"])
-    assets      : [Asset] @hasMany(indexName: "Assets_by_node", fields: ["id"])
-    assetsPr    : [AssetPr] @hasMany(indexName: "AssetsPr_by_node", fields: ["id"])
-    edges       : [EdgeNode] @hasMany(indexName: "EdgeNodes_by_node", fields: ["id"])
+    assets      : [Asset]       
+        @hasMany(indexName: "Assets_by_node", fields: ["id"])
+    assetsPr    : [AssetPr]     
+        @hasMany(indexName: "AssetsPr_by_node", fields: ["id"])
+    edges       : [Edge]        
+        @manyToMany(relationName: "EdgeNode")
+    #edges       : [EdgeNode]   @hasMany(indexName: "EdgeNodes_by_node", fields: ["id"])
 }
 
 #   
@@ -233,36 +248,41 @@ type Node
 type Edge 
     @model 
     @auth(rules: [
-        {allow: owner, ownerField: "owner", identityClaim: "email"}, 
-        {allow: groups, groups: ["Admins", "Editors"]}, 
-        {allow: groups, operations: [read], groups: ["Viewers"]}, 
-        {allow: public, operations: [read]}
+        { allow: owner, ownerField: "owner" } # identityClaim: "email"}, 
+        { allow: groups,                                  groups: ["Admins", "Editors"]}, 
+        { allow: groups, operations: [read],              groups: ["Viewers"]}, 
+        { allow: public, operations: [ read         ],    provider: iam }
     ]) 
 {
-    id          : ID! @primaryKey
-    type        : EdgeType! @index(name: "Edges_by_type", queryField: "edgesByType", sortKeyFields: ["createdAt"])
+    id          : ID!           
+        @primaryKey
+    type        : EdgeType!     
+        @index(name: "Edges_by_type", queryField: "edgesByType", sortKeyFields: ["createdAt"])
     createdAt   : AWSDateTime!
     owner       : String
     weight      : Int
-    nodes       : [EdgeNode] @hasMany(indexName: "EdgeNodes_by_edge", fields: ["id"])
+    nodes       : [Node]        
+        @manyToMany(relationName: "EdgeNode")
+    #nodes       : [EdgeNode]   @hasMany(indexName: "EdgeNodes_by_edge", fields: ["id"])
 }
 
-# NOTE: Implementation detail (facilitates N:N connection between edges and nodes) = not queryable 
-# EdgeNodes insertion order is (TBD if important) [ from, to ] = direction of relationship/type
-# creation of these needs to be done deliberately in order (use spool)
-type EdgeNode 
-    @model(queries: null) 
-    @auth(rules: [
-        {allow: owner, ownerField: "owner", identityClaim: "email"}, 
-        {allow: groups, groups: ["Admins", "Editors"]}, 
-        {allow: groups, operations: [read], groups: ["Viewers"]}, 
-        {allow: public, operations: [read]}
-    ]) 
-{
-    id          : ID! @primaryKey
-    edge_id     : ID! @index(name: "EdgeNodes_by_edge", sortKeyFields: ["node_id"])
-    node_id     : ID! @index(name: "EdgeNodes_by_node", sortKeyFields: ["edge_id"])
-    edge        : Edge! @belongsTo(fields: ["edge_id"])
-    node        : Node! @belongsTo(fields: ["node_id"])
-    owner       : String
-}
+## NOTE: Implementation detail (facilitates N:N connection between edges and nodes) = not queryable 
+## EdgeNodes insertion order is (TBD if important) [ from, to ] = direction of relationship/type
+## creation of these needs to be done deliberately in order (use spool)
+#type EdgeNode 
+#    @model(queries: null) 
+#    @auth(rules: [
+#        {allow: owner, ownerField: "owner", identityClaim: "email"}, 
+#        {allow: groups, groups: ["Admins", "Editors"]}, 
+#        {allow: groups, operations: [read], groups: ["Viewers"]}, 
+#        {allow: public, operations: [read]}
+#    ]) 
+#{
+#    id          : ID!          @primaryKey
+#    edge_id     : ID!          @index(name: "EdgeNodes_by_edge", sortKeyFields: ["nodeID"])
+#    nodeID     : ID!          @index(name: "EdgeNodes_by_node", sortKeyFields: ["edge_id"])
+#    edge        : Edge! @belongsTo(fields: ["edge_id"])
+#    node        : Node! @belongsTo(fields: ["nodeID"])
+#    owner       : String
+#}
+        

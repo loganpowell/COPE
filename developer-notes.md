@@ -64,8 +64,10 @@ amplify add api
 ```
 
 Here we will add a `graphl` API. You will copy the
-[`schema.graphql` file](https://github.com/loganpowell/COPE/blob/master/amplify/backend/api/CopeAPI/schema.graphql) from this project and use that. This is the
-backbone of your C.O.P.E. project.
+[`schema.graphql`
+file](https://github.com/loganpowell/COPE/blob/master/amplify/backend/api/CopeAPI/schema.graphql)
+from this project and use that. This is the backbone of your
+C.O.P.E. project.
 
 ## Add Authentication
 
@@ -269,7 +271,8 @@ You will then edit the policy `JSON`, replacing the
 
 ### Updating secrets for additional environments
 
-If you have multiple environments (e.g. `dev`/`prod`/etc), you will need to update the secrets in each like so:
+If you have multiple environments (e.g. `dev`/`prod`/etc),
+you will need to update the secrets in each like so:
 
 ```diff
 ➜  cope git:(migration) ✗ amplify function update
@@ -391,9 +394,12 @@ You can access the following resource attributes as environment variables from y
 
 ## Setting Admin Email and Password
 
-Before you have a UI set up, you can add your admin user via the Cognito UI.
+Before you have a UI set up, you can add your admin user via
+the Cognito UI.
 
-However, you will not be able to `CONFIRM` this account via the UI. To confirm it before you set up your client, you can use the [AWSCLI]
+However, you will not be able to `CONFIRM` this account via
+the UI. To confirm it before you set up your client, you can
+use the [AWSCLI]
 
 You can change a user's password and update status using:
 
@@ -585,26 +591,36 @@ Resource is not in the state stackUpdateComplete
 An error occurred during the push operation: Resource is not in the state stackUpdateComplete
 ```
 
-for this, I've found the easiest [solution](https://github.com/aws-amplify/amplify-cli/issues/82#issuecomment-639908474)
+for this, I've found the easiest
+[solution](https://github.com/aws-amplify/amplify-cli/issues/82#issuecomment-639908474)
 is to add an arbitrary extra space to your `schema.graphql`
 file and then run `amplify push` again
 
 ### Enable Iterative GSI Updates
 
-[source](https://docs.amplify.aws/cli/graphql-transformer/key#deploying-multiple-secondary-indices-gsi)
+[source](https://docs.amplify.aws/cli/reference/feature-flags/#enableIterativeGsiUpdates)
 
 ```
 Attempting to mutate more than 1 global secondary index at the same time.
 
 ```
 
-for [this](https://docs.amplify.aws/cli/graphql-transformer/key#deploying-multiple-secondary-indices-gsi)
+for
+[this](https://docs.amplify.aws/cli/reference/feature-flags/#enableIterativeGsiUpdates)
 To enable multiple GSI updates, set the
 `"enableiterativegsiupdates"` feature flag to true in your
 `amplify/cli.json` (located in the `amplify/` directory
 under root).
 
 ## ⚠ ERRORS? ⚠
+
+The most common errors come from trying to change primary
+indices, which causes - in the backend - a simultaneous
+delete and update operations on the same index. This will
+cause Amplify and the cloud environment to choke. If you
+need to change an index, do it by first commenting out the
+index, then `amplify push`ing that change, then make the
+change to the index and `amplify push` again.
 
 If you get an error like this:
 

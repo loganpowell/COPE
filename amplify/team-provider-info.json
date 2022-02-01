@@ -19,7 +19,7 @@
         },
         "COPECognitoPostConfirmTriggerAddToViewers": {
           "deploymentBucketName": "amplify-cope-migration-161145-deployment",
-          "s3Key": "amplify-builds/COPECognitoPostConfirmTriggerAddToViewers-4f504e716231722f3062-build.zip",
+          "s3Key": "amplify-builds/COPECognitoPostConfirmTriggerAddToViewers-4874757746527a307932-build.zip",
           "secretsPathAmplifyAppId": "d17wg1ypllrfa8"
         }
       },

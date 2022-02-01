@@ -3,8 +3,8 @@ mutation createEdge {
     id
     nodes {
       items {
-        node_id
-        edge_id
+        nodeID
+        edgeID
       }
     }
   }
@@ -15,8 +15,8 @@ query readEdge {
     nodes {
       items {
         id
-        edge_id
-        node_id
+        edgeID
+        nodeID
       }
     }
   }
@@ -49,10 +49,10 @@ mutation createNodes {
 }
 
 mutation createEdgeNodes {
-  edgeNode1: createEdgeNode(input: {id: "edgeNode5", edge_id: "testedge2", node_id: "testNode1"}) {
+  edgeNode1: createEdgeNode(input: {id: "edgeNode5", edgeID: "testedge2", nodeID: "testNode1"}) {
     id
   }
-  edgeNode2: createEdgeNode(input: {id: "edgeNode6", edge_id: "testedge2", node_id: "testNode3"}) {
+  edgeNode2: createEdgeNode(input: {id: "edgeNode6", edgeID: "testedge2", nodeID: "testNode3"}) {
     id
   }
 }
@@ -107,12 +107,12 @@ query listNodes {
       ...assetsAndProxies
       edges {
         items {
-          edge_id
+          edgeID
           edge {
             type
             nodes(sortDirection: DESC) {
               items {
-                node_id
+                nodeID
                 createdAt
                 updatedAt
               }
@@ -165,7 +165,7 @@ query nodeEnums {
 fragment asset on Resource {
   id
   type
-  node_id
+  nodeID
   name
   content
 }
@@ -189,8 +189,8 @@ fragment node on Node {
   edges(sortDirection:DESC){
     items{ #nodeEdges
       # id
-      # edge_id
-      # node_id
+      # edgeID
+      # nodeID
       # createdAt
       # owner
       edge{
@@ -242,8 +242,8 @@ query listEdges {
         items{
           createdAt
           id
-          edge_id
-          node_id
+          edgeID
+          nodeID
           node{
             type
           }
@@ -259,7 +259,7 @@ query listAssets{
   listAssets{
     items{
       id
-      node_id
+      nodeID
       type
       name
     }
@@ -328,7 +328,7 @@ mutation createNode {
 mutation create_Resource {
   create_Asset(input:{
     id:1
-    node_id:1
+    nodeID:1
     type:V_IMAGE
     name:"this is a anothah boogah"
     content:"so you're saying we can't just..."
@@ -341,7 +341,7 @@ mutation create_Resource {
 mutation createResource {
   createAsset(input:{
     id:1
-    node_id:1
+    nodeID:1
     type:V_IMAGE
     name:"public resource name"
     content:"once upon a midnight, dreary"
@@ -368,8 +368,8 @@ mutation createEdge {
 mutation createNodeEdge {
   createNodeEdge(input:{
     id: "1:1"
-    node_id:1,
-    edge_id:1,
+    nodeID:1,
+    edgeID:1,
   }){
     edge{
       id

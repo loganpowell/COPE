@@ -103,6 +103,9 @@
               "userPoolConfig": {
                 "userPoolId": "authcopeAuth"
               }
+            },
+            {
+              "authenticationType": "AWS_IAM"
             }
           ]
         }
