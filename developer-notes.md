@@ -676,3 +676,58 @@ https://docs.aws.amazon.com/cognito/latest/developerguide/signing-up-users-in-yo
 -   https://docs.amplify.aws/lib/graphqlapi/create-or-re-use-existing-backend/q/platform/js#create-new-appsync-graphql-api
 -   https://docs.amplify.aws/lib/auth/start/q/platform/js#configure-your-application
 -   https://medium.com/@dantasfiles/three-methods-to-get-user-information-in-aws-amplify-authentication-e4e39e658c33
+
+# Migration to AWS CDK:
+
+## CDK Tutorials
+
+-   [Getting Started](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html)
+-   [Appsync + DynamoDB + Lambda](https://aws.amazon.com/blogs/mobile/building-scalable-graphql-apis-on-aws-with-cdk-and-aws-appsync/)
+-   [appsync with cdk + graphql transformer](https://www.trek10.com/blog/appsync-with-the-aws-cloud-development-kit)
+
+    -   [lib](https://github.com/kcwinner/cdk-appsync-transformer)
+
+-   [Egghead tutorial with serverless](https://egghead.io/courses/build-a-graphql-api-with-aws-cdk-and-appsync-7d2a5fbc)
+-   [AWS Appsync with CDK](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/67662c95-2007-4281-ae51-5313cd7caa67/en-US/lab1/2-deploy-with-cdk)
+
+## AWS CloudFormation Tutorials
+
+-   [CFN Masterclass youtube](https://www.youtube.com/watch?v=6R44BADNJA8)
+-   [Cloud formation template reference](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-resource-specification.html)
+
+## VTL
+
+-   [VTL resolver mapping template reference](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-mapping-template-reference.html)
+-   [Article: Lamdba vs VTL](https://dev.to/skorfmann/aws-appsync-direct-lambda-vs-dynamodb-resolver-2596)
+-   [SO lambda vs VTL](https://stackoverflow.com/questions/61887922/aws-appsync-resolvers-lambda-function-vs-velocity-template-language-vtl)
+-   [pipeline resolvers](https://thenewstack.io/why-serverless-graphql-is-better-with-aws-appsync/)
+-   [burningmonk interview re: VTL vs lambda](https://aws.fm/episodes/episode-5-yan-cui)
+-   [Generate appsync vtl files without amplify cli](https://medium.com/collaborne-engineering/generate-appsync-vtl-files-without-amplify-cli-e5658fca2da5)
+
+## Lambda
+
+-   [Direct lambda resolvers](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/67662c95-2007-4281-ae51-5313cd7caa67/en-US/lab3/1-direct-lambda)
+
+## S3
+
+-   [SO how to use VTL for S3 directly with DynamoDB](https://stackoverflow.com/questions/48495338/how-to-upload-file-to-aws-s3-using-aws-appsync/50218870#50218870)
+-
+
+### Examples
+
+-   [union types](https://github.com/yinlinchen/amplify-appsync-graphql/blob/master/docs/uniontype.md)
+-   [TODO app Appsync API with CDK](https://gist.github.com/dabit3/e325dbfc55b4d59f05c949399b3c5d8c)
+-   [Custom GraphQL Transformers](https://kaustavghosh06.github.io/docs/cli-toolchain/plugins?sdk=js)
+
+### Existing (COPE) Appsync functions
+
+-   [console](https://console.aws.amazon.com/appsync/home?region=us-east-1#/dmziwpiehbeclofncicxhe47xq/v1/functions)
+
+## GSIs
+
+-   [COPE example GSI: EdgeNode](https://console.aws.amazon.com/dynamodbv2/home?region=us-east-1#table?initialTagKey=&name=EdgeNode-5gkobp75jjd2vioh5harxftoji-dev&tab=indexes)
+
+## Amplify CLI Plugins
+
+-   [graphql-model-transformer.ts](https://github.com/aws-amplify/amplify-cli/blob/master/packages/amplify-graphql-model-transformer/src/graphql-model-transformer.ts)
+-   [authoring a new plugin](https://docs.amplify.aws/cli/plugins/authoring/)

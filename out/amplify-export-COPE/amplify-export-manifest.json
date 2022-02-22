@@ -1,0 +1,194 @@
+{
+  "stackName": "amplify-cope-migration-161145",
+  "props": {
+    "templateFile": "root-stack-template.json",
+    "parameters": {
+      "AuthRoleName": "amplify-cope-migration-161145-authRole",
+      "UnauthRoleName": "amplify-cope-migration-161145-unauthRole",
+      "DeploymentBucketName": "amplify-cope-migration-161145-deployment"
+    },
+    "preserveLogicalIds": true,
+    "loadNestedStacks": {
+      "apiAdminQueries": {
+        "templateFile": "api\\AdminQueries\\admin-queries-cloudformation-template.json",
+        "parameters": {
+          "env": "migration"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "apiCopeAPI": {
+        "templateFile": "api\\CopeAPI\\cloudformation-template.json",
+        "parameters": {
+          "AppSyncApiName": "CopeAPI",
+          "DynamoDBBillingMode": "PAY_PER_REQUEST",
+          "DynamoDBEnableServerSideEncryption": false,
+          "S3DeploymentBucket": "amplify-cope-migration-161145-deployment",
+          "S3DeploymentRootKey": "amplify-appsync-files/8ae679ee00c3f53e40881576b07a7a27ab6b7f1b",
+          "env": "migration"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {
+          "Asset": {
+            "templateFile": "api\\CopeAPI\\amplify-appsync-files\\stacks\\Asset.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "AssetPr": {
+            "templateFile": "api\\CopeAPI\\amplify-appsync-files\\stacks\\AssetPr.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "ConnectionStack": {
+            "templateFile": "api\\CopeAPI\\amplify-appsync-files\\stacks\\ConnectionStack.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "CustomResourcesjson": {
+            "templateFile": "api\\CopeAPI\\amplify-appsync-files\\stacks\\CustomResources.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "Edge": {
+            "templateFile": "api\\CopeAPI\\amplify-appsync-files\\stacks\\Edge.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "EdgeNode": {
+            "templateFile": "api\\CopeAPI\\amplify-appsync-files\\stacks\\EdgeNode.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "Node": {
+            "templateFile": "api\\CopeAPI\\amplify-appsync-files\\stacks\\Node.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          }
+        }
+      },
+      "authcopeAuth": {
+        "templateFile": "auth\\copeAuth\\copeAuth-cloudformation-template.yml",
+        "parameters": {
+          "identityPoolName": "cope_id_pool",
+          "allowUnauthenticatedIdentities": true,
+          "resourceNameTruncated": "copefe15834f",
+          "userPoolName": "cope_user_pool",
+          "autoVerifiedAttributes": [
+            "email"
+          ],
+          "mfaConfiguration": "OFF",
+          "mfaTypes": [
+            "SMS Text Message"
+          ],
+          "smsAuthenticationMessage": "Your authentication code is {####}",
+          "smsVerificationMessage": "Your verification code is {####}",
+          "emailVerificationSubject": "Your verification code",
+          "emailVerificationMessage": "Your verification code is {####}",
+          "defaultPasswordPolicy": false,
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [],
+          "requiredAttributes": [
+            "email"
+          ],
+          "userpoolClientGenerateSecret": false,
+          "userpoolClientRefreshTokenValidity": 30,
+          "userpoolClientWriteAttributes": [
+            "email"
+          ],
+          "userpoolClientReadAttributes": [
+            "email"
+          ],
+          "userpoolClientLambdaRole": "copeAufe15834f_userpoolclient_lambda_role",
+          "userpoolClientSetAttributes": false,
+          "sharedId": "fe15834f",
+          "resourceName": "copeAuth",
+          "authSelections": "identityPoolAndUserPool",
+          "useDefault": "manual",
+          "thirdPartyAuth": false,
+          "usernameAttributes": [
+            "email"
+          ],
+          "userPoolGroups": true,
+          "adminQueries": true,
+          "triggers": "{}",
+          "hostedUI": false,
+          "userPoolGroupList": [
+            "Admins",
+            "Editors",
+            "Viewers"
+          ],
+          "adminQueryGroup": "Admins",
+          "serviceName": "Cognito",
+          "usernameCaseSensitive": false,
+          "permissions": [],
+          "dependsOn": [],
+          "env": "migration"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "authuserPoolGroups": {
+        "templateFile": "auth\\userPoolGroups\\template.json",
+        "parameters": {
+          "env": "migration"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "functionAdminQueriesae6420d7": {
+        "templateFile": "function\\AdminQueriesae6420d7\\AdminQueriesae6420d7-cloudformation-template.json",
+        "parameters": {
+          "deploymentBucketName": "amplify-cope-migration-161145-deployment",
+          "s3Key": "amplify-builds/AdminQueriesae6420d7-6d594a71644b4c324756-build.zip",
+          "env": "migration"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "functionCOPECognitoPostConfirmTriggerAddToViewers": {
+        "templateFile": "function\\COPECognitoPostConfirmTriggerAddToViewers\\COPECognitoPostConfirmTriggerAddToViewers-cloudformation-template.json",
+        "parameters": {
+          "deploymentBucketName": "amplify-cope-migration-161145-deployment",
+          "s3Key": "amplify-builds/COPECognitoPostConfirmTriggerAddToViewers-4874757746527a307932-build.zip",
+          "secretsPathAmplifyAppId": "d17wg1ypllrfa8",
+          "env": "migration"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "storageCopeStorage": {
+        "templateFile": "storage\\CopeStorage\\s3-cloudformation-template.json",
+        "parameters": {
+          "bucketName": "cope-storage-bucket",
+          "authPolicyName": "s3_amplify_1c63c370",
+          "unauthPolicyName": "s3_amplify_1c63c370",
+          "selectedGuestPermissions": [
+            "s3:GetObject",
+            "s3:ListBucket"
+          ],
+          "selectedAuthenticatedPermissions": [
+            "s3:GetObject",
+            "s3:ListBucket"
+          ],
+          "s3PermissionsGuestPublic": "s3:GetObject",
+          "s3PermissionsGuestUploads": "DISALLOW",
+          "GuestAllowList": "ALLOW",
+          "s3PermissionsAuthenticatedPublic": "s3:GetObject",
+          "s3PermissionsAuthenticatedProtected": "s3:GetObject",
+          "s3PermissionsAuthenticatedPrivate": "s3:GetObject",
+          "s3PermissionsAuthenticatedUploads": "DISALLOW",
+          "AuthenticatedAllowList": "ALLOW",
+          "triggerFunction": "NONE",
+          "s3PublicPolicy": "Public_policy_a25586db",
+          "s3UploadsPolicy": "Uploads_policy_a25586db",
+          "s3ProtectedPolicy": "Protected_policy_4961c5fb",
+          "s3PrivatePolicy": "Private_policy_4961c5fb",
+          "s3ReadPolicy": "read_policy_a25586db",
+          "env": "migration"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      }
+    }
+  }
+}

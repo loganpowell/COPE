@@ -1,0 +1,27 @@
+## [Start] Merge default values and inputs. **
+#set( $mergedValues = $util.defaultIfNull($ctx.stash.defaultValues, {}) )
+$util.qr($mergedValues.putAll($util.defaultIfNull($ctx.args.input, {})))
+## [End] Merge default values and inputs. **
+## [Start] Validate update mutation for @index 'Nodes_by_owner_status_createdAt'. **
+#set( $hasSeenSomeKeyArg = false )
+#set( $keyFieldNames = ["status", "createdAt"] )
+#foreach( $keyFieldName in $keyFieldNames )
+#if( $ctx.args.input.containsKey("$keyFieldName") ) #set( $hasSeenSomeKeyArg = true ) #end
+#end
+#foreach( $keyFieldName in $keyFieldNames )
+  #if( $hasSeenSomeKeyArg && !$ctx.args.input.containsKey("$keyFieldName") )
+    $util.error("When updating any part of the composite sort key for @index 'Nodes_by_owner_status_createdAt', you must provide all fields for the key. Missing key: '$keyFieldName'.")
+  #end
+#end
+## [End] Validate update mutation for @index 'Nodes_by_owner_status_createdAt'. **
+#if( $util.isNull($ctx.stash.metadata.dynamodbNameOverrideMap) )
+  $util.qr($ctx.stash.metadata.put("dynamodbNameOverrideMap", {
+  "status#createdAt": "statusCreatedAt"
+}))
+#else
+  $util.qr($ctx.stash.metadata.dynamodbNameOverrideMap.put("status#createdAt", "statusCreatedAt"))
+#end
+#if( $hasSeenSomeKeyArg )
+  $util.qr($ctx.args.input.put("status#createdAt","${mergedValues.status}#${mergedValues.createdAt}"))
+#end
+{}

@@ -1,0 +1,140 @@
+## [Start] Set query expression for key **
+#set( $modelQueryExpression = {} )
+## [Start] Validate key arguments. **
+#if( !$util.isNull($ctx.args.typeCreatedAt) && $util.isNullOrBlank($ctx.args.owner) )
+  $util.error("When providing argument 'typeCreatedAt' you must also provide 'owner'.", "InvalidArgumentsError")
+#end
+#if( !$util.isNull($ctx.args.typeCreatedAt) )
+  #set( $sortKeyArgumentOperations = $ctx.args.typeCreatedAt.keySet() )
+  #if( $sortKeyArgumentOperations.size() > 1 )
+    $util.error("Argument typeCreatedAt must specify at most one key condition operation.", "InvalidArgumentsError")
+  #end
+  #foreach( $operation in $sortKeyArgumentOperations )
+    #if( $operation == "between" )
+      #if( $ctx.args.typeCreatedAt.between.size() != 2 )
+        $util.error("Argument 'typeCreatedAt.between' expects exactly two elements.", "InvalidArgumentsError")
+      #end
+      #if( !$util.isNullOrBlank($ctx.args.typeCreatedAt.between[0].createdAt) && $util.isNullOrBlank($ctx.args.typeCreatedAt.between[0].type) )
+        $util.error("When providing argument 'typeCreatedAt.between[0].createdAt' you must also provide 'typeCreatedAt.between[0].type'.", "InvalidArgumentsError")
+      #end
+      #if( !$util.isNullOrBlank($ctx.args.typeCreatedAt.between[1].createdAt) && $util.isNullOrBlank($ctx.args.typeCreatedAt.between[1].type) )
+        $util.error("When providing argument 'typeCreatedAt.between[1].createdAt' you must also provide 'typeCreatedAt.between[1].type'.", "InvalidArgumentsError")
+      #end
+    #else
+      #if( !$util.isNullOrBlank($ctx.args.typeCreatedAt.get("$operation").createdAt) && $util.isNullOrBlank($ctx.args.typeCreatedAt.get("$operation").type) )
+        $util.error("When providing argument 'typeCreatedAt.$operation.createdAt' you must also provide 'typeCreatedAt.$operation.type'.", "InvalidArgumentsError")
+      #end
+    #end
+  #end
+#end
+## [End] Validate key arguments. **
+#if( !$util.isNull($ctx.args.owner) )
+  #set( $modelQueryExpression.expression = "#owner = :owner" )
+  #set( $modelQueryExpression.expressionNames = {
+  "#owner": "owner"
+} )
+  #set( $modelQueryExpression.expressionValues = {
+  ":owner": {
+      "S": "$ctx.args.owner"
+  }
+} )
+#end
+## [Start] Applying Key Condition **
+#set( $sortKeyValue = "" )
+#set( $sortKeyValue2 = "" )
+#if( !$util.isNull($ctx.args.typeCreatedAt) && !$util.isNull($ctx.args.typeCreatedAt.beginsWith) )
+#if( !$util.isNull($ctx.args.typeCreatedAt.beginsWith.type) ) #set( $sortKeyValue = "$ctx.args.typeCreatedAt.beginsWith.type" ) #end
+#if( !$util.isNull($ctx.args.typeCreatedAt.beginsWith.createdAt) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeCreatedAt.beginsWith.createdAt" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND begins_with(#sortKey, :sortKey)" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "type#createdAt"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.typeCreatedAt) && !$util.isNull($ctx.args.typeCreatedAt.between) )
+  #if( $ctx.args.typeCreatedAt.between.size() != 2 )
+    $util.error("Argument typeCreatedAt.between expects exactly 2 elements.")
+  #end
+#if( !$util.isNull($ctx.args.typeCreatedAt.between[0].type) ) #set( $sortKeyValue = "$ctx.args.typeCreatedAt.between[0].type" ) #end
+#if( !$util.isNull($ctx.args.typeCreatedAt.between[0].createdAt) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeCreatedAt.between[0].createdAt" ) #end
+#if( !$util.isNull($ctx.args.typeCreatedAt.between[1].type) ) #set( $sortKeyValue2 = "$ctx.args.typeCreatedAt.between[1].type" ) #end
+#if( !$util.isNull($ctx.args.typeCreatedAt.between[1].createdAt) ) #set( $sortKeyValue2 = "$sortKeyValue2#$ctx.args.typeCreatedAt.between[1].createdAt" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey BETWEEN :sortKey0 AND :sortKey1" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "type#createdAt"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey0", { "S": "$sortKeyValue" }))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey1", { "S": "$sortKeyValue2" }))
+#end
+#if( !$util.isNull($ctx.args.typeCreatedAt) && !$util.isNull($ctx.args.typeCreatedAt.eq) )
+#if( !$util.isNull($ctx.args.typeCreatedAt.eq.type) ) #set( $sortKeyValue = "$ctx.args.typeCreatedAt.eq.type" ) #end
+#if( !$util.isNull($ctx.args.typeCreatedAt.eq.createdAt) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeCreatedAt.eq.createdAt" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey = :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "type#createdAt"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.typeCreatedAt) && !$util.isNull($ctx.args.typeCreatedAt.lt) )
+#if( !$util.isNull($ctx.args.typeCreatedAt.lt.type) ) #set( $sortKeyValue = "$ctx.args.typeCreatedAt.lt.type" ) #end
+#if( !$util.isNull($ctx.args.typeCreatedAt.lt.createdAt) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeCreatedAt.lt.createdAt" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey < :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "type#createdAt"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.typeCreatedAt) && !$util.isNull($ctx.args.typeCreatedAt.le) )
+#if( !$util.isNull($ctx.args.typeCreatedAt.le.type) ) #set( $sortKeyValue = "$ctx.args.typeCreatedAt.le.type" ) #end
+#if( !$util.isNull($ctx.args.typeCreatedAt.le.createdAt) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeCreatedAt.le.createdAt" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey <= :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "type#createdAt"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.typeCreatedAt) && !$util.isNull($ctx.args.typeCreatedAt.gt) )
+#if( !$util.isNull($ctx.args.typeCreatedAt.gt.type) ) #set( $sortKeyValue = "$ctx.args.typeCreatedAt.gt.type" ) #end
+#if( !$util.isNull($ctx.args.typeCreatedAt.gt.createdAt) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeCreatedAt.gt.createdAt" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey > :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "type#createdAt"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.typeCreatedAt) && !$util.isNull($ctx.args.typeCreatedAt.ge) )
+#if( !$util.isNull($ctx.args.typeCreatedAt.ge.type) ) #set( $sortKeyValue = "$ctx.args.typeCreatedAt.ge.type" ) #end
+#if( !$util.isNull($ctx.args.typeCreatedAt.ge.createdAt) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.typeCreatedAt.ge.createdAt" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey >= :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "type#createdAt"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+
+
+## [End] Applying Key Condition **
+## [End] Set query expression for key **
+#set( $limit = $util.defaultIfNull($context.args.limit, 100) )
+#set( $QueryRequest = {
+  "version": "2018-05-29",
+  "operation": "Query",
+  "limit": $limit,
+  "query": $modelQueryExpression,
+  "index": "Nodes_by_owner_type_createdAt"
+} )
+#if( !$util.isNull($ctx.args.sortDirection)
+                      && $ctx.args.sortDirection == "DESC" )
+  #set( $QueryRequest.scanIndexForward = false )
+#else
+  #set( $QueryRequest.scanIndexForward = true )
+#end
+#if( $context.args.nextToken ) #set( $QueryRequest.nextToken = $context.args.nextToken ) #end
+#if( !$util.isNullOrEmpty($ctx.stash.authFilter) )
+  #set( $filter = $ctx.stash.authFilter )
+  #if( !$util.isNullOrEmpty($ctx.args.filter) )
+    #set( $filter = {
+  "and":   [$filter, $ctx.args.filter]
+} )
+  #end
+#else
+  #if( !$util.isNullOrEmpty($ctx.args.filter) )
+    #set( $filter = $ctx.args.filter )
+  #end
+#end
+#if( !$util.isNullOrEmpty($filter) )
+  #set( $filterExpression = $util.parseJson($util.transform.toDynamoDBFilterExpression($filter)) )
+  #if( !$util.isNullOrBlank($filterExpression.expression) )
+    #if( $filterExpression.expressionValues.size() == 0 )
+      $util.qr($filterExpression.remove("expressionValues"))
+    #end
+    #set( $QueryRequest.filter = $filterExpression )
+  #end
+#end
+$util.toJson($QueryRequest)

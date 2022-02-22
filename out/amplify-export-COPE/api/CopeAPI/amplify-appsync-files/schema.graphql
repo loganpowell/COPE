@@ -1,0 +1,672 @@
+
+enum NodeType {
+  R_ACCOUNT
+  H_AUTHOR
+  H_TEAM
+  A_ARTICLE
+  A_PAGE
+  A_APPLICATION
+  A_GEM
+  A_COURSE
+  S_ACS
+  S_DECENNIAL
+  S_CBP
+  V_1990
+  V_2000
+  V_2010
+  V_2020
+  C_COURSES
+  C_SERIES
+  C_LIST
+}
+
+enum NodeStatus {
+  DRAFT
+  PRIVATE
+  REVIEWED
+  PUBLISHED
+  EDITED
+  DELETED
+}
+
+enum EdgeType {
+  AUTHORED
+  HAS_NEXT
+  HAS_PREVIOUS
+  HAS_PART
+  HAS_CHILD
+}
+
+enum AssetType {
+  """
+  A [description](http://spec.graphql.org/June2018/#sec-Descriptions), 
+  here in parentheses, is `markdown` friendly!
+  """
+  DEPRECATED @deprecated(reason: "the reason is _also_ `markdown` friendly!")
+  A_IMAGE
+  A_OG_IMAGE
+  A_OG_AUDIO
+  A_OG_VIDEO
+  A_VIDEO
+  A_AUDIO
+  T_OG_TITLE
+  T_OG_DESCRIPTION
+  T_OG_TYPE
+  T_LEDE
+  T_BODY
+  M_DATA
+  M_MAP
+  M_VIZ
+  M_API
+  F_IMAGE
+  F_AUDIO
+  F_VIDEO
+  F_PDF
+  F_KML
+  F_SHP
+  F_CSV
+}
+
+interface Resource {
+  id: ID!
+  nodeID: ID!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  type: AssetType!
+  name: String!
+  index: Int
+  owner: String
+  content: String
+  editors: [String]
+}
+
+type Asset implements Resource @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  nodeID: ID!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  type: AssetType!
+  name: String!
+  index: Int
+  owner: String
+  content: String
+  editors: [String]
+}
+
+type AssetPr implements Resource @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  nodeID: ID!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  type: AssetType!
+  name: String!
+  index: Int
+  owner: String
+  content: String
+  editors: [String]
+}
+
+type Node @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  status: NodeStatus!
+  type: NodeType!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  owner: String
+  assets(filter: ModelAssetFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelAssetConnection
+  assetsPr(filter: ModelAssetPrFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelAssetPrConnection
+  edges(filter: ModelEdgeNodeFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEdgeNodeConnection
+}
+
+type Edge @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  type: EdgeType!
+  createdAt: AWSDateTime
+  owner: String
+  weight: Int
+  nodes(filter: ModelEdgeNodeFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEdgeNodeConnection
+  updatedAt: AWSDateTime!
+}
+
+type EdgeNode @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  nodeID: ID!
+  edgeID: ID!
+  node: Node!
+  edge: Edge!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelAssetConnection @aws_iam @aws_cognito_user_pools {
+  items: [Asset]!
+  nextToken: String
+}
+
+input ModelAssetTypeInput {
+  eq: AssetType
+  ne: AssetType
+}
+
+input ModelAssetFilterInput {
+  id: ModelIDInput
+  nodeID: ModelIDInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  type: ModelAssetTypeInput
+  name: ModelStringInput
+  index: ModelIntInput
+  owner: ModelStringInput
+  content: ModelStringInput
+  editors: ModelStringInput
+  and: [ModelAssetFilterInput]
+  or: [ModelAssetFilterInput]
+  not: ModelAssetFilterInput
+}
+
+type Query {
+  getAsset(id: ID!): Asset @aws_iam @aws_cognito_user_pools
+  listAssets(id: ID, filter: ModelAssetFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelAssetConnection @aws_iam @aws_cognito_user_pools
+  assetsByNode(nodeID: ID!, sortDirection: ModelSortDirection, filter: ModelAssetFilterInput, limit: Int, nextToken: String): ModelAssetConnection @aws_iam @aws_cognito_user_pools
+  assetsByType(type: AssetType!, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelAssetFilterInput, limit: Int, nextToken: String): ModelAssetConnection @aws_iam @aws_cognito_user_pools
+  assetsByOwnerType(owner: String!, typeCreatedAt: ModelAssetAssets_by_owner_typeCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelAssetFilterInput, limit: Int, nextToken: String): ModelAssetConnection @aws_iam @aws_cognito_user_pools
+  getAssetPr(id: ID!): AssetPr @aws_iam @aws_cognito_user_pools
+  listAssetPrs(id: ID, filter: ModelAssetPrFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelAssetPrConnection @aws_iam @aws_cognito_user_pools
+  assetsPrByNode(nodeID: ID!, sortDirection: ModelSortDirection, filter: ModelAssetPrFilterInput, limit: Int, nextToken: String): ModelAssetPrConnection @aws_iam @aws_cognito_user_pools
+  assetsPrByType(type: AssetType!, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelAssetPrFilterInput, limit: Int, nextToken: String): ModelAssetPrConnection @aws_iam @aws_cognito_user_pools
+  assetsPrByOwnerType(owner: String!, typeCreatedAt: ModelAssetPrAssetsPr_by_owner_typeCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelAssetPrFilterInput, limit: Int, nextToken: String): ModelAssetPrConnection @aws_iam @aws_cognito_user_pools
+  getNode(id: ID!): Node @aws_iam @aws_cognito_user_pools
+  listNodes(id: ID, filter: ModelNodeFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelNodeConnection @aws_iam @aws_cognito_user_pools
+  nodesByStatusType(status: NodeStatus!, typeCreatedAt: ModelNodeNodes_by_status_type_createdAtCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelNodeFilterInput, limit: Int, nextToken: String): ModelNodeConnection @aws_iam @aws_cognito_user_pools
+  nodesByOwnerStatus(owner: String!, statusCreatedAt: ModelNodeNodes_by_owner_status_createdAtCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelNodeFilterInput, limit: Int, nextToken: String): ModelNodeConnection @aws_iam @aws_cognito_user_pools
+  nodesByOwnerType(owner: String!, typeCreatedAt: ModelNodeNodes_by_owner_type_createdAtCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelNodeFilterInput, limit: Int, nextToken: String): ModelNodeConnection @aws_iam @aws_cognito_user_pools
+  getEdge(id: ID!): Edge @aws_iam @aws_cognito_user_pools
+  listEdges(id: ID, filter: ModelEdgeFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelEdgeConnection @aws_iam @aws_cognito_user_pools
+  edgesByType(type: EdgeType!, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelEdgeFilterInput, limit: Int, nextToken: String): ModelEdgeConnection @aws_iam @aws_cognito_user_pools
+  getEdgeNode(id: ID!): EdgeNode @aws_iam @aws_cognito_user_pools
+  listEdgeNodes(filter: ModelEdgeNodeFilterInput, limit: Int, nextToken: String): ModelEdgeNodeConnection @aws_iam @aws_cognito_user_pools
+}
+
+input ModelAssetConditionInput {
+  nodeID: ModelIDInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  type: ModelAssetTypeInput
+  name: ModelStringInput
+  index: ModelIntInput
+  owner: ModelStringInput
+  content: ModelStringInput
+  editors: ModelStringInput
+  and: [ModelAssetConditionInput]
+  or: [ModelAssetConditionInput]
+  not: ModelAssetConditionInput
+}
+
+input CreateAssetInput {
+  id: ID
+  nodeID: ID!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  type: AssetType!
+  name: String!
+  index: Int
+  owner: String
+  content: String
+  editors: [String]
+}
+
+input UpdateAssetInput {
+  id: ID!
+  nodeID: ID
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  type: AssetType
+  name: String
+  index: Int
+  owner: String
+  content: String
+  editors: [String]
+}
+
+input DeleteAssetInput {
+  id: ID!
+}
+
+type Mutation {
+  createAsset(input: CreateAssetInput!, condition: ModelAssetConditionInput): Asset @aws_iam @aws_cognito_user_pools
+  updateAsset(input: UpdateAssetInput!, condition: ModelAssetConditionInput): Asset @aws_iam @aws_cognito_user_pools
+  deleteAsset(input: DeleteAssetInput!, condition: ModelAssetConditionInput): Asset @aws_iam @aws_cognito_user_pools
+  createAssetPr(input: CreateAssetPrInput!, condition: ModelAssetPrConditionInput): AssetPr @aws_iam @aws_cognito_user_pools
+  updateAssetPr(input: UpdateAssetPrInput!, condition: ModelAssetPrConditionInput): AssetPr @aws_iam @aws_cognito_user_pools
+  deleteAssetPr(input: DeleteAssetPrInput!, condition: ModelAssetPrConditionInput): AssetPr @aws_iam @aws_cognito_user_pools
+  createNode(input: CreateNodeInput!, condition: ModelNodeConditionInput): Node @aws_iam @aws_cognito_user_pools
+  updateNode(input: UpdateNodeInput!, condition: ModelNodeConditionInput): Node @aws_iam @aws_cognito_user_pools
+  deleteNode(input: DeleteNodeInput!, condition: ModelNodeConditionInput): Node @aws_iam @aws_cognito_user_pools
+  createEdge(input: CreateEdgeInput!, condition: ModelEdgeConditionInput): Edge @aws_iam @aws_cognito_user_pools
+  updateEdge(input: UpdateEdgeInput!, condition: ModelEdgeConditionInput): Edge @aws_iam @aws_cognito_user_pools
+  deleteEdge(input: DeleteEdgeInput!, condition: ModelEdgeConditionInput): Edge @aws_iam @aws_cognito_user_pools
+  createEdgeNode(input: CreateEdgeNodeInput!, condition: ModelEdgeNodeConditionInput): EdgeNode @aws_iam @aws_cognito_user_pools
+  updateEdgeNode(input: UpdateEdgeNodeInput!, condition: ModelEdgeNodeConditionInput): EdgeNode @aws_iam @aws_cognito_user_pools
+  deleteEdgeNode(input: DeleteEdgeNodeInput!, condition: ModelEdgeNodeConditionInput): EdgeNode @aws_iam @aws_cognito_user_pools
+}
+
+type Subscription {
+  onCreateAsset(owner: String): Asset @aws_subscribe(mutations: ["createAsset"]) @aws_iam @aws_cognito_user_pools
+  onUpdateAsset(owner: String): Asset @aws_subscribe(mutations: ["updateAsset"]) @aws_iam @aws_cognito_user_pools
+  onDeleteAsset(owner: String): Asset @aws_subscribe(mutations: ["deleteAsset"]) @aws_iam @aws_cognito_user_pools
+  onCreateAssetPr(owner: String): AssetPr @aws_subscribe(mutations: ["createAssetPr"]) @aws_iam @aws_cognito_user_pools
+  onUpdateAssetPr(owner: String): AssetPr @aws_subscribe(mutations: ["updateAssetPr"]) @aws_iam @aws_cognito_user_pools
+  onDeleteAssetPr(owner: String): AssetPr @aws_subscribe(mutations: ["deleteAssetPr"]) @aws_iam @aws_cognito_user_pools
+  onCreateNode(owner: String): Node @aws_subscribe(mutations: ["createNode"]) @aws_iam @aws_cognito_user_pools
+  onUpdateNode(owner: String): Node @aws_subscribe(mutations: ["updateNode"]) @aws_iam @aws_cognito_user_pools
+  onDeleteNode(owner: String): Node @aws_subscribe(mutations: ["deleteNode"]) @aws_iam @aws_cognito_user_pools
+  onCreateEdge(owner: String): Edge @aws_subscribe(mutations: ["createEdge"]) @aws_iam @aws_cognito_user_pools
+  onUpdateEdge(owner: String): Edge @aws_subscribe(mutations: ["updateEdge"]) @aws_iam @aws_cognito_user_pools
+  onDeleteEdge(owner: String): Edge @aws_subscribe(mutations: ["deleteEdge"]) @aws_iam @aws_cognito_user_pools
+  onCreateEdgeNode(owner: String): EdgeNode @aws_subscribe(mutations: ["createEdgeNode"]) @aws_iam @aws_cognito_user_pools
+  onUpdateEdgeNode(owner: String): EdgeNode @aws_subscribe(mutations: ["updateEdgeNode"]) @aws_iam @aws_cognito_user_pools
+  onDeleteEdgeNode(owner: String): EdgeNode @aws_subscribe(mutations: ["deleteEdgeNode"]) @aws_iam @aws_cognito_user_pools
+}
+
+type ModelAssetPrConnection @aws_iam @aws_cognito_user_pools {
+  items: [AssetPr]!
+  nextToken: String
+}
+
+input ModelAssetPrFilterInput {
+  id: ModelIDInput
+  nodeID: ModelIDInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  type: ModelAssetTypeInput
+  name: ModelStringInput
+  index: ModelIntInput
+  owner: ModelStringInput
+  content: ModelStringInput
+  editors: ModelStringInput
+  and: [ModelAssetPrFilterInput]
+  or: [ModelAssetPrFilterInput]
+  not: ModelAssetPrFilterInput
+}
+
+input ModelAssetPrConditionInput {
+  nodeID: ModelIDInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  type: ModelAssetTypeInput
+  name: ModelStringInput
+  index: ModelIntInput
+  owner: ModelStringInput
+  content: ModelStringInput
+  editors: ModelStringInput
+  and: [ModelAssetPrConditionInput]
+  or: [ModelAssetPrConditionInput]
+  not: ModelAssetPrConditionInput
+}
+
+input CreateAssetPrInput {
+  id: ID
+  nodeID: ID!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  type: AssetType!
+  name: String!
+  index: Int
+  owner: String
+  content: String
+  editors: [String]
+}
+
+input UpdateAssetPrInput {
+  id: ID!
+  nodeID: ID
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  type: AssetType
+  name: String
+  index: Int
+  owner: String
+  content: String
+  editors: [String]
+}
+
+input DeleteAssetPrInput {
+  id: ID!
+}
+
+type ModelNodeConnection @aws_iam @aws_cognito_user_pools {
+  items: [Node]!
+  nextToken: String
+}
+
+input ModelNodeStatusInput {
+  eq: NodeStatus
+  ne: NodeStatus
+}
+
+input ModelNodeTypeInput {
+  eq: NodeType
+  ne: NodeType
+}
+
+input ModelNodeFilterInput {
+  id: ModelIDInput
+  status: ModelNodeStatusInput
+  type: ModelNodeTypeInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  owner: ModelStringInput
+  and: [ModelNodeFilterInput]
+  or: [ModelNodeFilterInput]
+  not: ModelNodeFilterInput
+}
+
+input ModelNodeConditionInput {
+  status: ModelNodeStatusInput
+  type: ModelNodeTypeInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  owner: ModelStringInput
+  and: [ModelNodeConditionInput]
+  or: [ModelNodeConditionInput]
+  not: ModelNodeConditionInput
+}
+
+input CreateNodeInput {
+  id: ID
+  status: NodeStatus!
+  type: NodeType!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  owner: String
+}
+
+input UpdateNodeInput {
+  id: ID!
+  status: NodeStatus
+  type: NodeType
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  owner: String
+}
+
+input DeleteNodeInput {
+  id: ID!
+}
+
+type ModelEdgeConnection @aws_iam @aws_cognito_user_pools {
+  items: [Edge]!
+  nextToken: String
+}
+
+input ModelEdgeTypeInput {
+  eq: EdgeType
+  ne: EdgeType
+}
+
+input ModelEdgeFilterInput {
+  id: ModelIDInput
+  type: ModelEdgeTypeInput
+  createdAt: ModelStringInput
+  owner: ModelStringInput
+  weight: ModelIntInput
+  and: [ModelEdgeFilterInput]
+  or: [ModelEdgeFilterInput]
+  not: ModelEdgeFilterInput
+}
+
+input ModelEdgeConditionInput {
+  type: ModelEdgeTypeInput
+  createdAt: ModelStringInput
+  owner: ModelStringInput
+  weight: ModelIntInput
+  and: [ModelEdgeConditionInput]
+  or: [ModelEdgeConditionInput]
+  not: ModelEdgeConditionInput
+}
+
+input CreateEdgeInput {
+  id: ID
+  type: EdgeType!
+  createdAt: AWSDateTime
+  owner: String
+  weight: Int
+}
+
+input UpdateEdgeInput {
+  id: ID!
+  type: EdgeType
+  createdAt: AWSDateTime
+  owner: String
+  weight: Int
+}
+
+input DeleteEdgeInput {
+  id: ID!
+}
+
+type ModelEdgeNodeConnection @aws_iam @aws_cognito_user_pools @aws_api_key {
+  items: [EdgeNode]!
+  nextToken: String
+}
+
+input ModelEdgeNodeFilterInput {
+  id: ModelIDInput
+  nodeID: ModelIDInput
+  edgeID: ModelIDInput
+  and: [ModelEdgeNodeFilterInput]
+  or: [ModelEdgeNodeFilterInput]
+  not: ModelEdgeNodeFilterInput
+}
+
+input ModelEdgeNodeConditionInput {
+  nodeID: ModelIDInput
+  edgeID: ModelIDInput
+  and: [ModelEdgeNodeConditionInput]
+  or: [ModelEdgeNodeConditionInput]
+  not: ModelEdgeNodeConditionInput
+}
+
+input CreateEdgeNodeInput {
+  id: ID
+  nodeID: ID!
+  edgeID: ID!
+}
+
+input UpdateEdgeNodeInput {
+  id: ID!
+  nodeID: ID
+  edgeID: ID
+}
+
+input DeleteEdgeNodeInput {
+  id: ID!
+}
+
+input ModelStringKeyConditionInput {
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  between: [String]
+  beginsWith: String
+}
+
+input ModelAssetAssets_by_owner_typeCompositeKeyConditionInput {
+  eq: ModelAssetAssets_by_owner_typeCompositeKeyInput
+  le: ModelAssetAssets_by_owner_typeCompositeKeyInput
+  lt: ModelAssetAssets_by_owner_typeCompositeKeyInput
+  ge: ModelAssetAssets_by_owner_typeCompositeKeyInput
+  gt: ModelAssetAssets_by_owner_typeCompositeKeyInput
+  between: [ModelAssetAssets_by_owner_typeCompositeKeyInput]
+  beginsWith: ModelAssetAssets_by_owner_typeCompositeKeyInput
+}
+
+input ModelAssetAssets_by_owner_typeCompositeKeyInput {
+  type: AssetType
+  createdAt: String
+}
+
+input ModelAssetPrAssetsPr_by_owner_typeCompositeKeyConditionInput {
+  eq: ModelAssetPrAssetsPr_by_owner_typeCompositeKeyInput
+  le: ModelAssetPrAssetsPr_by_owner_typeCompositeKeyInput
+  lt: ModelAssetPrAssetsPr_by_owner_typeCompositeKeyInput
+  ge: ModelAssetPrAssetsPr_by_owner_typeCompositeKeyInput
+  gt: ModelAssetPrAssetsPr_by_owner_typeCompositeKeyInput
+  between: [ModelAssetPrAssetsPr_by_owner_typeCompositeKeyInput]
+  beginsWith: ModelAssetPrAssetsPr_by_owner_typeCompositeKeyInput
+}
+
+input ModelAssetPrAssetsPr_by_owner_typeCompositeKeyInput {
+  type: AssetType
+  createdAt: String
+}
+
+input ModelNodeNodes_by_status_type_createdAtCompositeKeyConditionInput {
+  eq: ModelNodeNodes_by_status_type_createdAtCompositeKeyInput
+  le: ModelNodeNodes_by_status_type_createdAtCompositeKeyInput
+  lt: ModelNodeNodes_by_status_type_createdAtCompositeKeyInput
+  ge: ModelNodeNodes_by_status_type_createdAtCompositeKeyInput
+  gt: ModelNodeNodes_by_status_type_createdAtCompositeKeyInput
+  between: [ModelNodeNodes_by_status_type_createdAtCompositeKeyInput]
+  beginsWith: ModelNodeNodes_by_status_type_createdAtCompositeKeyInput
+}
+
+input ModelNodeNodes_by_status_type_createdAtCompositeKeyInput {
+  type: NodeType
+  createdAt: String
+}
+
+input ModelNodeNodes_by_owner_status_createdAtCompositeKeyConditionInput {
+  eq: ModelNodeNodes_by_owner_status_createdAtCompositeKeyInput
+  le: ModelNodeNodes_by_owner_status_createdAtCompositeKeyInput
+  lt: ModelNodeNodes_by_owner_status_createdAtCompositeKeyInput
+  ge: ModelNodeNodes_by_owner_status_createdAtCompositeKeyInput
+  gt: ModelNodeNodes_by_owner_status_createdAtCompositeKeyInput
+  between: [ModelNodeNodes_by_owner_status_createdAtCompositeKeyInput]
+  beginsWith: ModelNodeNodes_by_owner_status_createdAtCompositeKeyInput
+}
+
+input ModelNodeNodes_by_owner_status_createdAtCompositeKeyInput {
+  status: NodeStatus
+  createdAt: String
+}
+
+input ModelNodeNodes_by_owner_type_createdAtCompositeKeyConditionInput {
+  eq: ModelNodeNodes_by_owner_type_createdAtCompositeKeyInput
+  le: ModelNodeNodes_by_owner_type_createdAtCompositeKeyInput
+  lt: ModelNodeNodes_by_owner_type_createdAtCompositeKeyInput
+  ge: ModelNodeNodes_by_owner_type_createdAtCompositeKeyInput
+  gt: ModelNodeNodes_by_owner_type_createdAtCompositeKeyInput
+  between: [ModelNodeNodes_by_owner_type_createdAtCompositeKeyInput]
+  beginsWith: ModelNodeNodes_by_owner_type_createdAtCompositeKeyInput
+}
+
+input ModelNodeNodes_by_owner_type_createdAtCompositeKeyInput {
+  type: NodeType
+  createdAt: String
+}
+
+input ModelIDKeyConditionInput {
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  between: [ID]
+  beginsWith: ID
+}
+

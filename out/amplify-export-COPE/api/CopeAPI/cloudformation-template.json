@@ -1,0 +1,2033 @@
+{
+  "Parameters": {
+    "env": {
+      "Type": "String",
+      "Default": "NONE"
+    },
+    "DynamoDBModelTableReadIOPS": {
+      "Type": "Number",
+      "Default": 5,
+      "Description": "The number of read IOPS the table should support."
+    },
+    "DynamoDBModelTableWriteIOPS": {
+      "Type": "Number",
+      "Default": 5,
+      "Description": "The number of write IOPS the table should support."
+    },
+    "DynamoDBBillingMode": {
+      "Type": "String",
+      "Default": "PAY_PER_REQUEST",
+      "AllowedValues": [
+        "PAY_PER_REQUEST",
+        "PROVISIONED"
+      ],
+      "Description": "Configure @model types to create DynamoDB tables with PAY_PER_REQUEST or PROVISIONED billing modes."
+    },
+    "DynamoDBEnablePointInTimeRecovery": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "Description": "Whether to enable Point in Time Recovery on the table."
+    },
+    "DynamoDBEnableServerSideEncryption": {
+      "Type": "String",
+      "Default": "true",
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "Description": "Enable server side encryption powered by KMS."
+    },
+    "AuthCognitoUserPoolId": {
+      "Type": "String"
+    },
+    "AppSyncApiName": {
+      "Type": "String",
+      "Default": "AppSyncSimpleTransform"
+    },
+    "authRoleName": {
+      "Type": "String"
+    },
+    "unauthRoleName": {
+      "Type": "String"
+    },
+    "S3DeploymentBucket": {
+      "Type": "String",
+      "Description": "An S3 Bucket name where assets are deployed"
+    },
+    "S3DeploymentRootKey": {
+      "Type": "String",
+      "Description": "An S3 key relative to the S3DeploymentBucket that points to the root of the deployment directory."
+    }
+  },
+  "Resources": {
+    "GraphQLAPI": {
+      "Type": "AWS::AppSync::GraphQLApi",
+      "Properties": {
+        "AuthenticationType": "API_KEY",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppSyncApiName"
+              },
+              "-",
+              {
+                "Ref": "env"
+              }
+            ]
+          ]
+        },
+        "AdditionalAuthenticationProviders": [
+          {
+            "AuthenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "UserPoolConfig": {
+              "AwsRegion": {
+                "Ref": "AWS::Region"
+              },
+              "UserPoolId": {
+                "Ref": "AuthCognitoUserPoolId"
+              }
+            }
+          },
+          {
+            "AuthenticationType": "AWS_IAM"
+          }
+        ]
+      }
+    },
+    "GraphQLAPITransformerSchema3CB2AE18": {
+      "Type": "AWS::AppSync::GraphQLSchema",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "GraphQLAPI",
+            "ApiId"
+          ]
+        },
+        "DefinitionS3Location": {
+          "Fn::Join": [
+            "",
+            [
+              "s3://",
+              {
+                "Ref": "S3DeploymentBucket"
+              },
+              "/",
+              {
+                "Ref": "S3DeploymentRootKey"
+              },
+              "/schema.graphql"
+            ]
+          ]
+        }
+      }
+    },
+    "GraphQLAPIDefaultApiKey215A6DD7": {
+      "Type": "AWS::AppSync::ApiKey",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "GraphQLAPI",
+            "ApiId"
+          ]
+        },
+        "Description": "CopeAPIKey",
+        "Expires": 1675264106
+      }
+    },
+    "GraphQLAPINONEDS95A13CF0": {
+      "Type": "AWS::AppSync::DataSource",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "GraphQLAPI",
+            "ApiId"
+          ]
+        },
+        "Name": "NONE_DS",
+        "Type": "NONE",
+        "Description": "None Data Source for Pipeline functions"
+      }
+    },
+    "Asset": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "Parameters": {
+          "DynamoDBModelTableReadIOPS": {
+            "Ref": "DynamoDBModelTableReadIOPS"
+          },
+          "DynamoDBModelTableWriteIOPS": {
+            "Ref": "DynamoDBModelTableWriteIOPS"
+          },
+          "DynamoDBBillingMode": {
+            "Ref": "DynamoDBBillingMode"
+          },
+          "DynamoDBEnablePointInTimeRecovery": {
+            "Ref": "DynamoDBEnablePointInTimeRecovery"
+          },
+          "DynamoDBEnableServerSideEncryption": {
+            "Ref": "DynamoDBEnableServerSideEncryption"
+          },
+          "referencetotransformerrootstackenv10C5A902Ref": {
+            "Ref": "env"
+          },
+          "referencetotransformerrootstackGraphQLAPI20497F53ApiId": {
+            "Fn::GetAtt": [
+              "GraphQLAPI",
+              "ApiId"
+            ]
+          },
+          "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name": {
+            "Fn::GetAtt": [
+              "GraphQLAPINONEDS95A13CF0",
+              "Name"
+            ]
+          },
+          "referencetotransformerrootstackS3DeploymentBucket7592718ARef": {
+            "Ref": "S3DeploymentBucket"
+          },
+          "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref": {
+            "Ref": "S3DeploymentRootKey"
+          },
+          "referencetotransformerrootstackauthRoleNameFB872D50Ref": {
+            "Ref": "authRoleName"
+          },
+          "referencetotransformerrootstackunauthRoleName49F3C1FERef": {
+            "Ref": "unauthRoleName"
+          }
+        }
+      },
+      "DependsOn": [
+        "GraphQLAPITransformerSchema3CB2AE18"
+      ]
+    },
+    "AssetPr": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "Parameters": {
+          "DynamoDBModelTableReadIOPS": {
+            "Ref": "DynamoDBModelTableReadIOPS"
+          },
+          "DynamoDBModelTableWriteIOPS": {
+            "Ref": "DynamoDBModelTableWriteIOPS"
+          },
+          "DynamoDBBillingMode": {
+            "Ref": "DynamoDBBillingMode"
+          },
+          "DynamoDBEnablePointInTimeRecovery": {
+            "Ref": "DynamoDBEnablePointInTimeRecovery"
+          },
+          "DynamoDBEnableServerSideEncryption": {
+            "Ref": "DynamoDBEnableServerSideEncryption"
+          },
+          "referencetotransformerrootstackenv10C5A902Ref": {
+            "Ref": "env"
+          },
+          "referencetotransformerrootstackGraphQLAPI20497F53ApiId": {
+            "Fn::GetAtt": [
+              "GraphQLAPI",
+              "ApiId"
+            ]
+          },
+          "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name": {
+            "Fn::GetAtt": [
+              "GraphQLAPINONEDS95A13CF0",
+              "Name"
+            ]
+          },
+          "referencetotransformerrootstackS3DeploymentBucket7592718ARef": {
+            "Ref": "S3DeploymentBucket"
+          },
+          "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref": {
+            "Ref": "S3DeploymentRootKey"
+          },
+          "referencetotransformerrootstackauthRoleNameFB872D50Ref": {
+            "Ref": "authRoleName"
+          },
+          "referencetotransformerrootstackunauthRoleName49F3C1FERef": {
+            "Ref": "unauthRoleName"
+          }
+        }
+      },
+      "DependsOn": [
+        "GraphQLAPITransformerSchema3CB2AE18"
+      ]
+    },
+    "Node": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "Parameters": {
+          "DynamoDBModelTableReadIOPS": {
+            "Ref": "DynamoDBModelTableReadIOPS"
+          },
+          "DynamoDBModelTableWriteIOPS": {
+            "Ref": "DynamoDBModelTableWriteIOPS"
+          },
+          "DynamoDBBillingMode": {
+            "Ref": "DynamoDBBillingMode"
+          },
+          "DynamoDBEnablePointInTimeRecovery": {
+            "Ref": "DynamoDBEnablePointInTimeRecovery"
+          },
+          "DynamoDBEnableServerSideEncryption": {
+            "Ref": "DynamoDBEnableServerSideEncryption"
+          },
+          "referencetotransformerrootstackenv10C5A902Ref": {
+            "Ref": "env"
+          },
+          "referencetotransformerrootstackGraphQLAPI20497F53ApiId": {
+            "Fn::GetAtt": [
+              "GraphQLAPI",
+              "ApiId"
+            ]
+          },
+          "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name": {
+            "Fn::GetAtt": [
+              "GraphQLAPINONEDS95A13CF0",
+              "Name"
+            ]
+          },
+          "referencetotransformerrootstackS3DeploymentBucket7592718ARef": {
+            "Ref": "S3DeploymentBucket"
+          },
+          "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref": {
+            "Ref": "S3DeploymentRootKey"
+          },
+          "referencetotransformerrootstackauthRoleNameFB872D50Ref": {
+            "Ref": "authRoleName"
+          },
+          "referencetotransformerrootstackunauthRoleName49F3C1FERef": {
+            "Ref": "unauthRoleName"
+          }
+        }
+      },
+      "DependsOn": [
+        "GraphQLAPITransformerSchema3CB2AE18"
+      ]
+    },
+    "Edge": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "Parameters": {
+          "DynamoDBModelTableReadIOPS": {
+            "Ref": "DynamoDBModelTableReadIOPS"
+          },
+          "DynamoDBModelTableWriteIOPS": {
+            "Ref": "DynamoDBModelTableWriteIOPS"
+          },
+          "DynamoDBBillingMode": {
+            "Ref": "DynamoDBBillingMode"
+          },
+          "DynamoDBEnablePointInTimeRecovery": {
+            "Ref": "DynamoDBEnablePointInTimeRecovery"
+          },
+          "DynamoDBEnableServerSideEncryption": {
+            "Ref": "DynamoDBEnableServerSideEncryption"
+          },
+          "referencetotransformerrootstackenv10C5A902Ref": {
+            "Ref": "env"
+          },
+          "referencetotransformerrootstackGraphQLAPI20497F53ApiId": {
+            "Fn::GetAtt": [
+              "GraphQLAPI",
+              "ApiId"
+            ]
+          },
+          "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name": {
+            "Fn::GetAtt": [
+              "GraphQLAPINONEDS95A13CF0",
+              "Name"
+            ]
+          },
+          "referencetotransformerrootstackS3DeploymentBucket7592718ARef": {
+            "Ref": "S3DeploymentBucket"
+          },
+          "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref": {
+            "Ref": "S3DeploymentRootKey"
+          },
+          "referencetotransformerrootstackauthRoleNameFB872D50Ref": {
+            "Ref": "authRoleName"
+          },
+          "referencetotransformerrootstackunauthRoleName49F3C1FERef": {
+            "Ref": "unauthRoleName"
+          }
+        }
+      },
+      "DependsOn": [
+        "GraphQLAPITransformerSchema3CB2AE18"
+      ]
+    },
+    "EdgeNode": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "Parameters": {
+          "DynamoDBModelTableReadIOPS": {
+            "Ref": "DynamoDBModelTableReadIOPS"
+          },
+          "DynamoDBModelTableWriteIOPS": {
+            "Ref": "DynamoDBModelTableWriteIOPS"
+          },
+          "DynamoDBBillingMode": {
+            "Ref": "DynamoDBBillingMode"
+          },
+          "DynamoDBEnablePointInTimeRecovery": {
+            "Ref": "DynamoDBEnablePointInTimeRecovery"
+          },
+          "DynamoDBEnableServerSideEncryption": {
+            "Ref": "DynamoDBEnableServerSideEncryption"
+          },
+          "referencetotransformerrootstackenv10C5A902Ref": {
+            "Ref": "env"
+          },
+          "referencetotransformerrootstackGraphQLAPI20497F53ApiId": {
+            "Fn::GetAtt": [
+              "GraphQLAPI",
+              "ApiId"
+            ]
+          },
+          "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name": {
+            "Fn::GetAtt": [
+              "GraphQLAPINONEDS95A13CF0",
+              "Name"
+            ]
+          },
+          "referencetotransformerrootstackS3DeploymentBucket7592718ARef": {
+            "Ref": "S3DeploymentBucket"
+          },
+          "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref": {
+            "Ref": "S3DeploymentRootKey"
+          },
+          "referencetotransformerrootstackauthRoleNameFB872D50Ref": {
+            "Ref": "authRoleName"
+          },
+          "referencetotransformerrootstackunauthRoleName49F3C1FERef": {
+            "Ref": "unauthRoleName"
+          }
+        }
+      },
+      "DependsOn": [
+        "GraphQLAPITransformerSchema3CB2AE18"
+      ]
+    },
+    "ConnectionStack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "Parameters": {
+          "referencetotransformerrootstackGraphQLAPI20497F53ApiId": {
+            "Fn::GetAtt": [
+              "GraphQLAPI",
+              "ApiId"
+            ]
+          },
+          "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name": {
+            "Fn::GetAtt": [
+              "GraphQLAPINONEDS95A13CF0",
+              "Name"
+            ]
+          },
+          "referencetotransformerrootstackS3DeploymentBucket7592718ARef": {
+            "Ref": "S3DeploymentBucket"
+          },
+          "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref": {
+            "Ref": "S3DeploymentRootKey"
+          },
+          "referencetotransformerrootstackAssetNestedStackAssetNestedStackResource6A4491ABOutputstransformerrootstackAssetAssetDataSource364C6E92Name": {
+            "Fn::GetAtt": [
+              "Asset",
+              "Outputs.transformerrootstackAssetAssetDataSource364C6E92Name"
+            ]
+          },
+          "referencetotransformerrootstackAssetNestedStackAssetNestedStackResource6A4491ABOutputstransformerrootstackAssetAssetTableD3D49E73Ref": {
+            "Fn::GetAtt": [
+              "Asset",
+              "Outputs.transformerrootstackAssetAssetTableD3D49E73Ref"
+            ]
+          },
+          "referencetotransformerrootstackauthRoleNameFB872D50Ref": {
+            "Ref": "authRoleName"
+          },
+          "referencetotransformerrootstackunauthRoleName49F3C1FERef": {
+            "Ref": "unauthRoleName"
+          },
+          "referencetotransformerrootstackAssetPrNestedStackAssetPrNestedStackResourceEB4510CCOutputstransformerrootstackAssetPrAssetPrDataSource11DF5B16Name": {
+            "Fn::GetAtt": [
+              "AssetPr",
+              "Outputs.transformerrootstackAssetPrAssetPrDataSource11DF5B16Name"
+            ]
+          },
+          "referencetotransformerrootstackAssetPrNestedStackAssetPrNestedStackResourceEB4510CCOutputstransformerrootstackAssetPrAssetPrTable8244B33CRef": {
+            "Fn::GetAtt": [
+              "AssetPr",
+              "Outputs.transformerrootstackAssetPrAssetPrTable8244B33CRef"
+            ]
+          },
+          "referencetotransformerrootstackNodeNestedStackNodeNestedStackResource92F806B1OutputstransformerrootstackNodeNodeDataSource1DB3BDFFName": {
+            "Fn::GetAtt": [
+              "Node",
+              "Outputs.transformerrootstackNodeNodeDataSource1DB3BDFFName"
+            ]
+          },
+          "referencetotransformerrootstackNodeNestedStackNodeNestedStackResource92F806B1OutputstransformerrootstackNodeNodeTable0B0F7FABRef": {
+            "Fn::GetAtt": [
+              "Node",
+              "Outputs.transformerrootstackNodeNodeTable0B0F7FABRef"
+            ]
+          },
+          "referencetotransformerrootstackEdgeNestedStackEdgeNestedStackResource3BCA7186OutputstransformerrootstackEdgeEdgeDataSource606452E7Name": {
+            "Fn::GetAtt": [
+              "Edge",
+              "Outputs.transformerrootstackEdgeEdgeDataSource606452E7Name"
+            ]
+          },
+          "referencetotransformerrootstackEdgeNestedStackEdgeNestedStackResource3BCA7186OutputstransformerrootstackEdgeEdgeTableC056CE54Ref": {
+            "Fn::GetAtt": [
+              "Edge",
+              "Outputs.transformerrootstackEdgeEdgeTableC056CE54Ref"
+            ]
+          },
+          "referencetotransformerrootstackEdgeNodeNestedStackEdgeNodeNestedStackResource1E878154OutputstransformerrootstackEdgeNodeEdgeNodeDataSource76F0544CName": {
+            "Fn::GetAtt": [
+              "EdgeNode",
+              "Outputs.transformerrootstackEdgeNodeEdgeNodeDataSource76F0544CName"
+            ]
+          },
+          "referencetotransformerrootstackEdgeNodeNestedStackEdgeNodeNestedStackResource1E878154OutputstransformerrootstackEdgeNodeEdgeNodeTableB1DD21E7Ref": {
+            "Fn::GetAtt": [
+              "EdgeNode",
+              "Outputs.transformerrootstackEdgeNodeEdgeNodeTableB1DD21E7Ref"
+            ]
+          }
+        }
+      },
+      "DependsOn": [
+        "Asset",
+        "AssetPr",
+        "Edge",
+        "EdgeNode",
+        "GraphQLAPITransformerSchema3CB2AE18",
+        "Node"
+      ]
+    },
+    "AuthRolePolicy01921FC820": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "appsync:GraphQL",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Asset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Node"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Edge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "EdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "getAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "listAssets"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "createAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "updateAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "deleteAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "assetsByNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "assetsByType"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "assetsByOwnerType"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onCreateAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onUpdateAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onDeleteAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "getNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "listNodes"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "createNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "updateNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "deleteNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "nodesByStatusType"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "nodesByOwnerStatus"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "nodesByOwnerType"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onCreateNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onUpdateNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onDeleteNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "ModelAssetConnection"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "ModelAssetPrConnection"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "ModelEdgeNodeConnection"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "getEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "listEdges"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "createEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "updateEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "deleteEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "edgesByType"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onCreateEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onUpdateEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onDeleteEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "getEdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "listEdgeNodes"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "createEdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "updateEdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "deleteEdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onCreateEdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onUpdateEdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onDeleteEdgeNode"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Description": "",
+        "Path": "/",
+        "Roles": [
+          {
+            "Ref": "authRoleName"
+          }
+        ]
+      }
+    },
+    "UnauthRolePolicy019D4A6CE4": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "appsync:GraphQL",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Asset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Node"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Edge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "EdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "getAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "listAssets"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "createAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "updateAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "deleteAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "assetsByNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "assetsByType"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "assetsByOwnerType"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onCreateAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onUpdateAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onDeleteAsset"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "getNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "listNodes"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "createNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "updateNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "deleteNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "nodesByStatusType"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "nodesByOwnerStatus"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "nodesByOwnerType"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onCreateNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onUpdateNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onDeleteNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "ModelAssetConnection"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "ModelAssetPrConnection"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/*",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "ModelEdgeNodeConnection"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "getEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "listEdges"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "createEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "updateEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "deleteEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "edgesByType"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onCreateEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onUpdateEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onDeleteEdge"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "getEdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Query",
+                      "fieldName": "listEdgeNodes"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "createEdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "updateEdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Mutation",
+                      "fieldName": "deleteEdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onCreateEdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onUpdateEdgeNode"
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:appsync:${AWS::Region}:${AWS::AccountId}:apis/${apiId}/types/${typeName}/fields/${fieldName}",
+                    {
+                      "apiId": {
+                        "Fn::GetAtt": [
+                          "GraphQLAPI",
+                          "ApiId"
+                        ]
+                      },
+                      "typeName": "Subscription",
+                      "fieldName": "onDeleteEdgeNode"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Description": "",
+        "Path": "/",
+        "Roles": [
+          {
+            "Ref": "unauthRoleName"
+          }
+        ]
+      }
+    },
+    "CustomResourcesjson": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "Parameters": {
+          "AppSyncApiId": {
+            "Fn::GetAtt": [
+              "GraphQLAPI",
+              "ApiId"
+            ]
+          },
+          "AppSyncApiName": {
+            "Ref": "AppSyncApiName"
+          },
+          "env": {
+            "Ref": "env"
+          },
+          "S3DeploymentBucket": {
+            "Ref": "S3DeploymentBucket"
+          },
+          "S3DeploymentRootKey": {
+            "Ref": "S3DeploymentRootKey"
+          }
+        }
+      },
+      "DependsOn": [
+        "GraphQLAPI",
+        "GraphQLAPITransformerSchema3CB2AE18",
+        "Asset",
+        "AssetPr",
+        "Node",
+        "Edge",
+        "EdgeNode",
+        "ConnectionStack"
+      ]
+    }
+  },
+  "Outputs": {
+    "GraphQLAPIKeyOutput": {
+      "Description": "Your GraphQL API ID.",
+      "Value": {
+        "Fn::GetAtt": [
+          "GraphQLAPIDefaultApiKey215A6DD7",
+          "ApiKey"
+        ]
+      },
+      "Export": {
+        "Name": {
+          "Fn::Join": [
+            ":",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "GraphQLApiKey"
+            ]
+          ]
+        }
+      }
+    },
+    "GraphQLAPIIdOutput": {
+      "Description": "Your GraphQL API ID.",
+      "Value": {
+        "Fn::GetAtt": [
+          "GraphQLAPI",
+          "ApiId"
+        ]
+      },
+      "Export": {
+        "Name": {
+          "Fn::Join": [
+            ":",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "GraphQLApiId"
+            ]
+          ]
+        }
+      }
+    },
+    "GraphQLAPIEndpointOutput": {
+      "Description": "Your GraphQL API endpoint.",
+      "Value": {
+        "Fn::GetAtt": [
+          "GraphQLAPI",
+          "GraphQLUrl"
+        ]
+      },
+      "Export": {
+        "Name": {
+          "Fn::Join": [
+            ":",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "GraphQLApiEndpoint"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "Description": "{\"createdOn\":\"Windows\",\"createdBy\":\"Amplify\",\"createdWith\":\"7.6.14\",\"stackType\":\"root\",\"metadata\":{}}"
+}

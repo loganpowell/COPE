@@ -1,0 +1,27 @@
+## [Start] Merge default values and inputs. **
+#set( $mergedValues = $util.defaultIfNull($ctx.stash.defaultValues, {}) )
+$util.qr($mergedValues.putAll($util.defaultIfNull($ctx.args.input, {})))
+## [End] Merge default values and inputs. **
+## [Start] Validate create mutation for @index 'AssetsPr_by_owner_type'. **
+#set( $hasSeenSomeKeyArg = false )
+#set( $keyFieldNames = ["type", "createdAt"] )
+#foreach( $keyFieldName in $keyFieldNames )
+#if( $ctx.args.input.containsKey("$keyFieldName") ) #set( $hasSeenSomeKeyArg = true ) #end
+#end
+#foreach( $keyFieldName in $keyFieldNames )
+  #if( $hasSeenSomeKeyArg && !$ctx.args.input.containsKey("$keyFieldName") )
+    $util.error("When creating any part of the composite sort key for @index 'AssetsPr_by_owner_type', you must provide all fields for the key. Missing key: '$keyFieldName'.")
+  #end
+#end
+## [End] Validate create mutation for @index 'AssetsPr_by_owner_type'. **
+#if( $util.isNull($ctx.stash.metadata.dynamodbNameOverrideMap) )
+  $util.qr($ctx.stash.metadata.put("dynamodbNameOverrideMap", {
+  "type#createdAt": "typeCreatedAt"
+}))
+#else
+  $util.qr($ctx.stash.metadata.dynamodbNameOverrideMap.put("type#createdAt", "typeCreatedAt"))
+#end
+#if( $hasSeenSomeKeyArg )
+  $util.qr($ctx.args.input.put("type#createdAt","${mergedValues.type}#${mergedValues.createdAt}"))
+#end
+{}

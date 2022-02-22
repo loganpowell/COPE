@@ -1,0 +1,37 @@
+[
+  {
+    "category": "auth",
+    "resourceName": "userPoolGroups",
+    "service": "Cognito-UserPool-Groups"
+  },
+  {
+    "category": "auth",
+    "resourceName": "copeAuth",
+    "service": "Cognito"
+  },
+  {
+    "category": "function",
+    "resourceName": "AdminQueriesae6420d7",
+    "service": "Lambda"
+  },
+  {
+    "category": "function",
+    "resourceName": "COPECognitoPostConfirmTriggerAddToViewers",
+    "service": "Lambda"
+  },
+  {
+    "category": "api",
+    "resourceName": "AdminQueries",
+    "service": "API Gateway"
+  },
+  {
+    "category": "api",
+    "resourceName": "CopeAPI",
+    "service": "AppSync"
+  },
+  {
+    "category": "storage",
+    "resourceName": "CopeStorage",
+    "service": "S3"
+  }
+]
